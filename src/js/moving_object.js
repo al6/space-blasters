@@ -1,4 +1,4 @@
-const defaults = {
+let defaults = {
   velocityX: 0,
   velocityY: 0,
   posX: 0,

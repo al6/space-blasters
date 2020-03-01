@@ -59,7 +59,6 @@ class XFighter {
     const { canvas, ctx, img, x, y, height, width } = this;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, x, y, height, width);
-    debugger;
     img.onload = function() {
       canvas.width = this.naturalWidth;
       canvas.height = this.naturalHeight;

@@ -1,26 +1,29 @@
 import MovingObject from "./moving_object";
 
 class BackgroundLayer extends MovingObject {
-  constructor(canvas, imgSrc, velocityY) {
-    super(velocityY);
+  constructor(canvas, imgSrc, props) {
+    super(props);
     this.canvas = canvas;
     this.canvas.width = 450;
     this.canvas.height = 700;
     this.ctx = this.canvas.getContext("2d");
     this.img = new Image();
     this.img.src = `${imgSrc}`;
-    this.scrollVal = 0;
   }
 
   draw() {
-    const { canvas, ctx, img, pattern, posX, posY } = this;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    img.onload = function() {
+    let { canvas, ctx, img, posY, velocityY } = this;
+    function loop() {
       ctx.clearRect(0, 0, 450, 700);
-      let pattern = ctx.createPattern(img, "repeat");
-      ctx.fillStyle = pattern;
-      ctx.fillRect(posX, posY, canvas.width, canvas.height);
-    };
+      ctx.drawImage(img, 0, posY);
+      ctx.drawImage(img, 0, posY - canvas.height);
+      posY += velocityY;
+      if (posY <= -canvas.height || posY >= canvas.height) {
+        posY = 0;
+      }
+      setTimeout(() => requestAnimationFrame(loop), 60);
+    }
+    requestAnimationFrame(loop);
   }
 }
 

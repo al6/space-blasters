@@ -2,15 +2,38 @@ import BackgroundLayer from "./background_layer";
 const src = "./src/images/background_layers/";
 
 function drawLayer(i) {
-  if (i === 0) {
-    new BackgroundLayer(document.getElementById("l" + i), src + i + ".png", {
-      // velocityY: -5
-    }).draw();
-  } else {
-    new BackgroundLayer(document.getElementById("l" + i), src + i + ".png", {
-      velocityY: 0
-    }).draw();
+  let v = { velocityY: 0 };
+  switch (i) {
+    case 0:
+      v["velocityY"] = 1;
+      break;
+    case 1: // diverse small stars and 2 tiny planets
+      v["velocityY"] = 2;
+      break;
+    case 2: // white clouds
+      v["velocityY"] = 2;
+      break;
+    case 3: // tiny white stars
+      v["velocityY"] = -1;
+      break;
+    case 4: // small stars and 2 small moons
+      v["velocityY"] = -2;
+      break;
+    case 5: // big moon
+      v["velocityY"] = 1;
+      break;
+    case 6: // tiny rocks
+      v["velocityY"] = 1;
+      break;
+    case 7: // slightly bigger rocks
+      v["velocityY"] = -2;
+      break;
   }
+  new BackgroundLayer(
+    document.getElementById("l" + i),
+    src + i + ".png",
+    v
+  ).draw();
 }
 
 function drawBackground() {
