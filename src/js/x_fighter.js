@@ -12,6 +12,7 @@ class XFighter {
     this.rightPressed = false;
     this.downPressed = false;
     this.leftPressed = false;
+    this.drawXFighter = this.drawXFighter.bind(this);
     this.keyUpHandler = this.keyUpHandler.bind(this);
     this.keyDownHandler = this.keyDownHandler.bind(this);
     document.addEventListener("keyup", this.keyUpHandler, false);
@@ -58,11 +59,13 @@ class XFighter {
     const { canvas, ctx, img, x, y, height, width } = this;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, x, y, height, width);
+    debugger;
     img.onload = function() {
       canvas.width = this.naturalWidth;
       canvas.height = this.naturalHeight;
       ctx.drawImage(img, x, y, height, width);
     };
+    requestAnimationFrame(this.drawXFighter);
   }
 }
 export default XFighter;

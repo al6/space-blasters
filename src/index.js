@@ -9,5 +9,4 @@ document.addEventListener("DOMContentLoaded", () => {
     "./src/images/spaceship.png"
   );
   x.drawXFighter();
-  setInterval(() => window.requestAnimationFrame(() => x.drawXFighter()), 20);
 });
