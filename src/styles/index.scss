@@ -154,9 +154,10 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     .nav-headline {
       margin: 1rem;
+      font-size: 2rem;
       &:hover {
         cursor: default;
       }
