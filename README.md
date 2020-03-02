@@ -16,7 +16,8 @@ In Space Blasters, players will be able to:
 - Upgrade laser upon picking up upgrade item
 
 ## Wireframes
-[Early version of game](https://i.imgur.com/N8JpJit.gifv)
+![Early version of game](https://media.giphy.com/media/gLcA8yS00O1c3JViU3/giphy.gif)
+
 
 ## Technologies Used
 
