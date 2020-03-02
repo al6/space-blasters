@@ -4,7 +4,7 @@ const src = "./src/images/background_layers/";
 function drawLayer(i) {
   let v = { velocityY: 0 };
   switch (i) {
-    case 0:
+    case 0: // main background
       v["velocityY"] = 1;
       break;
     case 1: // diverse small stars and 2 tiny planets
