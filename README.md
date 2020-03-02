@@ -19,10 +19,9 @@ In Space Blasters, players will be able to:
 ![Early version of game](https://media.giphy.com/media/gLcA8yS00O1c3JViU3/giphy.gif)
 
 
-## Technologies Used
+## Architecture and Technologies
 
-Main game file is space_blasters.js
-Vanilla JavaScript, Canvas API, Web Audio API
+This project features object oriented design using Vanilla JavaScript, Canvas API, Web Audio API
 
 ## Implementation Timeline
 
