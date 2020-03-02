@@ -1,5 +1,4 @@
 import MovingObject from "./moving_object";
-
 class BackgroundLayer extends MovingObject {
   constructor(canvas, imgSrc, props) {
     super(props);
