@@ -16,12 +16,12 @@ In Space Blasters, players will be able to:
 - Upgrade laser upon picking up upgrade item
 
 ## Wireframes
-[Early version of game](https://i.imgur.com/N8JpJit.gifv)
+![Early version of game](https://media.giphy.com/media/gLcA8yS00O1c3JViU3/giphy.gif)
 
-## Technologies Used
 
-Main game file is space_blasters.js
-Vanilla JavaScript, Canvas API, Web Audio API
+## Architecture and Technologies
+
+This project features object oriented design using Vanilla JavaScript, Canvas API, Web Audio API
 
 ## Implementation Timeline
 
