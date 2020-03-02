@@ -71,9 +71,13 @@ class XFighter {
     const { canvas, ctx, img, x, y, height, width, projectiles } = this;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, x, y, height, width);
-    projectiles.map(projectile => {
-      projectile.posY += projectile.velocityY;
-      projectile.draw();
+    projectiles.forEach(projectile => {
+      if (projectile.posY >= 0) {
+        projectile.posY += projectile.velocityY;
+        projectile.draw();
+      } else {
+        projectiles.splice(projectiles.indexOf(projectile), 1);
+      }
     });
     img.onload = function() {
       canvas.width = this.naturalWidth;
@@ -86,15 +90,12 @@ class XFighter {
   shootPayload() {
     switch (this.weapon) {
       case "laser":
-        console.log("fire laser");
         let laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
         laser.play();
-        // SFX.laser.play();
-        // console.log(`posY: ${this.y}`);
         let x = new PlayerWeapon("laser1", {
           velocityY: -5,
           posX: this.x + 33,
-          posY: this.y - 50
+          posY: this.y - 10
         });
         this.projectiles.push(x);
         break;
