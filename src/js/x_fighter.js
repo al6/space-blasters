@@ -2,12 +2,12 @@ import PlayerWeapon from "./player_weapon";
 import SFX from "./SFX";
 
 class XFighter {
-  constructor(imgSrc) {
+  constructor() {
     this.weapon = "laser1";
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.img = new Image();
-    this.img.src = `${imgSrc}`;
+    this.img.src = "./src/images/ship.png";
     this.x = this.canvas.width * 1.4;
     this.y = this.canvas.height * 3.85;
     this.height = 80;
@@ -38,6 +38,7 @@ class XFighter {
   }
 
   keyDownHandler(e) {
+    e.preventDefault();
     if (e.code == "Space") {
       this.fireWeapon();
     } else if (e.key == "Right" || e.key == "ArrowRight") {
