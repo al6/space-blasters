@@ -11,18 +11,18 @@ class TieFighter extends MovingObject {
     this.img = new Image();
     this.img.src = "./src/images/tie-fighter.png";
     this.x = Math.floor(Math.random() * 831);
-    this.y = -100;
+    this.posY = Math.floor(Math.random() * -1000);
     this.height = 40;
     this.width = 80;
     this.projectiles = [];
   }
 
   drawTieFighter() {
-    let { ctx, img, x, y, velocityY, height, width, projectiles } = this;
+    let { ctx, img, x, posY, velocityY, height, width, projectiles } = this;
     if (this.hp > 0) {
-      ctx.drawImage(img, x, y, width, height);
-      if (this.y < 578) {
-        this.y += velocityY;
+      ctx.drawImage(img, x, posY, width, height);
+      if (this.posY < 600) {
+        this.posY += velocityY;
       }
     }
 
@@ -35,7 +35,7 @@ class TieFighter extends MovingObject {
     //   }
     // });
     img.onload = function() {
-      ctx.drawImage(img, x, y, width, height);
+      ctx.drawImage(img, x, posY, width, height);
     };
   }
 
