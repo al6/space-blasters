@@ -1,4 +1,5 @@
 import XFighter from "./x_fighter";
+import TieFighter from "./tie_fighter";
 
 class Game {
   constructor() {
@@ -6,13 +7,15 @@ class Game {
     // this.ctx = this.canvas.getContext("2d");
     this.player = new XFighter();
     this.wave = 1;
+    this.enemy = new TieFighter({ velocityY: 2 });
     this.draw = this.draw.bind(this);
     this.draw();
   }
 
   draw() {
-    const { player } = this;
+    const { player, enemy } = this;
     player.drawXFighter();
+    enemy.drawTieFighter();
     requestAnimationFrame(this.draw);
   }
 }
