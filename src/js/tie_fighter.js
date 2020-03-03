@@ -11,7 +11,7 @@ class TieFighter extends MovingObject {
     this.ctx = this.canvas.getContext("2d");
     this.img = new Image();
     this.img.src = "./src/images/tie-fighter.png";
-    this.x = Math.floor(Math.random() * 831);
+    this.posX = Math.floor(Math.random() * 831);
     this.posY = Math.floor(Math.random() * -1000);
     this.height = 40;
     this.width = 80;
@@ -19,12 +19,12 @@ class TieFighter extends MovingObject {
   }
 
   drawTieFighter() {
-    let { ctx, img, x, posY, velocityY, height, width, projectiles } = this;
+    let { ctx, img, posX, posY, velocityY, height, width, projectiles } = this;
     if (this.hp <= 0) {
       //explosion effect
       //after 50 ms create and draw upgrade item
     } else if (this.hp > 0) {
-      ctx.drawImage(img, x, posY, width, height);
+      ctx.drawImage(img, posX, posY, width, height);
       if (this.posY < 600) {
         this.posY += velocityY;
       }
@@ -39,7 +39,7 @@ class TieFighter extends MovingObject {
     //   }
     // });
     img.onload = function() {
-      ctx.drawImage(img, x, posY, width, height);
+      ctx.drawImage(img, posX, posY, width, height);
     };
   }
 

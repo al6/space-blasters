@@ -7,9 +7,7 @@ class Game {
     // this.ctx = this.canvas.getContext("2d");
     this.player = new XFighter();
     this.wave = 1;
-    this.enemies = [];
-    this.enemy = new TieFighter({ velocityY: 2 });
-    this.enemies.push(new TieFighter({ velocityY: 2 }));
+    this.enemies = [new TieFighter({ velocityY: 2 })];
     this.draw = this.draw.bind(this);
     this.draw();
   }
@@ -18,8 +16,8 @@ class Game {
     const { player, enemies } = this;
     player.drawXFighter();
     enemies.forEach(enemy => enemy.drawTieFighter());
-    if (enemies.every(enemy => enemy.posY >= 578)) {
-      this.wave += 1;
+    if (enemies.every(enemy => enemy.posY >= 578) || enemies.length === 0) {
+      this.wave += 5; 
       this.enemies = [...Array(this.wave).keys()].map(
         () => new TieFighter({ velocityY: 2 })
       );
