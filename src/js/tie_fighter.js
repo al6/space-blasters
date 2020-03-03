@@ -25,7 +25,7 @@ class TieFighter extends MovingObject {
       //after 50 ms create and draw upgrade item
     } else if (this.hp > 0) {
       ctx.drawImage(img, posX, posY, width, height);
-      if (this.posY < 600) {
+      if (this.posY < 650) {
         this.posY += velocityY;
       }
     }

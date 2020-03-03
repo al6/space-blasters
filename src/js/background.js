@@ -17,7 +17,7 @@ function drawLayer(i) {
       v["velocityY"] = -1;
       break;
     case 4: // small stars and 2 small moons
-      v["velocityY"] = 2;
+      v["velocityY"] = 1;
       break;
     case 5: // big moon
       v["velocityY"] = 1;
