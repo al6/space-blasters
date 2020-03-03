@@ -21,10 +21,12 @@ class BackgroundLayer extends MovingObject {
       ctx.drawImage(img, 0, posY);
       ctx.drawImage(img, 0, posY - canvas.height);
       posY += velocityY;
-      if (posY <= -canvas.height || posY >= canvas.height) {
+      if (posY >= canvas.height) {
         posY = 0;
+      } else if (posY < -700) {
+        posY = 1;
       }
-      requestAnimationFrame(loop)
+      requestAnimationFrame(loop);
     }
     loop();
   }
