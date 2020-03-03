@@ -84,7 +84,6 @@ class XFighter {
       canvas.height = this.naturalHeight;
       ctx.drawImage(img, x, y, height, width);
     };
-    requestAnimationFrame(this.drawXFighter);
   }
 
   fireWeapon() {
