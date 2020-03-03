@@ -11,8 +11,12 @@ class BackgroundLayer extends MovingObject {
   }
 
   draw() {
-    let { canvas, ctx, img, posY, velocityY } = this;
+    let { canvas, ctx, img, posX, posY, velocityY } = this;
     function loop() {
+      // const pattern = ctx.createPattern(img, "repeat"); // Create a pattern with this image, and set it to "repeat".
+      // ctx.fillStyle = pattern;
+      // ctx.fillRect(posY, posX, canvas.width, canvas.height); // ctx.fillRect(x, y, width, height);
+
       ctx.clearRect(0, 0, 450, 700);
       ctx.drawImage(img, 0, posY);
       ctx.drawImage(img, 0, posY - canvas.height);

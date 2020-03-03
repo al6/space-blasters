@@ -39,7 +39,7 @@ class XFighter {
 
   keyDownHandler(e) {
     if (e.code == "Space") {
-      this.shootPayload();
+      this.fireWeapon();
     } else if (e.key == "Right" || e.key == "ArrowRight") {
       this.rightPressed = true;
       if (this.x >= this.canvas.width - 3 * this.width) {
@@ -87,7 +87,7 @@ class XFighter {
     requestAnimationFrame(this.drawXFighter);
   }
 
-  shootPayload() {
+  fireWeapon() {
     switch (this.weapon) {
       case "laser":
         let laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
