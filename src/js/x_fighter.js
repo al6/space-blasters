@@ -1,6 +1,4 @@
 import PlayerWeapon from "./player_weapon";
-import SFX from "./SFX";
-
 class XFighter {
   constructor() {
     this.weapon = "laser1";
@@ -87,7 +85,7 @@ class XFighter {
   }
 
   fireWeapon() {
-    let laser, x;
+    let laser, x, y;
     switch (this.weapon) {
       case "laser1":
         laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
@@ -107,13 +105,14 @@ class XFighter {
           posX: this.x + 53,
           posY: this.y - 10
         });
-        let y = new PlayerWeapon("laser1", {
+        y = new PlayerWeapon("laser1", {
           velocityY: -5,
           posX: this.x + 13,
           posY: this.y - 10
         });
         this.projectiles.push(x);
         this.projectiles.push(y);
+        break;
       default:
         break;
     }
