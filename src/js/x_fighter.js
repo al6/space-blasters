@@ -3,7 +3,7 @@ import SFX from "./SFX";
 
 class XFighter {
   constructor(imgSrc) {
-    this.weapon = "laser";
+    this.weapon = "laser1";
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.img = new Image();
@@ -88,11 +88,12 @@ class XFighter {
   }
 
   fireWeapon() {
+    let laser, x;
     switch (this.weapon) {
-      case "laser":
-        let laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+      case "laser1":
+        laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
         laser.play();
-        let x = new PlayerWeapon("laser1", {
+        x = new PlayerWeapon("laser1", {
           velocityY: -5,
           posX: this.x + 33,
           posY: this.y - 10
@@ -100,7 +101,20 @@ class XFighter {
         this.projectiles.push(x);
         break;
       case "laser2":
-        console.log("fire laser2");
+        laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+        laser.play();
+        x = new PlayerWeapon("laser1", {
+          velocityY: -5,
+          posX: this.x + 53,
+          posY: this.y - 10
+        });
+        let y = new PlayerWeapon("laser1", {
+          velocityY: -5,
+          posX: this.x + 13,
+          posY: this.y - 10
+        });
+        this.projectiles.push(x);
+        this.projectiles.push(y);
       default:
         break;
     }
