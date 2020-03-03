@@ -26,7 +26,9 @@ class XFighter {
   }
 
   keyUpHandler(e) {
-    if (e.key == "Right" || e.key == "ArrowRight") {
+    if (e.code == "Space" || e.key == "Space") {
+      this.spacePressed = false;
+    } else if (e.key == "Right" || e.key == "ArrowRight") {
       this.rightPressed = false;
     } else if (e.key == "Left" || e.key == "ArrowLeft") {
       this.leftPressed = false;
@@ -40,6 +42,7 @@ class XFighter {
   keyDownHandler(e) {
     e.preventDefault();
     if (e.code == "Space") {
+      this.spacePressed = true;
       this.fireWeapon();
     } else if (e.key == "Right" || e.key == "ArrowRight") {
       this.rightPressed = true;
