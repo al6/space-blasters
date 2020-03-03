@@ -1,4 +1,4 @@
-import XFighter, { drawXFighter } from "./x_fighter";
+import XFighter from "./x_fighter";
 
 class Game {
   constructor() {

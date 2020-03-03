@@ -11,7 +11,7 @@ class BackgroundLayer extends MovingObject {
   }
 
   draw() {
-    let { canvas, ctx, img, posX, posY, velocityY } = this;
+    let { canvas, ctx, img, posY, velocityY } = this;
     function loop() {
       // const pattern = ctx.createPattern(img, "repeat"); // Create a pattern with this image, and set it to "repeat".
       // ctx.fillStyle = pattern;
@@ -24,9 +24,9 @@ class BackgroundLayer extends MovingObject {
       if (posY <= -canvas.height || posY >= canvas.height) {
         posY = 0;
       }
-      setTimeout(() => requestAnimationFrame(loop), 60);
+      requestAnimationFrame(loop)
     }
-    requestAnimationFrame(loop);
+    loop();
   }
 }
 
