@@ -6,6 +6,7 @@ class TieFighter extends MovingObject {
     super(props);
     this.weapon = "laser1";
     this.hp = 2;
+    this.loot = ["upgrade weapon"];
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.img = new Image();
@@ -19,7 +20,10 @@ class TieFighter extends MovingObject {
 
   drawTieFighter() {
     let { ctx, img, x, posY, velocityY, height, width, projectiles } = this;
-    if (this.hp > 0) {
+    if (this.hp <= 0) {
+      //explosion effect
+      //after 50 ms create and draw upgrade item
+    } else if (this.hp > 0) {
       ctx.drawImage(img, x, posY, width, height);
       if (this.posY < 600) {
         this.posY += velocityY;
