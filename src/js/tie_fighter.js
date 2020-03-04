@@ -19,7 +19,7 @@ class TieFighter extends MovingObject {
   }
 
   drawTieFighter() {
-    let { ctx, img, posX, posY, velocityY, height, width, projectiles } = this;
+    let { ctx, img, posX, posY, velocityY, height, width } = this;
     if (this.hp <= 0) {
       // console.log("explosion!")
       //after 50 ms create and draw upgrade item
@@ -50,7 +50,7 @@ class TieFighter extends MovingObject {
         laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
         laser.play();
         x = new PlayerWeapon("laser1", {
-          velocityY: 5,
+          velocityY: 1,
           posX: this.x + 33,
           posY: this.y + 10
         });

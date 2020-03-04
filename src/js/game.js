@@ -3,28 +3,29 @@ import TieFighter from "./tie_fighter";
 
 class Game {
   constructor() {
-    // this.canvas = document.getElementById("game-canvas");
-    // this.ctx = this.canvas.getContext("2d");
+    this.canvas = document.getElementById("game-canvas");
+    this.context = this.canvas.getContext("2d");
     this.player = new XFighter();
     this.wave = 1;
-    this.enemies = [new TieFighter({ velocityY: 2 })];
+    this.enemies = [new TieFighter({ velocityY: 5 })];
     this.draw = this.draw.bind(this);
     this.checkCollision = this.checkCollision.bind(this);
     this.draw();
   }
 
   draw() {
-    const { player, enemies, checkCollision } = this;
+    const { context, player, enemies, checkCollision } = this;
+    context.clearRect(0, 0, 450, 700);
     player.drawXFighter();
+    debugger;
     player.projectiles.forEach(projectile => {
-      if (projectile.posY >= 0 && projectile.status === "active") {
-        if (enemies.length === 0) {
-          projectile.posY += projectile.velocityY;
-          // projectile.draw();
-        }
+      if (projectile && projectile.posY >= 0) {
         enemies.forEach(enemy => {
           if (checkCollision(projectile, enemy)) {
-            projectile.status = "inactive";
+            player.projectiles.splice(
+              player.projectiles.indexOf(projectile),
+              1
+            );
             enemy.hp -= 1;
             if (enemy.hp <= 0) {
               enemies.splice(enemies.indexOf(enemy), 1);
@@ -35,7 +36,6 @@ class Game {
           }
         });
       } else {
-        projectile.status = "inactive";
         player.projectiles.splice(player.projectiles.indexOf(projectile), 1);
       }
     });
