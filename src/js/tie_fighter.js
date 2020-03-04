@@ -13,7 +13,7 @@ class TieFighter extends MovingObject {
     this.img.src = "./src/images/tie-fighter.png";
     this.posX = Math.floor(Math.random() * 831);
     this.posY = Math.floor(Math.random() * -1000);
-    this.height = 40;
+    this.height = 30;
     this.width = 80;
     this.projectiles = [];
   }
@@ -21,7 +21,7 @@ class TieFighter extends MovingObject {
   drawTieFighter() {
     let { ctx, img, posX, posY, velocityY, height, width, projectiles } = this;
     if (this.hp <= 0) {
-      //explosion effect
+      // console.log("explosion!")
       //after 50 ms create and draw upgrade item
     } else if (this.hp > 0) {
       ctx.drawImage(img, posX, posY, width, height);
