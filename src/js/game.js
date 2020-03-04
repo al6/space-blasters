@@ -7,7 +7,7 @@ class Game {
     // this.ctx = this.canvas.getContext("2d");
     this.player = new XFighter();
     this.wave = 1;
-    this.enemies = [];
+    this.enemies = [new TieFighter({ velocityY: 2 })];
     this.draw = this.draw.bind(this);
     this.checkCollision = this.checkCollision.bind(this);
     this.draw();
@@ -20,7 +20,7 @@ class Game {
       if (projectile.posY >= 0 && projectile.status === "active") {
         if (enemies.length === 0) {
           projectile.posY += projectile.velocityY;
-          projectile.draw();
+          // projectile.draw();
         }
         enemies.forEach(enemy => {
           if (checkCollision(projectile, enemy)) {
@@ -28,7 +28,6 @@ class Game {
             enemy.hp -= 1;
             if (enemy.hp <= 0) {
               enemies.splice(enemies.indexOf(enemy), 1);
-              console.log(enemies);
             }
           } else {
             projectile.posY += projectile.velocityY;
@@ -55,15 +54,12 @@ class Game {
       return false;
     } else if (
       object1.posY > object2.posY + 30 ||
-      object1.posY < object2.posY
-      // ||
-      // object1.posX < object2.posX ||
-      // object1.posX > object2.posX
+      object1.posY < object2.posY ||
+      object1.posX < object2.posX ||
+      object1.posX > object2.posX + 80
     ) {
-      // debugger;
       return false;
     } else {
-      console.log("hit a collision!!");
       return true;
     }
   }
