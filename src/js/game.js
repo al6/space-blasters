@@ -8,7 +8,7 @@ class Game {
     this.context = this.canvas.getContext("2d");
     this.player = new XFighter();
     this.wave = 1;
-    this.enemies = [new TieFighter({ velocityY: 5 })];
+    this.enemies = [];
     this.draw = this.draw.bind(this);
     this.checkCollision = this.checkCollision.bind(this);
     this.background = drawBackground();
@@ -39,9 +39,9 @@ class Game {
             if (!flag) {
               projectile.posY += projectile.velocityY;
               flag = true;
+              debugger
               projectile.draw();
             }
-
           }
         });
       } else {
@@ -51,6 +51,7 @@ class Game {
     enemies.forEach(enemy => enemy.drawTieFighter());
     if (enemies.every(enemy => enemy.posY >= 578) || enemies.length === 0) {
       enemies = [];
+
       this.wave += 5;
       this.enemies = [...Array(this.wave).keys()].map(
         () => new TieFighter({ velocityY: 2 })
@@ -60,17 +61,20 @@ class Game {
   }
 
   checkCollision(object1, object2) {
-    if (!object1 || !object2) {
-      return false;
-    } else if (
-      object1.posY > object2.posY + 30 ||
-      object1.posY < object2.posY ||
-      object1.posX < object2.posX ||
-      object1.posX > object2.posX + 80
-    ) {
-      return false;
-    } else {
-      return true;
+    switch (object1.name) {
+      case "laser1":
+        if (!object1 || !object2) {
+          return false;
+        } else if (
+          object1.posY > object2.posY + object2.height ||
+          object1.posY < object2.posY ||
+          object1.posX + 10 < object2.posX ||
+          object1.posX > object2.posX + object2.width
+        ) {
+          return false;
+        } else {
+          return true;
+        }
     }
   }
 }

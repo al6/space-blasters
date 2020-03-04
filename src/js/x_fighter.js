@@ -2,6 +2,7 @@ import PlayerWeapon from "./player_weapon";
 class XFighter {
   constructor() {
     this.weapon = "laser1";
+    this.hp = 100;
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.img = new Image();
