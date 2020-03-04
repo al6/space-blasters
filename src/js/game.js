@@ -4,59 +4,72 @@ import drawBackground from "./background";
 
 class Game {
   constructor() {
+    this.background = drawBackground();
     this.canvas = document.getElementById("game-canvas");
     this.context = this.canvas.getContext("2d");
     this.player = new XFighter();
     this.wave = 1;
+    this.score = 0;
     this.enemies = [];
-    this.draw = this.draw.bind(this);
+    this.paused = false;
     this.checkCollision = this.checkCollision.bind(this);
-    this.background = drawBackground();
+    this.draw = this.draw.bind(this);
     this.draw();
+    this.keyDownHandler = this.keyDownHandler.bind(this);
+    document.addEventListener("keydown", this.keyDownHandler, false);
   }
 
   draw() {
-    let { background, context, player, enemies, checkCollision } = this;
-    context.clearRect(0, 0, 450, 700);
-    if (background[0]) {
-      background.forEach(layer => layer.draw());
-    }
-    player.drawXFighter();
-    player.projectiles.forEach(projectile => {
-      if (projectile && projectile.posY >= 0) {
-        let flag = false;
-        enemies.forEach(enemy => {
-          if (checkCollision(projectile, enemy)) {
-            player.projectiles.splice(
-              player.projectiles.indexOf(projectile),
-              1
-            );
-            enemy.hp -= 1;
-            if (enemy.hp <= 0) {
-              enemies.splice(enemies.indexOf(enemy), 1);
-            }
-          } else {
-            if (!flag) {
-              projectile.posY += projectile.velocityY;
-              flag = true;
-              debugger
-              projectile.draw();
-            }
-          }
-        });
-      } else {
-        player.projectiles.splice(player.projectiles.indexOf(projectile), 1);
+    if (!this.paused) {
+      let { background, context, player, enemies, checkCollision } = this;
+      context.clearRect(0, 0, 450, 700);
+      if (background[0]) {
+        background.forEach(layer => layer.draw());
       }
-    });
-    enemies.forEach(enemy => enemy.drawTieFighter());
-    if (enemies.every(enemy => enemy.posY >= 578) || enemies.length === 0) {
-      enemies = [];
-
-      this.wave += 5;
-      this.enemies = [...Array(this.wave).keys()].map(
-        () => new TieFighter({ velocityY: 2 })
-      );
+      player.drawXFighter();
+      player.projectiles.forEach(projectile => {
+        if (projectile && projectile.posY >= 0) {
+          let already_drawn = false;
+          enemies.forEach(enemy => {
+            if (checkCollision(projectile, enemy)) {
+              player.projectiles.splice(
+                player.projectiles.indexOf(projectile),
+                1
+              );
+              enemy.hp -= 1;
+              if (enemy.hp <= 0) {
+                switch (enemy.constructor.name) {
+                  case "TieFighter":
+                    this.score += 100;
+                    break;
+                  default:
+                    break;
+                }
+                enemies.splice(enemies.indexOf(enemy), 1);
+              }
+            } else {
+              if (!already_drawn) {
+                projectile.posY += projectile.velocityY;
+                projectile.draw();
+                already_drawn = true;
+              }
+            }
+          });
+        } else {
+          player.projectiles.splice(player.projectiles.indexOf(projectile), 1);
+        }
+      });
+      enemies.forEach(enemy => enemy.drawTieFighter());
+      if (enemies.every(enemy => enemy.posY >= 578) || enemies.length === 0) {
+        enemies = [];
+        this.wave += 5;
+        this.enemies = [...Array(this.wave).keys()].map(
+          () => new TieFighter({ velocityY: 2 })
+        );
+      }
     }
+    // console.log(player.hp)
+
     requestAnimationFrame(this.draw);
   }
 
@@ -75,6 +88,19 @@ class Game {
         } else {
           return true;
         }
+    }
+  }
+
+  keyDownHandler(e) {
+    e.preventDefault();
+    if (e.key == "r" || e.key == "R") {
+      this.player = new XFighter();
+      this.wave = 1;
+      this.score = 0;
+      this.enemies = [];
+    } else if (e.key == "p" || e.key == "P") {
+      this.paused = !this.paused;
+      console.log(this.paused);
     }
   }
 }

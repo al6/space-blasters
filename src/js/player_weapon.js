@@ -25,9 +25,6 @@ class PlayerWeapon extends MovingObject {
     let { ctx, img, posX, posY, velocityY } = this;
     posY += velocityY;
     ctx.drawImage(img, posX, posY);
-    if (posY < 0) {
-      delete this;
-    }
   }
 }
 

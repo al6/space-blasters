@@ -129,7 +129,7 @@ table {
 
 * {
   color: white;
-  font-family: Whitney, Helvetica Neueu, Helvetica, sans-serif;
+  font-family: Whitney, Helvetica, sans-serif;
   font-size: 1.5rem;
 }
 
@@ -223,8 +223,8 @@ body {
     justify-content: center;
     margin-bottom: 2rem;
 
-    .sound,
-    .no-sound {
+    #sound,
+    #no-sound {
       filter: brightness(80%);
       margin: 0 1rem;
       max-height: 2rem;

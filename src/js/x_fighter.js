@@ -1,14 +1,14 @@
 import PlayerWeapon from "./player_weapon";
 class XFighter {
   constructor() {
-    this.weapon = "laser1";
-    this.hp = 100;
+    this.weapon = "laser2";
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.img = new Image();
     this.img.src = "./src/images/ship.png";
-    this.x = this.canvas.width * 1.4;
-    this.y = this.canvas.height * 3.85;
+    this.hp = 100;
+    this.x = 420;
+    this.y = 577.5;
     this.height = 80;
     this.width = 30;
     this.projectiles = [];
@@ -67,7 +67,7 @@ class XFighter {
   }
 
   drawXFighter() {
-    const { canvas, ctx, img, x, y, height, width, projectiles } = this;
+    const { canvas, ctx, img, x, y, height, width } = this;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, x, y, height, width);
     img.onload = function() {
