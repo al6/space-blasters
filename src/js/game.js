@@ -1,5 +1,6 @@
 import XFighter from "./x_fighter";
 import TieFighter from "./tie_fighter";
+import drawBackground from "./background";
 
 class Game {
   constructor() {
@@ -10,16 +11,20 @@ class Game {
     this.enemies = [new TieFighter({ velocityY: 5 })];
     this.draw = this.draw.bind(this);
     this.checkCollision = this.checkCollision.bind(this);
+    this.background = drawBackground();
     this.draw();
   }
 
   draw() {
-    const { context, player, enemies, checkCollision } = this;
+    let { background, context, player, enemies, checkCollision } = this;
     context.clearRect(0, 0, 450, 700);
+    if (background[0]) {
+      background.forEach(layer => layer.draw());
+    }
     player.drawXFighter();
-    debugger;
     player.projectiles.forEach(projectile => {
       if (projectile && projectile.posY >= 0) {
+        let flag = false;
         enemies.forEach(enemy => {
           if (checkCollision(projectile, enemy)) {
             player.projectiles.splice(
@@ -31,8 +36,12 @@ class Game {
               enemies.splice(enemies.indexOf(enemy), 1);
             }
           } else {
-            projectile.posY += projectile.velocityY;
-            projectile.draw();
+            if (!flag) {
+              projectile.posY += projectile.velocityY;
+              flag = true;
+              projectile.draw();
+            }
+
           }
         });
       } else {
@@ -41,6 +50,7 @@ class Game {
     });
     enemies.forEach(enemy => enemy.drawTieFighter());
     if (enemies.every(enemy => enemy.posY >= 578) || enemies.length === 0) {
+      enemies = [];
       this.wave += 5;
       this.enemies = [...Array(this.wave).keys()].map(
         () => new TieFighter({ velocityY: 2 })

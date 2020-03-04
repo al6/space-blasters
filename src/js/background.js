@@ -29,11 +29,11 @@ function drawLayer(i) {
       v["velocityY"] = -2;
       break;
   }
-  new BackgroundLayer(
+  return new BackgroundLayer(
     document.getElementById("l" + i),
     src + i + ".png",
     v
-  ).draw();
+  );
 }
 
 function drawBackground() {
@@ -41,7 +41,7 @@ function drawBackground() {
   for (let i = 0; i < 8; i++) {
     layers.push(i);
   }
-  layers.forEach(i => drawLayer(i));
+  return layers.map(i => drawLayer(i));
 }
 
 export default drawBackground;
