@@ -15,7 +15,6 @@ class BackgroundLayer extends MovingObject {
     this.posY += velocityY;
     ctx.clearRect(0, 0, 450, 700);
     ctx.drawImage(img, 0, -700 + posY);
-    ctx.drawImage(img, 0, 700 + posY);
     ctx.drawImage(img, 0, posY);
     if (posY >= canvas.height) {
       this.posY = 0;

@@ -11,6 +11,8 @@ class Game {
     this.wave = 0;
     this.score = 0;
     this.enemies = [];
+    this.tieFighterImg = new Image();
+    this.tieFighterImg.src = "./src/images/tie-fighter.png";
     this.paused = false;
     this.lost = false;
     this.fpsInterval = 1000 / 120;
@@ -115,7 +117,7 @@ class Game {
           this.wave += 5;
           this.enemies = [...Array(this.wave).keys()].map(
             () =>
-              new TieFighter({ velocityY: Math.ceil(Math.random() * speed) })
+              new TieFighter(this.tieFighterImg, { velocityY: Math.ceil(Math.random() * speed) })
           );
         }
       } else if (!this.lost) {

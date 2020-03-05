@@ -2,7 +2,7 @@ import PlayerWeapon from "./player_weapon";
 import MovingObject from "./moving_object";
 
 class TieFighter extends MovingObject {
-  constructor(props) {
+  constructor(img, props) {
     super(props);
     this.name = "TieFighter";
     this.weapon = "laser1";
@@ -23,8 +23,7 @@ class TieFighter extends MovingObject {
     }
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
-    this.img = new Image();
-    this.img.src = "./src/images/tie-fighter.png";
+    this.img = img
     this.posX = Math.floor(Math.random() * 831);
     this.posY = Math.floor(Math.random() * -1000);
     this.height = 30;
