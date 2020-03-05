@@ -51,7 +51,7 @@ class Game {
         this.drawScore();
         this.drawHP();
         player.projectiles.forEach(projectile => {
-          if (projectile && projectile.posY >= -100) {
+          if (projectile && projectile.posY >= -5) {
             let alreadyDrawn = false;
             enemies.forEach(enemy => {
               if (checkCollision(projectile, enemy)) {
@@ -90,7 +90,6 @@ class Game {
           if (enemy.posY >= 578) {
             this.player.hp -= 1;
             enemies.splice(enemies.indexOf(enemy), 1);
-            console.log(enemies);
           } else {
             enemy.drawTieFighter();
           }

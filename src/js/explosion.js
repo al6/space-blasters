@@ -1,49 +1,33 @@
 import PlayerWeapon from "./player_weapon";
 import MovingObject from "./moving_object";
 
-class TieFighter extends MovingObject {
-  constructor(props) {
+class Explosion extends MovingObject {
+  constructor(loot, props) {
     super(props);
-    this.name = "TieFighter";
-    this.weapon = "laser1";
-    this.hp = 2;
-    this.loot = [
-      { name: "laser2", droprate: 0.3 },
-      { name: "laser3", droprate: 0.2 },
-      { name: "raygun", droprate: 0.1 },
-      { name: "bigboy", droprate: 0.07 },
-      { name: "antimatter", droprate: 0.05 }
-    ];
-    this.loot = this.loot[Math.floor(Math.random() * this.loot.length)];
-    let rand = Math.ceil(Math.random() * 100);
-    if (this.loot["droprate"] * 100 > rand) {
-      this.loot = this.loot["name"];
-      console.log(this.loot);
-    } else {
-      this.loot = [];
-    }
+    this.name = "Explosion";
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
+    this.images = [];
     this.img = new Image();
     this.img.src = "./src/images/tie-fighter.png";
+    this.images.push(this.img);
     this.posX = Math.floor(Math.random() * 831);
     this.posY = Math.floor(Math.random() * -1000);
     this.height = 30;
     this.width = 80;
-    this.projectiles = [];
+    this.loot = loot;
   }
 
-  drawTieFighter() {
+  drawExplosion() {
     let { ctx, img, posX, posY, velocityY, height, width } = this;
-    if (this.hp <= 0) {
-      // let explosion = new Explosion(posX, posY, velocityY)
-      //after 50 ms create and draw upgrade item
-    } else if (this.hp > 0) {
+    if(){
       ctx.drawImage(img, posX, posY, width, height);
       if (this.posY < 650) {
         this.posY += velocityY;
       }
-    }
+    }  
+      
+
     img.onload = function() {
       ctx.drawImage(img, posX, posY, width, height);
     };
@@ -83,4 +67,4 @@ class TieFighter extends MovingObject {
     }
   }
 }
-export default TieFighter;
+export default Explosion;
