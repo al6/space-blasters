@@ -36,7 +36,7 @@ class TieFighter extends MovingObject {
   drawTieFighter() {
     let { ctx, img, posX, posY, velocityY, height, width } = this;
     if (this.hp <= 0) {
-      // let explosion = new Explosion(posX, posY, velocityY)
+      // let explosion = new Explosion(this.loot, posX, posY, velocityY)
       //after 50 ms create and draw upgrade item
     } else if (this.hp > 0) {
       ctx.drawImage(img, posX, posY, width, height);
