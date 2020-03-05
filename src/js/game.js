@@ -84,20 +84,20 @@ class Game {
             speed = 6;
             break;
           case this.wave > 30:
-            speed = 7;
+            speed = 10;
             break;
           case this.wave > 40:
-            speed = 8;
+            speed = 12;
             break;
             case this.wave > 50:
-            speed = 10;
+            speed = 15;
             break;
           default:
             break;
         }
         this.wave += 5;
         this.enemies = [...Array(this.wave).keys()].map(
-          () => new TieFighter({ velocityY: speed })
+          () => new TieFighter({ velocityY: 5 + Math.floor(Math.random()*3) })
         );
       }
     } else if (!this.lost) {

@@ -30,15 +30,6 @@ class TieFighter extends MovingObject {
         this.posY += velocityY;
       }
     }
-
-    // projectiles.forEach(projectile => {
-    //   if (projectile.posY >= 0) {
-    //     projectile.posY += projectile.velocityY;
-    //     projectile.draw();
-    //   } else {
-    //     projectiles.splice(projectiles.indexOf(projectile), 1);
-    //   }
-    // });
     img.onload = function() {
       ctx.drawImage(img, posX, posY, width, height);
     };
