@@ -1,18 +1,19 @@
 import XFighter from "./x_fighter";
 import TieFighter from "./tie_fighter";
+import Explosion from "./explosion";
 import drawBackground from "./background";
 
 class Game {
   constructor() {
     this.background = drawBackground();
+    this.tieFighterImg = new Image();
+    this.tieFighterImg.src = "./src/images/tie-fighter.png";
     this.canvas = document.getElementById("game-canvas");
     this.context = this.canvas.getContext("2d");
     this.player = new XFighter();
     this.wave = 0;
     this.score = 0;
     this.enemies = [];
-    this.tieFighterImg = new Image();
-    this.tieFighterImg.src = "./src/images/tie-fighter.png";
     this.paused = false;
     this.lost = false;
     this.fpsInterval = 1000 / 120;
@@ -30,6 +31,7 @@ class Game {
     this.draw();
     this.keyDownHandler = this.keyDownHandler.bind(this);
     document.addEventListener("keydown", this.keyDownHandler, false);
+    window.explosions = [];
   }
 
   draw() {
@@ -64,8 +66,17 @@ class Game {
                 );
                 enemy.hp -= 1;
                 if (enemy.hp <= 0) {
+                  let explosion = null;
                   switch (enemy.constructor.name) {
                     case "TieFighter":
+                      explosion = new Explosion(this.loot, {
+                        posX: enemy.posX,
+                        posY: enemy.posY,
+                        velocityY: 1
+                      });
+                      window.explosions.push(explosion);
+                      console.log(window.explosions);
+                      console.log(enemies);
                       this.score += 1;
                       break;
                     default:
@@ -186,7 +197,10 @@ class Game {
     let { context } = this;
     context.font = "100px Arial";
     context.fillStyle = "green";
-    context.fillText("PAUSED", 250, 320);
+    context.fillText("PAUSED", 250, 270);
+    context.font = "bold 50px Arial";
+    context.fillText("PRESS P TO PLAY/PAUSE", 150, 320);
+
   }
 
   drawReset() {

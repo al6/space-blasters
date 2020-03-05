@@ -1,6 +1,5 @@
 import PlayerWeapon from "./player_weapon";
 import MovingObject from "./moving_object";
-
 class TieFighter extends MovingObject {
   constructor(img, props) {
     super(props);
@@ -23,7 +22,7 @@ class TieFighter extends MovingObject {
     }
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
-    this.img = img
+    this.img = img;
     this.posX = Math.floor(Math.random() * 831);
     this.posY = Math.floor(Math.random() * -1000);
     this.height = 30;
@@ -33,14 +32,9 @@ class TieFighter extends MovingObject {
 
   drawTieFighter() {
     let { ctx, img, posX, posY, velocityY, height, width } = this;
-    if (this.hp <= 0) {
-      // let explosion = new Explosion(this.loot, posX, posY, velocityY)
-      //after 50 ms create and draw upgrade item
-    } else if (this.hp > 0) {
-      ctx.drawImage(img, posX, posY, width, height);
-      if (this.posY < 650) {
-        this.posY += velocityY;
-      }
+    ctx.drawImage(img, posX, posY, width, height);
+    if (this.posY < 650) {
+      this.posY += velocityY;
     }
     img.onload = function() {
       ctx.drawImage(img, posX, posY, width, height);
