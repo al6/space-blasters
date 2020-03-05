@@ -13,100 +13,118 @@ class Game {
     this.enemies = [];
     this.paused = false;
     this.lost = false;
+    this.fpsInterval = 1000 / 60;
+    this.stop = false;
+    this.frameCount = 0;
+    this.fps = 60;
+    this.now = 0;
+    this.then = Date.now();
+    this.startTime = this.then;
+    this.elapsed = 0;
     this.checkCollision = this.checkCollision.bind(this);
     this.draw = this.draw.bind(this);
     this.drawReset = this.drawReset.bind(this);
+    this.impact = new Audio("./src/sounds/impact.mp3");
     this.draw();
     this.keyDownHandler = this.keyDownHandler.bind(this);
     document.addEventListener("keydown", this.keyDownHandler, false);
   }
 
   draw() {
-    if (!this.paused && !this.lost) {
-      let { background, context, player, enemies, checkCollision } = this;
-      context.clearRect(0, 0, 450, 700);
-      if (background[0]) {
-        background.forEach(layer => layer.draw());
-      }
-      if (player.hp > 0) {
-        player.drawXFighter();
+    requestAnimationFrame(this.draw);
+    this.now = Date.now();
+    this.elapsed = this.now - this.then;
+    if (this.elapsed > this.fpsInterval) {
+      this.then = this.now - (this.elapsed % this.fpsInterval);
+      if (!this.paused && !this.lost) {
+        let { background, context, player, enemies, checkCollision } = this;
+        context.clearRect(0, 0, 450, 700);
+        if (background[0]) {
+          background.forEach(layer => layer.draw());
+        }
+        if (player.hp > 0) {
+          player.drawXFighter();
+        } else {
+          this.drawLose();
+          this.lost = true;
+        }
+        this.drawScore();
+        this.drawHP();
+        player.projectiles.forEach(projectile => {
+          if (projectile && projectile.posY >= 0) {
+            let alreadyDrawn = false;
+            enemies.forEach(enemy => {
+              if (checkCollision(projectile, enemy)) {
+                this.impact.play();
+                player.projectiles.splice(
+                  player.projectiles.indexOf(projectile),
+                  1
+                );
+                enemy.hp -= 1;
+                if (enemy.hp <= 0) {
+                  switch (enemy.constructor.name) {
+                    case "TieFighter":
+                      this.score += 1;
+                      break;
+                    default:
+                      break;
+                  }
+                  enemies.splice(enemies.indexOf(enemy), 1);
+                }
+              } else {
+                if (!alreadyDrawn) {
+                  projectile.posY += projectile.velocityY;
+                  projectile.draw();
+                  alreadyDrawn = true;
+                }
+              }
+            });
+          } else {
+            player.projectiles.splice(
+              player.projectiles.indexOf(projectile),
+              1
+            );
+          }
+        });
+        enemies.forEach(enemy => {
+          if (enemy.posY >= 578) {
+            this.player.hp -= 1;
+            enemies.splice(enemies.indexOf(enemy), 1);
+            console.log(enemies);
+          } else {
+            enemy.drawTieFighter();
+          }
+        });
+        if (enemies.length === 0) {
+          let speed = 3;
+          switch (this.wave) {
+            case this.wave > 20:
+              speed = 5;
+              break;
+            case this.wave > 30:
+              speed = 6;
+              break;
+            case this.wave > 40:
+              speed = 8;
+              break;
+            case this.wave > 50:
+              speed = 10;
+              break;
+            default:
+              break;
+          }
+          this.wave += 5;
+          this.enemies = [...Array(this.wave).keys()].map(
+            () =>
+              new TieFighter({ velocityY: Math.ceil(Math.random() * speed) })
+          );
+        }
+      } else if (!this.lost) {
+        this.drawPause();
       } else {
         this.drawLose();
-        this.lost = true;
       }
-      this.drawScore();
-      this.drawHP();
-      player.projectiles.forEach(projectile => {
-        if (projectile && projectile.posY >= 0) {
-          let alreadyDrawn = false;
-          enemies.forEach(enemy => {
-            if (checkCollision(projectile, enemy)) {
-              player.projectiles.splice(
-                player.projectiles.indexOf(projectile),
-                1
-              );
-              enemy.hp -= 1;
-              if (enemy.hp <= 0) {
-                switch (enemy.constructor.name) {
-                  case "TieFighter":
-                    this.score += 1;
-                    break;
-                  default:
-                    break;
-                }
-                enemies.splice(enemies.indexOf(enemy), 1);
-              }
-            } else {
-              if (!alreadyDrawn) {
-                projectile.posY += projectile.velocityY;
-                projectile.draw();
-                alreadyDrawn = true;
-              }
-            }
-          });
-        } else {
-          player.projectiles.splice(player.projectiles.indexOf(projectile), 1);
-        }
-      });
-      enemies.forEach(enemy => {
-        if (enemy.posY >= 578) {
-          this.player.hp -= 1;
-          enemies.splice(enemies.indexOf(enemy), 1);
-          console.log(enemies);
-        } else {
-          enemy.drawTieFighter();
-        }
-      });
-      if (enemies.length === 0) {
-        let speed = 5;
-        switch (this.wave) {
-          case this.wave > 20:
-            speed = 6;
-            break;
-          case this.wave > 30:
-            speed = 10;
-            break;
-          case this.wave > 40:
-            speed = 12;
-            break;
-            case this.wave > 50:
-            speed = 15;
-            break;
-          default:
-            break;
-        }
-        this.wave += 5;
-        this.enemies = [...Array(this.wave).keys()].map(
-          () => new TieFighter({ velocityY: 5 + Math.floor(Math.random()*3) })
-        );
-      }
-    } else if (!this.lost) {
-      this.drawPause();
-    } else {
-      this.drawLose();
     }
-
-    requestAnimationFrame(this.draw);
   }
 
   checkCollision(object1, object2) {
