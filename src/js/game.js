@@ -78,12 +78,29 @@ class Game {
         }
       });
       if (enemies.length === 0) {
+        let speed = 5;
+        switch (this.wave) {
+          case this.wave > 20:
+            speed = 6;
+            break;
+          case this.wave > 30:
+            speed = 7;
+            break;
+          case this.wave > 40:
+            speed = 8;
+            break;
+            case this.wave > 50:
+            speed = 10;
+            break;
+          default:
+            break;
+        }
         this.wave += 5;
         this.enemies = [...Array(this.wave).keys()].map(
-          () => new TieFighter({ velocityY: 2 })
+          () => new TieFighter({ velocityY: speed })
         );
       }
-    } else if(!this.lost){
+    } else if (!this.lost) {
       this.drawPause();
     } else {
       this.drawLose();
