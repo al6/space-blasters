@@ -5,6 +5,7 @@ class Explosion extends MovingObject {
   constructor(loot, props) {
     super(props);
     this.name = "Explosion";
+    this.hp = 4;
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.images = [];
@@ -19,17 +20,16 @@ class Explosion extends MovingObject {
   }
 
   drawExplosion() {
-    let { ctx, img, posX, posY, velocityY, height, width } = this;
-    if(){
-      ctx.drawImage(img, posX, posY, width, height);
+    let { ctx, images, posX, posY, velocityY, height, width } = this;
+    if (this.hp > 0) {
+      ctx.drawImage(images[this.hp], posX, posY, width, height);
+      this.hp -= 1;
       if (this.posY < 650) {
         this.posY += velocityY;
       }
-    }  
-      
-
-    img.onload = function() {
-      ctx.drawImage(img, posX, posY, width, height);
+    }
+    images[this.hp].onload = function() {
+      ctx.drawImage(images[this.hp], posX, posY, width, height);
     };
   }
 

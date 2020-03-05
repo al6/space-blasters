@@ -18,7 +18,6 @@ class TieFighter extends MovingObject {
     let rand = Math.ceil(Math.random() * 100);
     if (this.loot["droprate"] * 100 > rand) {
       this.loot = this.loot["name"];
-      console.log(this.loot);
     } else {
       this.loot = [];
     }
