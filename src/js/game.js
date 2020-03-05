@@ -13,7 +13,7 @@ class Game {
     this.enemies = [];
     this.paused = false;
     this.lost = false;
-    this.fpsInterval = 1000 / 60;
+    this.fpsInterval = 1000 / 120;
     this.stop = false;
     this.frameCount = 0;
     this.fps = 60;
@@ -51,7 +51,7 @@ class Game {
         this.drawScore();
         this.drawHP();
         player.projectiles.forEach(projectile => {
-          if (projectile && projectile.posY >= 0) {
+          if (projectile && projectile.posY >= -100) {
             let alreadyDrawn = false;
             enemies.forEach(enemy => {
               if (checkCollision(projectile, enemy)) {
