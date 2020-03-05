@@ -4,6 +4,7 @@ import MovingObject from "./moving_object";
 class TieFighter extends MovingObject {
   constructor(props) {
     super(props);
+    this.name = "TieFighter";
     this.weapon = "laser1";
     this.hp = 2;
     this.loot = ["upgrade weapon"];

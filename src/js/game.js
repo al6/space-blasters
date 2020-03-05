@@ -8,28 +8,37 @@ class Game {
     this.canvas = document.getElementById("game-canvas");
     this.context = this.canvas.getContext("2d");
     this.player = new XFighter();
-    this.wave = 1;
+    this.wave = 0;
     this.score = 0;
     this.enemies = [];
     this.paused = false;
+    this.lost = false;
     this.checkCollision = this.checkCollision.bind(this);
     this.draw = this.draw.bind(this);
+    this.drawReset = this.drawReset.bind(this);
     this.draw();
     this.keyDownHandler = this.keyDownHandler.bind(this);
     document.addEventListener("keydown", this.keyDownHandler, false);
   }
 
   draw() {
-    if (!this.paused) {
+    if (!this.paused && !this.lost) {
       let { background, context, player, enemies, checkCollision } = this;
       context.clearRect(0, 0, 450, 700);
       if (background[0]) {
         background.forEach(layer => layer.draw());
       }
-      player.drawXFighter();
+      if (player.hp > 0) {
+        player.drawXFighter();
+      } else {
+        this.drawLose();
+        this.lost = true;
+      }
+      this.drawScore();
+      this.drawHP();
       player.projectiles.forEach(projectile => {
         if (projectile && projectile.posY >= 0) {
-          let already_drawn = false;
+          let alreadyDrawn = false;
           enemies.forEach(enemy => {
             if (checkCollision(projectile, enemy)) {
               player.projectiles.splice(
@@ -40,7 +49,7 @@ class Game {
               if (enemy.hp <= 0) {
                 switch (enemy.constructor.name) {
                   case "TieFighter":
-                    this.score += 100;
+                    this.score += 1;
                     break;
                   default:
                     break;
@@ -48,10 +57,10 @@ class Game {
                 enemies.splice(enemies.indexOf(enemy), 1);
               }
             } else {
-              if (!already_drawn) {
+              if (!alreadyDrawn) {
                 projectile.posY += projectile.velocityY;
                 projectile.draw();
-                already_drawn = true;
+                alreadyDrawn = true;
               }
             }
           });
@@ -59,16 +68,26 @@ class Game {
           player.projectiles.splice(player.projectiles.indexOf(projectile), 1);
         }
       });
-      enemies.forEach(enemy => enemy.drawTieFighter());
-      if (enemies.every(enemy => enemy.posY >= 578) || enemies.length === 0) {
-        enemies = [];
+      enemies.forEach(enemy => {
+        if (enemy.posY >= 578) {
+          this.player.hp -= 1;
+          enemies.splice(enemies.indexOf(enemy), 1);
+          console.log(enemies);
+        } else {
+          enemy.drawTieFighter();
+        }
+      });
+      if (enemies.length === 0) {
         this.wave += 5;
         this.enemies = [...Array(this.wave).keys()].map(
           () => new TieFighter({ velocityY: 2 })
         );
       }
+    } else if(!this.lost){
+      this.drawPause();
+    } else {
+      this.drawLose();
     }
-    // console.log(player.hp)
 
     requestAnimationFrame(this.draw);
   }
@@ -98,10 +117,47 @@ class Game {
       this.wave = 1;
       this.score = 0;
       this.enemies = [];
+      this.lost = false;
     } else if (e.key == "p" || e.key == "P") {
       this.paused = !this.paused;
-      console.log(this.paused);
     }
+  }
+
+  drawHP() {
+    let { context } = this;
+    context.font = "bold 30px Arial";
+    context.fillStyle = "RED";
+    context.fillText("HP: " + this.player.hp, 10, 30);
+  }
+
+  drawScore() {
+    let { context } = this;
+    context.font = "bold 30px Arial";
+    context.fillStyle = "white";
+    context.fillText("Score: " + this.score, 130, 30);
+  }
+
+  drawLose() {
+    let { context } = this;
+    context.font = "bold 130px Arial";
+    context.fillStyle = "red";
+    context.fillText("GAME OVER", 50, 250);
+    context.font = "bold 50px Arial";
+    context.fillText("PRESS R TO RESTART", 180, 300);
+  }
+
+  drawPause() {
+    let { context } = this;
+    context.font = "100px Arial";
+    context.fillStyle = "green";
+    context.fillText("PAUSED", 250, 320);
+  }
+
+  drawReset() {
+    let { context } = this;
+    context.font = "100px Arial";
+    context.fillStyle = "red";
+    context.fillText("RESET", 250, 320);
   }
 }
 
