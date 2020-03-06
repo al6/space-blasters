@@ -55,7 +55,7 @@ class XFighter {
       this.leftPressed = true;
     }
     if (e.key == "Up" || e.key == "ArrowUp") {
-\      this.upPressed = true;
+      this.upPressed = true;
     }
     if (e.key == "Down" || e.key == "ArrowDown") {
       this.downPressed = true;
