@@ -2,6 +2,7 @@ import XFighter from "./x_fighter";
 import TieFighter from "./tie_fighter";
 import Explosion from "./explosion";
 import drawBackground from "./background";
+import Upgrade from "./upgrade";
 
 class Game {
   constructor() {
@@ -34,6 +35,7 @@ class Game {
     this.keyDownHandler = this.keyDownHandler.bind(this);
     document.addEventListener("keydown", this.keyDownHandler, false);
     this.explosions = [];
+    this.upgrades = [];
     this.draw();
   }
 
@@ -45,7 +47,16 @@ class Game {
       this.then = this.now - (this.elapsed % this.fpsInterval);
 
       if (!this.paused && !this.lost) {
-        let { background, context, player, enemies, checkCollision } = this;
+        let {
+          background,
+          context,
+          player,
+          enemies,
+          checkCollision,
+          explosions,
+          upgrades
+        } = this;
+
         context.clearRect(0, 0, 450, 700);
 
         if (background[0]) {
@@ -59,16 +70,52 @@ class Game {
         }
         this.drawScore();
         this.drawHP();
-        this.explosions.forEach(explosion => {
+        explosions.forEach(explosion => {
           if (explosion.hp > 0) {
             explosion.drawExplosion();
             explosion.hp -= 1;
-            explosion.delete = false;
           } else if (explosion.hp <= 0) {
-            explosion.delete = true;
+            if (explosion.loot) {
+              let upgrade = new Upgrade(this.loot, {
+                posX: explosion.posX,
+                posY: explosion.posY,
+                velocityY: 1
+              });
+              upgrades.push(upgrade);
+            }
+            // if (!window.muted) {
+            //   let tieExplodeSound = new Audio(
+            //     "./src/sounds/tie_explode_short.mp3"
+            //   );
+            //   tieExplodeSound.play();
+            // }
+            explosions.splice(explosions.indexOf(explosion), 1);
           }
         });
+        upgrades.forEach(upgrade => {
+          if (checkCollision(player, upgrade)) {
+            switch (player.weapon) {
+              case "laser1":
+                player.weapon = "laser2";
+                break;
+              case "laser2":
+                player.weapon = "laser3";
+              case "laser3":
+                player.hp += 1;
+                break;
+              default:
+                break;
+            }
+            upgrades.splice(upgrades.indexOf(upgrade), 1);
+          } else if (upgrade && upgrade.posY < 578) {
+            upgrade.drawUpgrade();
+          } else {
+            upgrades.splice(upgrades.indexOf(upgrade), 1);
+          }
+        });
+        // if (this.upgrades[0] && this.upgrades[0].delete) {
 
+        // }
         player.projectiles.forEach(projectile => {
           if (projectile && projectile.posY >= -5) {
             let alreadyDrawn = false;
@@ -84,7 +131,7 @@ class Game {
                   let explosion = null;
                   switch (enemy.constructor.name) {
                     case "TieFighter":
-                      explosion = new Explosion(this.loot, {
+                      explosion = new Explosion(enemy.loot, {
                         posX: enemy.posX,
                         posY: enemy.posY,
                         velocityY: 1
@@ -162,6 +209,11 @@ class Game {
         }
       } else {
         this.drawLose();
+        if (window.muted) {
+          this.drawMuted();
+        } else {
+          this.context.clearRect(400, -100, 550, 200);
+        }
       }
       if (window.muted && !this.paused) {
         this.drawMuted();
@@ -179,6 +231,21 @@ class Game {
           object1.posY < object2.posY ||
           object1.posX + 10 < object2.posX ||
           object1.posX > object2.posX + object2.width
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+
+      case "player":
+        debugger;
+        if (!object1 || !object2) {
+          return false;
+        } else if (
+          object1.y > object2.posY + object2.height ||
+          object1.y + object1.height < object2.posY ||
+          object1.x + object1.width < object2.posX ||
+          object1.x > object2.posX + object2.width
         ) {
           return false;
         } else {

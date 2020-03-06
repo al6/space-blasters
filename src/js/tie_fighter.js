@@ -7,18 +7,19 @@ class TieFighter extends MovingObject {
     this.weapon = "laser1";
     this.hp = 2;
     this.loot = [
-      { name: "laser2", droprate: 0.3 },
-      { name: "laser3", droprate: 0.2 },
-      { name: "raygun", droprate: 0.1 },
-      { name: "bigboy", droprate: 0.07 },
-      { name: "antimatter", droprate: 0.05 }
+      { name: "upgrade", droprate: 0.05 }
+      // { name: "laser2", droprate: 0.3 },
+      // { name: "laser3", droprate: 0.2 },
+      // { name: "raygun", droprate: 0.1 },
+      // { name: "bigboy", droprate: 0.07 },
+      // { name: "antimatter", droprate: 0.05 }
     ];
     this.loot = this.loot[Math.floor(Math.random() * this.loot.length)];
     let rand = Math.ceil(Math.random() * 100);
     if (this.loot["droprate"] * 100 > rand) {
       this.loot = this.loot["name"];
     } else {
-      this.loot = [];
+      this.loot = null;
     }
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");

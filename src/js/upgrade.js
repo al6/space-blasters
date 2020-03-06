@@ -1,29 +1,26 @@
 import MovingObject from "./moving_object";
-class Explosion extends MovingObject {
+class Upgrade extends MovingObject {
   constructor(loot, props) {
     super(props);
-    this.name = "explosion";
-    this.hp = 60;
+    this.name = "upgrade";
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.img = new Image();
-    this.img.src = "./src/images/explosions/halfsized/tie_fighter_explosion_frames/1.png";
-    this.height = 50;
-    this.width = 80;
+    this.img.src = "./src/images/upgrades/1.png";
+    this.height = 20;
+    this.width = 30;
     this.loot = loot;
   }
 
-  drawExplosion() {
+  drawUpgrade() {
     let { ctx, img, posX, posY, velocityY, height, width } = this;
-    if (this.hp > 0) {
+    if (this.posY < 578) {
       ctx.drawImage(img, posX, posY, width, height);
-      if (this.posY < 650) {
-        this.posY += velocityY;
-      }
+      this.posY += velocityY;
     }
     img.onload = function() {
       ctx.drawImage(img, posX, posY, width, height);
     };
   }
 }
-export default Explosion;
+export default Upgrade;

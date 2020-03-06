@@ -1,7 +1,8 @@
 import PlayerWeapon from "./player_weapon";
 class XFighter {
   constructor() {
-    this.weapon = "laser2";
+    this.name = "player";
+    this.weapon = "laser1";
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.img = new Image();
@@ -92,8 +93,6 @@ class XFighter {
     if (this.downPressed) {
       if (this.y < 578) {
         this.y += 10;
-      } else {
-        this.y = 0;
       }
     }
     ctx.drawImage(img, x, y, height, width);
@@ -105,7 +104,7 @@ class XFighter {
   }
 
   fireWeapon() {
-    let laser, x, y;
+    let laser, x, y, z;
     if (this.projectileCoolDown <= 0) {
       this.projectileCoolDown += 10;
       switch (this.weapon) {
@@ -134,6 +133,28 @@ class XFighter {
           });
           this.projectiles.push(x);
           this.projectiles.push(y);
+          break;
+        case "laser3":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser1", {
+            velocityY: -5,
+            posX: this.x + 53,
+            posY: this.y - 10
+          });
+          y = new PlayerWeapon("laser1", {
+            velocityY: -5,
+            posX: this.x + 13,
+            posY: this.y - 10
+          });
+          z = new PlayerWeapon("laser1", {
+            velocityY: -5,
+            posX: this.x + 33,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          this.projectiles.push(y);
+          this.projectiles.push(z);
           break;
         default:
           break;
