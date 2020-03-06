@@ -83,12 +83,6 @@ class Game {
               });
               upgrades.push(upgrade);
             }
-            // if (!window.muted) {
-            //   let tieExplodeSound = new Audio(
-            //     "./src/sounds/tie_explode_short.mp3"
-            //   );
-            //   tieExplodeSound.play();
-            // }
             explosions.splice(explosions.indexOf(explosion), 1);
           }
         });
@@ -178,6 +172,13 @@ class Game {
             enemies.splice(enemies.indexOf(enemy), 1);
           } else {
             enemy.drawTieFighter();
+            let randomNumber = Math.ceil(Math.random() * 100);
+            if (randomNumber <= 1) {
+              enemy.fireWeapon();
+            }
+            enemy.projectiles.forEach(projectile => {
+              projectile.draw();
+            });
           }
         });
         if (enemies.length === 0) {

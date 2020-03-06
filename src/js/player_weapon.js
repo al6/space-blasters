@@ -14,7 +14,7 @@ class PlayerWeapon extends MovingObject {
         img.src = "./src/images/weapons/laser1.png";
         break;
       case "laser2":
-        img.src = "./src/images/ship.png/";
+        img.src = "./src/images/weapons/laser2.png";
         break;
       default:
         break;

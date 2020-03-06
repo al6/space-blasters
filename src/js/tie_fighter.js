@@ -4,7 +4,7 @@ class TieFighter extends MovingObject {
   constructor(img, props) {
     super(props);
     this.name = "TieFighter";
-    this.weapon = "laser1";
+    this.weapon = "laser2";
     this.hp = 2;
     this.loot = [
       { name: "upgrade", droprate: 0.15 }
@@ -21,6 +21,8 @@ class TieFighter extends MovingObject {
     } else {
       this.loot = null;
     }
+    this.projectileCoolDown = 0;
+    this.projectileCoolDownConstant = 10;
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.img = img;
@@ -43,36 +45,28 @@ class TieFighter extends MovingObject {
   }
 
   fireWeapon() {
-    let laser, x, y;
-    switch (this.weapon) {
-      case "laser1":
-        laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-        laser.play();
-        x = new PlayerWeapon("laser1", {
-          velocityY: 1,
-          posX: this.x + 33,
-          posY: this.y + 10
-        });
-        this.projectiles.push(x);
-        break;
-      case "laser2":
-        laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-        if (window.muted) laser.play();
-        x = new PlayerWeapon("laser1", {
-          velocityY: -5,
-          posX: this.x + 53,
-          posY: this.y - 10
-        });
-        y = new PlayerWeapon("laser1", {
-          velocityY: -5,
-          posX: this.x + 13,
-          posY: this.y - 10
-        });
-        this.projectiles.push(x);
-        this.projectiles.push(y);
-        break;
-      default:
-        break;
+    if (this.projectileCoolDown <= 0) {
+      this.projectileCoolDown += this.projectileCoolDownConstant;
+      let laser, x;
+      switch (this.weapon) {
+        case "laser2":
+          if (!window.muted) {
+            laser = new Audio("./src/sounds/tie_fire_laser.mp3");
+            laser.play();
+          }
+          x = new PlayerWeapon("laser2", {
+            velocityY: -5,
+            posX: this.posX + 53,
+            posY: this.posY - 10
+          });
+          this.projectiles.push(x);
+          console.log(this.projectiles);
+          break;
+        default:
+          break;
+      }
+    } else {
+      this.projectileCoolDown -= 1;
     }
   }
 }
