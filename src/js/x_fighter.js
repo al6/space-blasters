@@ -45,7 +45,7 @@ class XFighter {
 
   keyDownHandler(e) {
     e.preventDefault();
-\    if (e.code == "Space") {
+    if (e.code == "Space") {
       this.spacePressed = true;
     }
     if (e.key == "Right" || e.key == "ArrowRight") {
