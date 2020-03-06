@@ -15,8 +15,8 @@ class XFighter {
     this.projectileCoolDown = 0;
     this.spacePressed = false;
     this.upPressed = false;
-    this.rightPressed = false;
     this.downPressed = false;
+    this.rightPressed = false;
     this.leftPressed = false;
     this.drawXFighter = this.drawXFighter.bind(this);
     this.keyUpHandler = this.keyUpHandler.bind(this);
@@ -44,20 +44,18 @@ class XFighter {
   }
 
   keyDownHandler(e) {
-
     e.preventDefault();
-    if (e.code == "Space") {
+\    if (e.code == "Space") {
       this.spacePressed = true;
     }
     if (e.key == "Right" || e.key == "ArrowRight") {
-      console.log("right pressed")
       this.rightPressed = true;
     }
     if (e.key == "Left" || e.key == "ArrowLeft") {
       this.leftPressed = true;
     }
     if (e.key == "Up" || e.key == "ArrowUp") {
-      this.upPressed = true;
+\      this.upPressed = true;
     }
     if (e.key == "Down" || e.key == "ArrowDown") {
       this.downPressed = true;
@@ -78,7 +76,7 @@ class XFighter {
       }
     }
     if (this.rightPressed) {
-      if (this.x < this.canvas.width - 3 * this.width) {
+      if (this.x < 850) {
         this.x += 15;
       } else {
         this.x = -100;

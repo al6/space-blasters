@@ -69,7 +69,6 @@ class Game {
           }
         });
 
-        console.log(this.explosions);
         player.projectiles.forEach(projectile => {
           if (projectile && projectile.posY >= -5) {
             let alreadyDrawn = false;
