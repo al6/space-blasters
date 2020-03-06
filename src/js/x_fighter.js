@@ -42,33 +42,51 @@ class XFighter {
     e.preventDefault();
     if (e.code == "Space") {
       this.spacePressed = true;
-      this.fireWeapon();
     } else if (e.key == "Right" || e.key == "ArrowRight") {
       this.rightPressed = true;
-      if (this.x < this.canvas.width - 3 * this.width) {
-        this.x += this.canvas.height / 20;
-      }
     } else if (e.key == "Left" || e.key == "ArrowLeft") {
       this.leftPressed = true;
-      if (this.x > 0) {
-        this.x -= this.canvas.height / 20;
-      }
     } else if (e.key == "Up" || e.key == "ArrowUp") {
       this.upPressed = true;
-      if (this.y > 0) {
-        this.y -= this.canvas.height / 20;
-      }
     } else if (e.key == "Down" || e.key == "ArrowDown") {
       this.downPressed = true;
-      if (this.y < this.canvas.height - this.height + 20) {
-        this.y += this.canvas.height / 20;
-      }
     }
   }
 
   drawXFighter() {
-    const { canvas, ctx, img, x, y, height, width } = this;
+    const {
+      canvas,
+      ctx,
+      img,
+      x,
+      y,
+      velocityX,
+      velocityY,
+      height,
+      width
+    } = this;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (this.spacePressed) {
+      this.fireWeapon();
+    }
+    if (this.leftPressed) {
+      if (this.x > 0) {
+        this.x -= this.canvas.height / 100;
+      }
+    } else if (this.rightPressed) {
+      if (this.x < this.canvas.width - 3 * this.width) {
+        this.x += this.canvas.height / 100;
+      }
+    }
+    if (this.upPressed) {
+      if (this.y > 0) {
+        this.y -= this.canvas.height / 100;
+      }
+    } else if (this.downPressed) {
+      if (this.y < this.canvas.height - this.height + 20) {
+        this.y += this.canvas.height / 100;
+      }
+    }
     ctx.drawImage(img, x, y, height, width);
     img.onload = function() {
       canvas.width = this.naturalWidth;
@@ -82,7 +100,7 @@ class XFighter {
     switch (this.weapon) {
       case "laser1":
         laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-        laser.play();
+        if (!window.muted) laser.play();
         x = new PlayerWeapon("laser1", {
           velocityY: -5,
           posX: this.x + 33,
@@ -92,7 +110,7 @@ class XFighter {
         break;
       case "laser2":
         laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-        laser.play();
+        if (!window.muted) laser.play();
         x = new PlayerWeapon("laser1", {
           velocityY: -5,
           posX: this.x + 53,

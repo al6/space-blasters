@@ -56,7 +56,7 @@ class TieFighter extends MovingObject {
         break;
       case "laser2":
         laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-        laser.play();
+        if (window.muted) laser.play();
         x = new PlayerWeapon("laser1", {
           velocityY: -5,
           posX: this.x + 53,

@@ -24,6 +24,8 @@ class Game {
     this.then = Date.now();
     this.startTime = this.then;
     this.elapsed = 0;
+    this.playingStatus = document.getElementById("sound");
+    this.notPlayingStatus = document.getElementById("no-sound");
     this.checkCollision = this.checkCollision.bind(this);
     this.draw = this.draw.bind(this);
     this.drawReset = this.drawReset.bind(this);
@@ -59,7 +61,7 @@ class Game {
             let alreadyDrawn = false;
             enemies.forEach(enemy => {
               if (checkCollision(projectile, enemy)) {
-                this.impact.play();
+                if (!window.muted) this.impact.play();
                 player.projectiles.splice(
                   player.projectiles.indexOf(projectile),
                   1
@@ -128,7 +130,9 @@ class Game {
           this.wave += 5;
           this.enemies = [...Array(this.wave).keys()].map(
             () =>
-              new TieFighter(this.tieFighterImg, { velocityY: Math.ceil(Math.random() * speed) })
+              new TieFighter(this.tieFighterImg, {
+                velocityY: Math.ceil(Math.random() * speed)
+              })
           );
         }
       } else if (!this.lost) {
@@ -167,6 +171,18 @@ class Game {
       this.lost = false;
     } else if (e.key == "p" || e.key == "P") {
       this.paused = !this.paused;
+    } else if (e.key == "m" || e.key == "M") {
+      if (window.muted) {
+        this.playingStatus.classList.toggle("hidden");
+        this.notPlayingStatus.classList.toggle("hidden");
+        window.muted = false;
+        window.bgMusic.play();
+      } else {
+        this.notPlayingStatus.classList.toggle("hidden");
+        this.playingStatus.classList.toggle("hidden");
+        window.muted = true;
+        window.bgMusic.pause();
+      }
     }
   }
 
@@ -200,7 +216,6 @@ class Game {
     context.fillText("PAUSED", 250, 270);
     context.font = "bold 50px Arial";
     context.fillText("PRESS P TO PLAY/PAUSE", 150, 320);
-
   }
 
   drawReset() {

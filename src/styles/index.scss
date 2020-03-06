@@ -221,12 +221,15 @@ body {
     align-items: center;
     display: flex;
     justify-content: center;
+    margin: 0, 1rem;
     margin-bottom: 2rem;
-
+    position: relative;
     #sound,
     #no-sound {
+      position: absolute;
       filter: brightness(80%);
-      margin: 0 1rem;
+      margin: 1rem;
+      padding: 1rem;
       max-height: 2rem;
       transition: 1s;
       &:hover {
@@ -234,6 +237,11 @@ body {
         filter: none;
         transition: 0.2s;
       }
+    }
+
+    .hidden {
+      display: none;
+      transition: 0.2s;
     }
   }
 }
