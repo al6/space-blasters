@@ -21,7 +21,7 @@ In Space Blasters, players will be able to:
 
 ## Architecture and Technologies
 
-This project features object oriented design using Vanilla JavaScript, Canvas API, Web Audio API
+This project features object oriented design using Vanilla JavaScript, Canvas API
 
 ## Implementation Timeline
 
