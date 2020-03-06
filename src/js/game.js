@@ -30,10 +30,10 @@ class Game {
     this.draw = this.draw.bind(this);
     this.drawReset = this.drawReset.bind(this);
     this.impact = new Audio("./src/sounds/impact.mp3");
-    this.draw();
     this.keyDownHandler = this.keyDownHandler.bind(this);
     document.addEventListener("keydown", this.keyDownHandler, false);
     this.explosions = [];
+    this.draw();
   }
 
   draw() {
@@ -42,12 +42,13 @@ class Game {
     this.elapsed = this.now - this.then;
     if (this.elapsed > this.fpsInterval) {
       this.then = this.now - (this.elapsed % this.fpsInterval);
+
       if (!this.paused && !this.lost) {
+        let { background, context, player, enemies, checkCollision } = this;
+        context.clearRect(0, 0, 450, 700);
         if (window.muted) {
           this.drawMuted();
         }
-        let { background, context, player, enemies, checkCollision } = this;
-        context.clearRect(0, 0, 450, 700);
         if (background[0]) {
           background.forEach(layer => layer.draw());
         }

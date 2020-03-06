@@ -28,42 +28,44 @@ class XFighter {
   keyUpHandler(e) {
     if (e.code == "Space" || e.key == "Space") {
       this.spacePressed = false;
-    } else if (e.key == "Right" || e.key == "ArrowRight") {
+    }
+    if (e.key == "Right" || e.key == "ArrowRight") {
       this.rightPressed = false;
-    } else if (e.key == "Left" || e.key == "ArrowLeft") {
+    }
+    if (e.key == "Left" || e.key == "ArrowLeft") {
       this.leftPressed = false;
-    } else if (e.key == "Up" || e.key == "ArrowUp") {
+    }
+    if (e.key == "Up" || e.key == "ArrowUp") {
       this.upPressed = false;
-    } else if (e.key == "Down" || e.key == "ArrowDown") {
+    }
+    if (e.key == "Down" || e.key == "ArrowDown") {
       this.downPressed = false;
     }
   }
 
   keyDownHandler(e) {
+
     e.preventDefault();
     if (e.code == "Space") {
       this.spacePressed = true;
-    } else if (e.key == "Right" || e.key == "ArrowRight") {
+    }
+    if (e.key == "Right" || e.key == "ArrowRight") {
+      console.log("right pressed")
       this.rightPressed = true;
-    } else if (e.key == "Left" || e.key == "ArrowLeft") {
+    }
+    if (e.key == "Left" || e.key == "ArrowLeft") {
       this.leftPressed = true;
-    } else if (e.key == "Up" || e.key == "ArrowUp") {
+    }
+    if (e.key == "Up" || e.key == "ArrowUp") {
       this.upPressed = true;
-    } else if (e.key == "Down" || e.key == "ArrowDown") {
+    }
+    if (e.key == "Down" || e.key == "ArrowDown") {
       this.downPressed = true;
     }
   }
 
   drawXFighter() {
-    const {
-      canvas,
-      ctx,
-      img,
-      x,
-      y,
-      height,
-      width
-    } = this;
+    const { canvas, ctx, img, x, y, height, width } = this;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (this.spacePressed) {
       this.fireWeapon();
