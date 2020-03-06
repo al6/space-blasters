@@ -17,7 +17,6 @@ class Explosion extends MovingObject {
     let { ctx, img, posX, posY, velocityY, height, width } = this;
     if (this.hp > 0) {
       ctx.drawImage(img, posX, posY, width, height);
-      this.hp -= 1;
       if (this.posY < 650) {
         this.posY += velocityY;
       }

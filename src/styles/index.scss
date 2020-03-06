@@ -156,9 +156,16 @@ body {
     justify-content: space-between;
     margin-bottom: 1rem;
     .headline {
-      margin: 1rem;
+      margin-top: 1rem;
       height: 80%;
       width: 80%;
+      &:hover {
+        cursor: default;
+      }
+    }
+
+    .educational-disclaimer {
+      margin: 1rem;
       &:hover {
         cursor: default;
       }
@@ -206,7 +213,6 @@ body {
     align-items: center;
     display: flex;
     flex-direction: column;
-    margin-bottom: 2rem;
     .arrow-keys {
       filter: brightness(80%);
       height: 8rem;
@@ -222,15 +228,10 @@ body {
     align-items: center;
     display: flex;
     justify-content: center;
-    margin: 0, 1rem;
-    margin-bottom: 2rem;
-    position: relative;
+    margin: 1rem 0;
     #sound,
     #no-sound {
-      position: absolute;
       filter: brightness(80%);
-      margin: 1rem;
-      padding: 1rem;
       max-height: 2rem;
       transition: 1s;
       &:hover {

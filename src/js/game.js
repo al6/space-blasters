@@ -30,6 +30,7 @@ class Game {
     this.draw = this.draw.bind(this);
     this.drawReset = this.drawReset.bind(this);
     this.impact = new Audio("./src/sounds/impact.mp3");
+    this.tieExplode = new Audio("./src/sounds/tie_explode_short.mp3");
     this.keyDownHandler = this.keyDownHandler.bind(this);
     document.addEventListener("keydown", this.keyDownHandler, false);
     this.explosions = [];
@@ -46,9 +47,7 @@ class Game {
       if (!this.paused && !this.lost) {
         let { background, context, player, enemies, checkCollision } = this;
         context.clearRect(0, 0, 450, 700);
-        if (window.muted) {
-          this.drawMuted();
-        }
+
         if (background[0]) {
           background.forEach(layer => layer.draw());
         }
@@ -63,13 +62,14 @@ class Game {
         this.explosions.forEach(explosion => {
           if (explosion.hp > 0) {
             explosion.drawExplosion();
-          } else {
+            explosion.hp -= 1;
+            explosion.delete = false;
+          } else if (explosion.hp <= 0) {
             explosion.delete = true;
           }
         });
-        this.explosions.filter(explosion => {
-          !explosion.delete;
-        });
+
+        console.log(this.explosions);
         player.projectiles.forEach(projectile => {
           if (projectile && projectile.posY >= -5) {
             let alreadyDrawn = false;
@@ -90,6 +90,13 @@ class Game {
                         posY: enemy.posY,
                         velocityY: 1
                       });
+
+                      if (!window.muted) {
+                        let tieExplodeSound = new Audio(
+                          "./src/sounds/tie_explode_short.mp3"
+                        );
+                        tieExplodeSound.play();
+                      }
                       this.explosions.push(explosion);
                       this.score += 1;
                       break;
@@ -149,8 +156,16 @@ class Game {
         }
       } else if (!this.lost) {
         this.drawPause();
+        if (window.muted) {
+          this.drawMuted();
+        } else {
+          this.context.clearRect(400, -100, 550, 200);
+        }
       } else {
         this.drawLose();
+      }
+      if (window.muted && !this.paused) {
+        this.drawMuted();
       }
     }
   }
@@ -202,7 +217,7 @@ class Game {
     let { context } = this;
     context.font = "bold 30px Arial";
     context.fillStyle = "red";
-    context.fillText("MUTED. PRESS M TO UNMUTE", 10, 30);
+    context.fillText("MUTED! PRESS M TO UNMUTE", 450, 30);
   }
 
   drawHP() {
