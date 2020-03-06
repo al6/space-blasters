@@ -33,7 +33,7 @@ class Game {
     this.draw();
     this.keyDownHandler = this.keyDownHandler.bind(this);
     document.addEventListener("keydown", this.keyDownHandler, false);
-    window.explosions = [];
+    this.explosions = [];
   }
 
   draw() {
@@ -43,6 +43,9 @@ class Game {
     if (this.elapsed > this.fpsInterval) {
       this.then = this.now - (this.elapsed % this.fpsInterval);
       if (!this.paused && !this.lost) {
+        if (window.muted) {
+          this.drawMuted();
+        }
         let { background, context, player, enemies, checkCollision } = this;
         context.clearRect(0, 0, 450, 700);
         if (background[0]) {
@@ -56,6 +59,16 @@ class Game {
         }
         this.drawScore();
         this.drawHP();
+        this.explosions.forEach(explosion => {
+          if (explosion.hp > 0) {
+            explosion.drawExplosion();
+          } else {
+            explosion.delete = true;
+          }
+        });
+        this.explosions.filter(explosion => {
+          !explosion.delete;
+        });
         player.projectiles.forEach(projectile => {
           if (projectile && projectile.posY >= -5) {
             let alreadyDrawn = false;
@@ -76,9 +89,7 @@ class Game {
                         posY: enemy.posY,
                         velocityY: 1
                       });
-                      window.explosions.push(explosion);
-                      console.log(window.explosions);
-                      console.log(enemies);
+                      this.explosions.push(explosion);
                       this.score += 1;
                       break;
                     default:
@@ -186,10 +197,17 @@ class Game {
     }
   }
 
+  drawMuted() {
+    let { context } = this;
+    context.font = "bold 30px Arial";
+    context.fillStyle = "red";
+    context.fillText("MUTED. PRESS M TO UNMUTE", 10, 30);
+  }
+
   drawHP() {
     let { context } = this;
     context.font = "bold 30px Arial";
-    context.fillStyle = "RED";
+    context.fillStyle = "red";
     context.fillText("HP: " + this.player.hp, 10, 30);
   }
 

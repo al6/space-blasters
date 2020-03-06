@@ -12,6 +12,7 @@ class XFighter {
     this.height = 80;
     this.width = 30;
     this.projectiles = [];
+    this.projectileCoolDown = 0;
     this.spacePressed = false;
     this.upPressed = false;
     this.rightPressed = false;
@@ -60,8 +61,6 @@ class XFighter {
       img,
       x,
       y,
-      velocityX,
-      velocityY,
       height,
       width
     } = this;
@@ -71,20 +70,30 @@ class XFighter {
     }
     if (this.leftPressed) {
       if (this.x > 0) {
-        this.x -= this.canvas.height / 100;
+        this.x -= 15;
+      } else {
+        this.x = 850;
       }
-    } else if (this.rightPressed) {
+    }
+    if (this.rightPressed) {
       if (this.x < this.canvas.width - 3 * this.width) {
-        this.x += this.canvas.height / 100;
+        this.x += 15;
+      } else {
+        this.x = -100;
       }
     }
     if (this.upPressed) {
       if (this.y > 0) {
-        this.y -= this.canvas.height / 100;
+        this.y -= 10;
+      } else {
+        this.y = 578;
       }
-    } else if (this.downPressed) {
-      if (this.y < this.canvas.height - this.height + 20) {
-        this.y += this.canvas.height / 100;
+    }
+    if (this.downPressed) {
+      if (this.y < 578) {
+        this.y += 10;
+      } else {
+        this.y = 0;
       }
     }
     ctx.drawImage(img, x, y, height, width);
@@ -97,35 +106,40 @@ class XFighter {
 
   fireWeapon() {
     let laser, x, y;
-    switch (this.weapon) {
-      case "laser1":
-        laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-        if (!window.muted) laser.play();
-        x = new PlayerWeapon("laser1", {
-          velocityY: -5,
-          posX: this.x + 33,
-          posY: this.y - 10
-        });
-        this.projectiles.push(x);
-        break;
-      case "laser2":
-        laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-        if (!window.muted) laser.play();
-        x = new PlayerWeapon("laser1", {
-          velocityY: -5,
-          posX: this.x + 53,
-          posY: this.y - 10
-        });
-        y = new PlayerWeapon("laser1", {
-          velocityY: -5,
-          posX: this.x + 13,
-          posY: this.y - 10
-        });
-        this.projectiles.push(x);
-        this.projectiles.push(y);
-        break;
-      default:
-        break;
+    if (this.projectileCoolDown <= 0) {
+      this.projectileCoolDown += 10;
+      switch (this.weapon) {
+        case "laser1":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser1", {
+            velocityY: -5,
+            posX: this.x + 33,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          break;
+        case "laser2":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser1", {
+            velocityY: -5,
+            posX: this.x + 53,
+            posY: this.y - 10
+          });
+          y = new PlayerWeapon("laser1", {
+            velocityY: -5,
+            posX: this.x + 13,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          this.projectiles.push(y);
+          break;
+        default:
+          break;
+      }
+    } else {
+      this.projectileCoolDown -= 1;
     }
   }
 }

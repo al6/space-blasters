@@ -5,7 +5,7 @@ import Game from "./js/game.js";
 document.addEventListener("DOMContentLoaded", () => {
   drawBackground();
   window.muted = true;
-  window.bgMusic = new Audio("./src/sounds/SkyFire.ogg");
+  window.bgMusic = new Audio("./src/sounds/sw.mp3");
   new Game();
   bgMusic.loop = true;
 
