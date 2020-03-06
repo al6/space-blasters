@@ -7,7 +7,7 @@ class TieFighter extends MovingObject {
     this.weapon = "laser1";
     this.hp = 2;
     this.loot = [
-      { name: "upgrade", droprate: 0.05 }
+      { name: "upgrade", droprate: 0.15 }
       // { name: "laser2", droprate: 0.3 },
       // { name: "laser3", droprate: 0.2 },
       // { name: "raygun", droprate: 0.1 },

@@ -14,6 +14,7 @@ class XFighter {
     this.width = 30;
     this.projectiles = [];
     this.projectileCoolDown = 0;
+    this.projectileCoolDownConstant = 10;
     this.spacePressed = false;
     this.upPressed = false;
     this.downPressed = false;
@@ -106,7 +107,7 @@ class XFighter {
   fireWeapon() {
     let laser, x, y, z;
     if (this.projectileCoolDown <= 0) {
-      this.projectileCoolDown += 10;
+      this.projectileCoolDown += this.projectileCoolDownConstant;
       switch (this.weapon) {
         case "laser1":
           laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");

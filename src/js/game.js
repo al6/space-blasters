@@ -101,7 +101,13 @@ class Game {
               case "laser2":
                 player.weapon = "laser3";
               case "laser3":
-                player.hp += 1;
+                if (player.hp === 100) {
+                  if (player.projectileCoolDownConstant >= 5) {
+                    player.projectileCoolDownConstant -= 1;
+                  }
+                } else {
+                  player.hp += 100;
+                }
                 break;
               default:
                 break;
