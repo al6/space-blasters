@@ -287,3 +287,15 @@ body {
     z-index: 9;
   }
 }
+
+@media (max-width: 325px){
+  body {
+    zoom: 60%;
+  }
+}
+
+@media (max-width: 500px){
+  .right-container {
+    display: none;
+  }
+}
