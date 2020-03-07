@@ -6,7 +6,16 @@ document.addEventListener("DOMContentLoaded", () => {
   drawBackground();
   window.muted = true;
   window.bgMusic = new Audio("./src/sounds/sw.mp3");
-  new Game();
+
+  window.playerImg = new Image();
+  window.playerImg.src = "./src/images/xwing.png";
+  window.playerImg.onload = function() {
+    let canvas = document.getElementById("game-canvas");
+    canvas.width = this.naturalWidth;
+    canvas.height = this.naturalHeight;
+    new Game();
+  };
+
   bgMusic.loop = true;
 
   let playingStatus = document.getElementById("sound");
