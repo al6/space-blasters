@@ -6,12 +6,12 @@ class XFighter {
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.img = new Image();
-    this.img.src = "./src/images/ship.png";
+    this.img.src = "./src/images/xwing.png";
     this.hp = 100;
-    this.x = 420;
-    this.y = 577.5;
-    this.height = 80;
-    this.width = 30;
+    this.x = 0;
+    this.y = 0;
+    this.height = 100;
+    this.width = 100;
     this.projectiles = [];
     this.projectileCoolDown = 0;
     this.projectileCoolDownConstant = 10;
@@ -96,11 +96,11 @@ class XFighter {
         this.y += 10;
       }
     }
-    ctx.drawImage(img, 0, 0, height, width);
+    ctx.drawImage(img, x, y, height, width);
     img.onload = function() {
-      // canvas.width = this.naturalWidth;
-      // canvas.height = this.naturalHeight;
-      ctx.drawImage(img, 0, 0, height, width);
+      canvas.width = this.naturalWidth;
+      canvas.height = this.naturalHeight;
+      ctx.drawImage(img, x, y, height, width);
     };
   }
 
@@ -114,7 +114,7 @@ class XFighter {
           if (!window.muted) laser.play();
           x = new PlayerWeapon("laser1", {
             velocityY: -5,
-            posX: this.x + 33,
+            posX: this.x + 43,
             posY: this.y - 10
           });
           this.projectiles.push(x);
@@ -124,12 +124,12 @@ class XFighter {
           if (!window.muted) laser.play();
           x = new PlayerWeapon("laser1", {
             velocityY: -5,
-            posX: this.x + 53,
+            posX: this.x,
             posY: this.y - 10
           });
           y = new PlayerWeapon("laser1", {
             velocityY: -5,
-            posX: this.x + 13,
+            posX: this.x + 90,
             posY: this.y - 10
           });
           this.projectiles.push(x);
@@ -140,17 +140,17 @@ class XFighter {
           if (!window.muted) laser.play();
           x = new PlayerWeapon("laser1", {
             velocityY: -5,
-            posX: this.x + 53,
+            posX: this.x,
             posY: this.y - 10
           });
           y = new PlayerWeapon("laser1", {
             velocityY: -5,
-            posX: this.x + 13,
+            posX: this.x + 43,
             posY: this.y - 10
           });
           z = new PlayerWeapon("laser1", {
             velocityY: -5,
-            posX: this.x + 33,
+            posX: this.x + 90,
             posY: this.y - 10
           });
           this.projectiles.push(x);
