@@ -99,8 +99,8 @@ class Game {
                   if (player.projectileCoolDownConstant >= 5) {
                     player.projectileCoolDownConstant -= 1;
                   }
-                } else {
-                  player.hp += 100;
+                } else if (player.hp <= 99) {
+                  player.hp += 1;
                 }
                 break;
               default:
@@ -121,9 +121,7 @@ class Game {
             let alreadyDrawn = false;
             enemies.forEach(enemy => {
               if (checkCollision(projectile, enemy)) {
-                // if (!window.muted) this.impact.play();
-                //make wrapper to remember state
-                this.impact.play();
+                if (!window.muted) this.impact.play();
                 player.projectiles.splice(
                   player.projectiles.indexOf(projectile),
                   1
