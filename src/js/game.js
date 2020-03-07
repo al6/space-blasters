@@ -8,7 +8,7 @@ class Game {
   constructor() {
     this.background = drawBackground();
     this.tieFighterImg = new Image();
-    this.tieFighterImg.src = "./src/images/tie-fighter.png";
+    this.tieFighterImg.src = "./src/images/tie-advanced.png";
     this.canvas = document.getElementById("game-canvas");
     this.context = this.canvas.getContext("2d");
     this.player = new XFighter();
@@ -54,7 +54,8 @@ class Game {
           enemies,
           checkCollision,
           explosions,
-          upgrades
+          upgrades,
+          score
         } = this;
 
         context.clearRect(0, 0, 450, 700);
@@ -101,13 +102,15 @@ class Game {
                   }
                 } else if (player.hp <= 99) {
                   player.hp += 1;
+                } else {
+                  score += 5;
                 }
                 break;
               default:
                 break;
             }
             upgrades.splice(upgrades.indexOf(upgrade), 1);
-          } else if (upgrade && upgrade.posY < 578) {
+          } else if (upgrade && upgrade.posY < 850) {
             upgrade.drawUpgrade();
           } else {
             upgrades.splice(upgrades.indexOf(upgrade), 1);
@@ -167,7 +170,7 @@ class Game {
           }
         });
         enemies.forEach(enemy => {
-          if (enemy.posY >= 578) {
+          if (enemy.posY >= 850) {
             this.player.hp -= 1;
             enemies.splice(enemies.indexOf(enemy), 1);
           } else {
@@ -212,14 +215,14 @@ class Game {
         if (window.muted) {
           this.drawMuted();
         } else {
-          this.context.clearRect(400, -100, 550, 200);
+          this.context.clearRect(300, -100, 550, 150);
         }
       } else {
         this.drawLose();
         if (window.muted) {
           this.drawMuted();
         } else {
-          this.context.clearRect(400, -100, 550, 200);
+          this.context.clearRect(300, -100, 550, 150);
         }
       }
       if (window.muted && !this.paused) {
@@ -289,7 +292,7 @@ class Game {
     let { context } = this;
     context.font = "bold 30px Arial";
     context.fillStyle = "red";
-    context.fillText("MUTED! PRESS M TO UNMUTE", 450, 30);
+    context.fillText("MUTED! PRESS M TO UNMUTE", 388, 30);
   }
 
   drawHP() {
@@ -310,18 +313,18 @@ class Game {
     let { context } = this;
     context.font = "bold 130px Arial";
     context.fillStyle = "red";
-    context.fillText("GAME OVER", 50, 250);
+    context.fillText("GAME OVER", 10, 250);
     context.font = "bold 50px Arial";
-    context.fillText("PRESS R TO RESTART", 180, 300);
+    context.fillText("PRESS R TO RESTART", 150, 400);
   }
 
   drawPause() {
     let { context } = this;
     context.font = "100px Arial";
     context.fillStyle = "green";
-    context.fillText("PAUSED", 250, 270);
+    context.fillText("PAUSED", 250, 370);
     context.font = "bold 50px Arial";
-    context.fillText("PRESS P TO PLAY/PAUSE", 150, 320);
+    context.fillText("PRESS P TO PLAY/PAUSE", 110, 420);
   }
 
   drawReset() {

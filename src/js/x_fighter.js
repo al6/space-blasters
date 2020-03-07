@@ -8,10 +8,10 @@ class XFighter {
     this.img = new Image();
     this.img.src = "./src/images/xwing.png";
     this.hp = 100;
-    this.x = 0;
-    this.y = 0;
     this.height = 100;
     this.width = 100;
+    this.x = 400;
+    this.y = 750;
     this.projectiles = [];
     this.projectileCoolDown = 0;
     this.projectileCoolDownConstant = 10;
@@ -87,12 +87,10 @@ class XFighter {
     if (this.upPressed) {
       if (this.y > 0) {
         this.y -= 10;
-      } else {
-        this.y = 578;
       }
     }
     if (this.downPressed) {
-      if (this.y < 578) {
+      if (this.y < 755) {
         this.y += 10;
       }
     }

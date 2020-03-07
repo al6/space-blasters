@@ -7,7 +7,8 @@ class Explosion extends MovingObject {
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.img = new Image();
-    this.img.src = "./src/images/explosions/halfsized/tie_fighter_explosion_frames/1.png";
+    this.img.src =
+      "./src/images/explosions/halfsized/tie_fighter_explosion_frames/1.png";
     this.height = 50;
     this.width = 80;
     this.loot = loot;
@@ -17,9 +18,7 @@ class Explosion extends MovingObject {
     let { ctx, img, posX, posY, velocityY, height, width } = this;
     if (this.hp > 0) {
       ctx.drawImage(img, posX, posY, width, height);
-      if (this.posY < 650) {
-        this.posY += velocityY;
-      }
+      this.posY += velocityY;
     }
     img.onload = function() {
       ctx.drawImage(img, posX, posY, width, height);

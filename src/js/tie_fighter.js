@@ -26,9 +26,9 @@ class TieFighter extends MovingObject {
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.img = img;
-    this.posX = Math.floor(Math.random() * 831);
-    this.posY = Math.floor(Math.random() * -1000);
-    this.height = 30;
+    this.posX = Math.floor(Math.random() * 731);
+    this.posY = Math.floor(Math.random() * -800);
+    this.height = 40;
     this.width = 80;
     this.projectiles = [];
   }
@@ -36,9 +36,7 @@ class TieFighter extends MovingObject {
   drawTieFighter() {
     let { ctx, img, posX, posY, velocityY, height, width } = this;
     ctx.drawImage(img, posX, posY, width, height);
-    if (this.posY < 650) {
-      this.posY += velocityY;
-    }
+    this.posY += velocityY;
     img.onload = function() {
       ctx.drawImage(img, posX, posY, width, height);
     };
