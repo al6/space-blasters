@@ -11,7 +11,7 @@ class Game {
     this.tieFighterImg.src = "./src/images/tie-advanced.png";
     this.canvas = document.getElementById("game-canvas");
     this.context = this.canvas.getContext("2d");
-    this.player = new XFighter();
+    this.player = new XFighter(this.playerImg);
     this.wave = 0;
     this.score = 0;
     this.enemies = [];
@@ -63,8 +63,9 @@ class Game {
         if (background[0]) {
           background.forEach(layer => layer.draw());
         }
-        if (player.hp > 0) {
+        if (player.hp > 0 && window.playerImg) {
           player.drawXFighter();
+        } else if (player.hp > 0) {
         } else {
           this.drawLose();
           this.lost = true;
