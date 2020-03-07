@@ -16,7 +16,7 @@ class Explosion extends MovingObject {
 
   drawExplosion() {
     let { ctx, img, posX, posY, velocityY, height, width } = this;
-    debugger;
+    console.log(img);
     if (this.hp > 0) {
       ctx.drawImage(img, posX, posY, width, height);
       this.posY += velocityY;
