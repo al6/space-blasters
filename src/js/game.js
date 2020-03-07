@@ -247,7 +247,6 @@ class Game {
         }
 
       case "player":
-        debugger;
         if (!object1 || !object2) {
           return false;
         } else if (
