@@ -74,14 +74,14 @@ class XFighter {
       if (this.x > 0) {
         this.x -= 15;
       } else {
-        this.x = 850;
+        this.x = 750;
       }
     }
     if (this.rightPressed) {
-      if (this.x < 850) {
+      if (this.x < 700) {
         this.x += 15;
       } else {
-        this.x = -100;
+        this.x = -50;
       }
     }
     if (this.upPressed) {
