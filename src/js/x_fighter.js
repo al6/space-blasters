@@ -1,17 +1,16 @@
 import PlayerWeapon from "./player_weapon";
 class XFighter {
-  constructor() {
+  constructor(img) {
     this.name = "player";
     this.weapon = "laser1";
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
-    this.img = new Image();
-    this.img.src = "./src/images/xwing.png";
+    this.img = window.playerImg;
     this.hp = 100;
     this.height = 100;
     this.width = 100;
     this.x = 400;
-    this.y = 750;
+    this.y = 765;
     this.projectiles = [];
     this.projectileCoolDown = 0;
     this.projectileCoolDownConstant = 10;
@@ -64,6 +63,16 @@ class XFighter {
     }
   }
 
+  touchHandler(e) {
+    const { height, width } = this;
+    if (e.touches) {
+      playerX = e.touches[0].pageX - canvas.offsetLeft - width / 2;
+      playerY = e.touches[0].pageY - canvas.offsetTop - height / 2;
+      output.innerHTML = "Touch: " + " x: " + playerX + ", y: " + playerY;
+      e.preventDefault();
+    }
+  }
+
   drawXFighter() {
     const { canvas, ctx, img, x, y, height, width } = this;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -94,12 +103,7 @@ class XFighter {
         this.y += 10;
       }
     }
-    ctx.drawImage(img, x, y, height, width);
-    img.onload = function() {
-      canvas.width = this.naturalWidth;
-      canvas.height = this.naturalHeight;
-      ctx.drawImage(img, x, y, height, width);
-    };
+    ctx.drawImage(this.img, x, y, height, width);
   }
 
   fireWeapon() {
