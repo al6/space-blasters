@@ -271,6 +271,8 @@ class Game {
       this.wave = 1;
       this.score = 0;
       this.enemies = [];
+      this.explosions = [];
+      this.upgrades = [];
       this.lost = false;
     } else if (e.key == "p" || e.key == "P") {
       this.paused = !this.paused;
