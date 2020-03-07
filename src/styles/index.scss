@@ -294,6 +294,12 @@ body {
   }
 }
 
+@media (min-width: 350px), (max-width: 500px){
+  body {
+    zoom: 80%;
+  }
+}
+
 @media (max-width: 500px){
   .right-container {
     display: none;
