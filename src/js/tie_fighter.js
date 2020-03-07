@@ -60,7 +60,6 @@ class TieFighter extends MovingObject {
             posY: this.posY - 10
           });
           this.projectiles.push(x);
-          console.log(this.projectiles);
           break;
         default:
           break;

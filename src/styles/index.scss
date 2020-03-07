@@ -157,8 +157,8 @@ body {
     margin-bottom: 1rem;
     .headline {
       margin-top: 1rem;
-      height: 80%;
-      width: 80%;
+      height: 95%;
+      width: 95%;
       &:hover {
         cursor: default;
       }
@@ -190,9 +190,10 @@ body {
   }
 
   .hi-scores {
+    align-items: center;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     margin-bottom: 1rem;
     &:hover {
       cursor: default;

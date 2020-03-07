@@ -121,7 +121,9 @@ class Game {
             let alreadyDrawn = false;
             enemies.forEach(enemy => {
               if (checkCollision(projectile, enemy)) {
-                if (!window.muted) this.impact.play();
+                // if (!window.muted) this.impact.play();
+                //make wrapper to remember state
+                this.impact.play();
                 player.projectiles.splice(
                   player.projectiles.indexOf(projectile),
                   1
