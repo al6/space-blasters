@@ -96,11 +96,11 @@ class XFighter {
         this.y += 10;
       }
     }
-    ctx.drawImage(img, x, y, height, width);
+    ctx.drawImage(img, 0, 0, height, width);
     img.onload = function() {
-      canvas.width = this.naturalWidth;
-      canvas.height = this.naturalHeight;
-      ctx.drawImage(img, x, y, height, width);
+      // canvas.width = this.naturalWidth;
+      // canvas.height = this.naturalHeight;
+      ctx.drawImage(img, 0, 0, height, width);
     };
   }
 

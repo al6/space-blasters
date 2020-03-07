@@ -142,50 +142,54 @@ body {
   justify-content: center;
   min-height: 100vh;
   min-width: 100vw;
+  margin: 0 2rem;
 }
 
 .right-container {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  margin: 2rem;
-
+  justify-content: space-between;
+  height: 700px;
+  
   .header {
     align-items: center;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-bottom: 1rem;
-    .headline {
-      margin-top: 1rem;
-      height: 95%;
-      width: 95%;
-      &:hover {
-        cursor: default;
-      }
-    }
+    
+  }
 
-    .educational-disclaimer {
-      margin: 1rem;
-      &:hover {
-        cursor: default;
-      }
+  .headline {
+    max-height: 120px;
+    max-width: 350px;
+    height: 95%;
+    width: 95%;
+    &:hover {
+      cursor: default;
     }
+  }
 
-    .professional-links {
-      display: flex;
-      justify-content: space-between;
-      width: 10rem;
+  .educational-disclaimer {
+    &:hover {
+      cursor: default;
     }
+  }
 
-    .professional-link {
-      height: 2rem;
-      filter: brightness(60%);
-      transition: 1s;
-      &:hover {
-        cursor: pointer;
-        filter: none;
-        transition: 0.2s;
-      }
+  .professional-links {
+    display: flex;
+    justify-content: space-between;
+    width: 10rem;
+  }
+
+  .professional-link {
+    height: 2rem;
+    filter: brightness(60%);
+    transition: 1s;
+    &:hover {
+      cursor: pointer;
+      filter: none;
+      transition: 0.2s;
     }
   }
 
@@ -194,13 +198,11 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-bottom: 1rem;
     &:hover {
       cursor: default;
     }
     h1 {
       text-align: center;
-      margin-bottom: 1rem;
     }
     ul {
       margin: 0 auto;
@@ -229,7 +231,6 @@ body {
     align-items: center;
     display: flex;
     justify-content: center;
-    margin: 1rem 0;
     #sound,
     #no-sound {
       filter: brightness(80%);
