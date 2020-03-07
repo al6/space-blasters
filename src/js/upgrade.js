@@ -14,7 +14,6 @@ class Upgrade extends MovingObject {
 
   drawUpgrade() {
     let { ctx, img, posX, posY, velocityY, height, width } = this;
-    debugger;
     ctx.drawImage(img, posX, posY, width, height);
     this.posY += velocityY;
     img.onload = function() {
