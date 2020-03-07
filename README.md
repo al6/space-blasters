@@ -12,7 +12,7 @@ In Space Blasters, players will be able to:
 - Navigate a spaceship
 - Enjoy the space inspired scenery with several layered canvas elements
 - Destroy enemy spaceships
-- See their own health bar
+- See their own HP
 - Upgrade laser upon picking up upgrade item
 
 ## Wireframes
