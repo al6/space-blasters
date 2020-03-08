@@ -129,7 +129,6 @@ class Game {
                 enemy.hp -= 1;
                 if (enemy.hp <= 0) {
                   let explosion = null;
-                  console.log("explosion!");
                   switch (enemy.name) {
                     case "TieFighter":
                       explosion = new Explosion(enemy.loot, {
