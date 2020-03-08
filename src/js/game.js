@@ -54,8 +54,7 @@ class Game {
           enemies,
           checkCollision,
           explosions,
-          upgrades,
-          score
+          upgrades
         } = this;
 
         context.clearRect(0, 0, 450, 700);
@@ -104,7 +103,7 @@ class Game {
                 } else if (player.hp <= 99) {
                   player.hp += 1;
                 } else {
-                  score += 5;
+                  this.score += 5;
                 }
                 break;
               default:
@@ -146,7 +145,7 @@ class Game {
                         tieExplodeSound.play();
                       }
                       explosions.push(explosion);
-                      score += 1;
+                      this.score += 1;
                       break;
                     default:
                       break;

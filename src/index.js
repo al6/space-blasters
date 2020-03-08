@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let canvas = document.getElementById("game-canvas");
     canvas.width = this.naturalWidth;
     canvas.height = this.naturalHeight;
-    new Game();
+    setTimeout(() => new Game(), 100);
   };
 
   bgMusic.loop = true;
