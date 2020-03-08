@@ -130,7 +130,7 @@ class Game {
                 enemy.hp -= 1;
                 if (enemy.hp <= 0) {
                   let explosion = null;
-                  switch (enemy.constructor.name) {
+                  switch (enemy.name) {
                     case "TieFighter":
                       explosion = new Explosion(enemy.loot, {
                         posX: enemy.posX,
