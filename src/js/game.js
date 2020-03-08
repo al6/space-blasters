@@ -117,9 +117,6 @@ class Game {
             upgrades.splice(upgrades.indexOf(upgrade), 1);
           }
         });
-        // if (this.upgrades[0] && this.upgrades[0].delete) {
-
-        // }
         player.projectiles.forEach(projectile => {
           if (projectile && projectile.posY >= -5) {
             let alreadyDrawn = false;
@@ -147,8 +144,8 @@ class Game {
                         );
                         tieExplodeSound.play();
                       }
-                      this.explosions.push(explosion);
-                      this.score += 1;
+                      explosions.push(explosion);
+                      score += 1;
                       break;
                     default:
                       break;
