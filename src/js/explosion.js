@@ -7,7 +7,7 @@ class Explosion extends MovingObject {
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.img = new Image();
-    this.img.src = "./src/images/explosions/1.png";
+    this.img.src = "./src/images/explosions/explosion1.png";
     this.height = 50;
     this.width = 80;
     this.loot = loot;

@@ -6,7 +6,8 @@ class Upgrade extends MovingObject {
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.img = new Image();
-    this.img.src = "./src/images/upgrades/1.png";
+    this.img.src = "./src/images/upgrades/upgrades1.png";
+    
     this.height = 20;
     this.width = 30;
     this.loot = loot;
