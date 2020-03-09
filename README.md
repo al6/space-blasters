@@ -1,8 +1,9 @@
-# Space Blasters
-
+[Live Site](https://al6.github.io/space-blasters "Space Blasters")
+# Space Blasters 
+![Screenshot](https://i.imgur.com/7Jg2LkA.png)
 ## Background and Overview
 
-Space Blasters is an arcade and space inspired game. Navigate a spaceship and defeat the enemies!
+Space Blasters is a Star Wars and space shooter inspired game. Navigate a spaceship and defeat the enemies!
 
 ## Functionality and MVPs
 
