@@ -74,7 +74,7 @@ class XFighter {
   }
 
   drawXFighter() {
-    const { canvas, ctx, img, x, y, height, width } = this;
+    const { canvas, ctx, x, y, height, width } = this;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (this.spacePressed) {
       this.fireWeapon();

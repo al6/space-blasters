@@ -53,7 +53,7 @@ class TieFighter extends MovingObject {
             laser.play();
           }
           x = new PlayerWeapon("laser2", {
-            velocityY: -5,
+            velocityY: 5,
             posX: this.posX + 53,
             posY: this.posY - 10
           });

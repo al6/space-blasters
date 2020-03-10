@@ -1,8 +1,8 @@
 import XFighter from "./x_fighter";
 import TieFighter from "./tie_fighter";
 import Explosion from "./explosion";
-import drawBackground from "./background";
 import Upgrade from "./upgrade";
+import drawBackground from "./background";
 
 class Game {
   constructor() {
@@ -35,6 +35,7 @@ class Game {
     this.keyDownHandler = this.keyDownHandler.bind(this);
     document.addEventListener("keydown", this.keyDownHandler, false);
     this.explosions = [];
+    this.enemyLasers = [];
     this.upgrades = [];
     this.draw();
   }
@@ -52,11 +53,11 @@ class Game {
           context,
           player,
           enemies,
+          enemyLasers,
           checkCollision,
           explosions,
           upgrades
         } = this;
-
         context.clearRect(0, 0, 450, 700);
 
         if (background[0]) {
@@ -166,19 +167,28 @@ class Game {
             );
           }
         });
+        enemyLasers.forEach(projectile => {
+          if (checkCollision(projectile, player)) {
+            enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
+            player.hp -= 100;
+          } else if (projectile.posY < 850) {
+            projectile.draw();
+            projectile.posY += projectile.velocityY;
+          } else {
+            enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
+          }
+        });
         enemies.forEach(enemy => {
           if (enemy.posY >= 850) {
             this.player.hp -= 1;
             enemies.splice(enemies.indexOf(enemy), 1);
           } else {
             enemy.drawTieFighter();
-            let randomNumber = Math.ceil(Math.random() * 100);
-            if (randomNumber <= 1) {
+            let randomNumber = Math.ceil(Math.random() * 1000);
+            if (randomNumber === 1) {
               enemy.fireWeapon();
+              enemyLasers.push(enemy.projectiles[enemy.projectiles.length - 1]);
             }
-            enemy.projectiles.forEach(projectile => {
-              projectile.draw();
-            });
           }
         });
         if (enemies.length === 0) {
@@ -199,7 +209,7 @@ class Game {
             default:
               break;
           }
-          this.wave += 5;
+          this.wave += 20;
           this.enemies = [...Array(this.wave).keys()].map(
             () =>
               new TieFighter(this.tieFighterImg, {
@@ -244,6 +254,21 @@ class Game {
           return true;
         }
 
+      case "laser2":
+        debugger;
+        if (!object1 || !object2) {
+          return false;
+        } else if (
+          object1.posY > object2.y + object2.height ||
+          object1.posY < object2.y ||
+          object1.posX + 10 < object2.x ||
+          object1.posX > object2.x + object2.width
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+
       case "player":
         if (!object1 || !object2) {
           return false;
@@ -268,6 +293,7 @@ class Game {
       this.score = 0;
       this.enemies = [];
       this.explosions = [];
+      this.enemyLasers = [];
       this.upgrades = [];
       this.lost = false;
     } else if (e.key == "p" || e.key == "P") {
