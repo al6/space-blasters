@@ -173,7 +173,11 @@ class Game {
             player.hp -= 100;
           } else if (projectile.posY < 850) {
             projectile.draw();
+            console.log(projectile.posY);
+            console.log(projectile.velocityY);
             projectile.posY += projectile.velocityY;
+            console.log("add to posY?");
+            console.log(projectile.posY);
           } else {
             enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
           }
