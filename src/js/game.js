@@ -32,6 +32,7 @@ class Game {
     this.drawReset = this.drawReset.bind(this);
     this.impact = new Audio("./src/sounds/impact.mp3");
     this.tieExplode = new Audio("./src/sounds/tie_explode_short.mp3");
+    this.tieExplode.volume = 0.5;
     this.upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
     this.upgradeSound.volume = 1;
     this.keyDownHandler = this.keyDownHandler.bind(this);
@@ -78,6 +79,16 @@ class Game {
         explosions.forEach(explosion => {
           if (explosion.hp > 0) {
             explosion.drawExplosion();
+            if (explosion.sX <= 3584) {
+              explosion.sX += 512;
+            } else {
+              explosion.sX = 0;
+            }
+            if (explosion.sY <= 3584) {
+              explosion.sY += 512;
+            } else {
+              explosion.sY = 0;
+            }
             explosion.hp -= 1;
           } else if (explosion.hp <= 0) {
             if (explosion.loot) {
