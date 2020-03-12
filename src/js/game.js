@@ -167,9 +167,6 @@ class Game {
             );
           }
         });
-        console.log("enemyLasers next line");
-        console.log(enemyLasers);
-        console.log("enemyLasers previous line");
 
         enemyLasers.forEach(projectile => {
           if (checkCollision(projectile, player)) {
