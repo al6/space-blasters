@@ -32,6 +32,8 @@ class Game {
     this.drawReset = this.drawReset.bind(this);
     this.impact = new Audio("./src/sounds/impact.mp3");
     this.tieExplode = new Audio("./src/sounds/tie_explode_short.mp3");
+    this.upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+    this.upgradeSound.volume = 1;
     this.keyDownHandler = this.keyDownHandler.bind(this);
     document.addEventListener("keydown", this.keyDownHandler, false);
     this.explosions = [];
@@ -70,6 +72,7 @@ class Game {
           this.drawLose();
           this.lost = true;
         }
+        this.drawCoolDownConstant();
         this.drawScore();
         this.drawHP();
         explosions.forEach(explosion => {
@@ -93,13 +96,16 @@ class Game {
             switch (player.weapon) {
               case "laser1":
                 player.weapon = "laser2";
+                this.upgradeSound.play();
                 break;
               case "laser2":
                 player.weapon = "laser3";
+                this.upgradeSound.play();
               case "laser3":
                 if (player.hp === 100) {
                   if (player.projectileCoolDownConstant >= 5) {
                     player.projectileCoolDownConstant -= 1;
+                    this.upgradeSound.play();
                   }
                 } else if (player.hp <= 99) {
                   player.hp += 1;
@@ -171,7 +177,16 @@ class Game {
         enemyLasers.forEach(projectile => {
           if (checkCollision(projectile, player)) {
             enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
-            player.hp -= 100;
+            player.hp -= 5;
+            let explosion = new Explosion({
+              posX: player.x,
+              posY: player.y,
+              velocityY: 1
+            });
+            if (!window.muted) {
+              this.tieExplode.play();
+            }
+            this.explosions.push(explosion);
           } else if (projectile.posY < 850) {
             projectile.draw();
             projectile.posY += projectile.velocityY;
@@ -327,6 +342,17 @@ class Game {
     context.fillText("HP: " + this.player.hp, 10, 30);
   }
 
+  drawCoolDownConstant() {
+    let { context } = this;
+    context.font = "bold 20px Arial";
+    context.fillStyle = "green";
+    context.fillText(
+      "Laser Cooldown: " + this.player.projectileCoolDownConstant,
+      10,
+      60
+    );
+  }
+
   drawScore() {
     let { context } = this;
     context.font = "bold 30px Arial";
@@ -339,6 +365,8 @@ class Game {
     context.font = "bold 130px Arial";
     context.fillStyle = "red";
     context.fillText("GAME OVER", 10, 250);
+    context.font = "bold 50px Arial";
+    context.fillText("Your final score is: " + this.score, 150, 330);
     context.font = "bold 50px Arial";
     context.fillText("PRESS R TO RESTART", 150, 400);
   }

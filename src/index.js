@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   drawBackground();
   window.muted = true;
   window.bgMusic = new Audio("./src/sounds/sw.mp3");
+  window.bgMusic.volume = 0.2;
 
   window.playerImg = new Image();
   window.playerImg.src = "./src/images/xwing.png";
