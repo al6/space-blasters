@@ -177,7 +177,7 @@ class Game {
         enemyLasers.forEach(projectile => {
           if (checkCollision(projectile, player)) {
             enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
-            player.hp -= 5;
+            player.hp -= 1;
             let explosion = new Explosion({
               posX: player.x,
               posY: player.y,
