@@ -107,7 +107,7 @@ class Game {
             switch (player.weapon) {
               case "laser1":
                 player.weapon = "laser2";
-                this.upgradeSound.play();
+                if (!window.muted) this.upgradeSound.play();
                 break;
               case "laser2":
                 player.weapon = "laser3";
@@ -116,7 +116,7 @@ class Game {
                 if (player.hp === 100) {
                   if (player.projectileCoolDownConstant >= 5) {
                     player.projectileCoolDownConstant -= 1;
-                    this.upgradeSound.play();
+                    if (!window.muted) this.upgradeSound.play();
                   }
                 } else if (player.hp <= 99) {
                   player.hp += 1;
