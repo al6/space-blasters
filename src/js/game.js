@@ -111,7 +111,7 @@ class Game {
                 break;
               case "laser2":
                 player.weapon = "laser3";
-                this.upgradeSound.play();
+                if (!window.muted) this.upgradeSound.play();
               case "laser3":
                 if (player.hp === 100) {
                   if (player.projectileCoolDownConstant >= 5) {
