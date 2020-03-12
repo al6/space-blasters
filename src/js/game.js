@@ -167,6 +167,10 @@ class Game {
             );
           }
         });
+        console.log("enemyLasers next line");
+        console.log(enemyLasers);
+        console.log("enemyLasers previous line");
+
         enemyLasers.forEach(projectile => {
           if (checkCollision(projectile, player)) {
             enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
@@ -255,7 +259,6 @@ class Game {
         }
 
       case "laser2":
-        debugger;
         if (!object1 || !object2) {
           return false;
         } else if (
