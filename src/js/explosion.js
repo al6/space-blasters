@@ -28,7 +28,6 @@ class Explosion extends MovingObject {
       sHeight,
       posX,
       posY,
-      velocityY,
       height,
       width,
       scale

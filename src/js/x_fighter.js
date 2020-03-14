@@ -93,6 +93,7 @@ class XFighter {
     this.downPressed = false;
     this.spacePressed = false;
   }
+  
   drawXFighter() {
     const { canvas, ctx, x, y, height, width } = this;
     ctx.clearRect(0, 0, canvas.width, canvas.height);

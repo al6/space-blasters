@@ -189,11 +189,12 @@ class Game {
           if (checkCollision(projectile, player)) {
             enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
             player.hp -= 1;
-            let explosion = new Explosion({
-              posX: player.x,
-              posY: player.y,
+            let explosion = new Explosion(null, {
+              posX: this.player.x,
+              posY: this.player.y,
               velocityY: 1
             });
+
             if (!window.muted) {
               this.tieExplode.play();
             }
