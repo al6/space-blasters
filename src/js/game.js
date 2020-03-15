@@ -6,44 +6,43 @@ import drawBackground from "./background";
 
 class Game {
   constructor() {
+    this.canvas = document.getElementById("game-canvas");
+    this.context = this.canvas.getContext("2d");
+    this.playingStatus = document.getElementById("sound");
+    this.notPlayingStatus = document.getElementById("no-sound");
+
     this.background = drawBackground();
     this.tieFighterImg = new Image();
     this.tieFighterImg.src = "./src/images/tie-advanced.png";
-    this.canvas = document.getElementById("game-canvas");
-    this.context = this.canvas.getContext("2d");
     this.player = new XFighter(this.playerImg);
-    this.wave = 0;
-    this.waveCount = 0;
-    this.lastWave = 30;
-    this.score = 0;
-    this.enemies = [];
-    this.paused = false;
-    this.lost = false;
-    this.won = false;
-    this.fpsInterval = 1000 / 120;
-    this.stop = false;
-    this.frameCount = 0;
-    this.fps = 60;
-    this.now = 0;
-    this.then = Date.now();
-    this.startTime = this.then;
-    this.elapsed = 0;
-    this.playingStatus = document.getElementById("sound");
-    this.notPlayingStatus = document.getElementById("no-sound");
-    this.checkCollision = this.checkCollision.bind(this);
-    this.draw = this.draw.bind(this);
-    this.drawReset = this.drawReset.bind(this);
-    this.drawWin = this.drawWin.bind(this);
-    this.drawWavesLeft = this.drawWavesLeft.bind(this);
+
     this.impact = new Audio("./src/sounds/impact.mp3");
     this.tieExplode = new Audio("./src/sounds/tie_explode_short.mp3");
     this.tieExplode.volume = 0.3;
+
+    this.score = 0;
+    this.wave = 0;
+    this.lastWave = 30;
+    this.waveCount = 0;
+
+    this.lost = false;
+    this.paused = false;
+    this.won = false;
+
+    this.draw = this.draw.bind(this);
+    this.checkCollision = this.checkCollision.bind(this);
     this.keyDownHandler = this.keyDownHandler.bind(this);
     document.addEventListener("keydown", this.keyDownHandler, false);
-    this.explosions = [];
+
+    this.enemies = [];
     this.enemyLasers = [];
+    this.explosions = [];
     this.upgrades = [];
-    this.draw();
+
+    this.now = 0;
+    this.elapsed = 0;
+    this.then = Date.now();
+    this.fpsInterval = 20;
   }
 
   draw() {
@@ -51,7 +50,9 @@ class Game {
       this.drawWin();
       this.won = true;
     }
+
     requestAnimationFrame(this.draw);
+
     this.now = Date.now();
     this.elapsed = this.now - this.then;
     if (this.elapsed > this.fpsInterval) {
@@ -76,14 +77,105 @@ class Game {
         if (player.hp > 0 && window.playerImg) {
           player.drawXFighter();
         } else if (player.hp > 0) {
+          //failsafe if player image isn't loaded
         } else {
           this.drawLose();
           this.lost = true;
         }
+
         this.drawCoolDownConstant();
-        this.drawScore();
         this.drawHP();
+        this.drawScore();
         this.drawWavesLeft();
+
+        player.projectiles.forEach(projectile => {
+          if (projectile && projectile.posY >= -5) {
+            let alreadyDrawn = false;
+            enemies.forEach(enemy => {
+              if (checkCollision(projectile, enemy)) {
+                if (!window.muted) this.impact.play();
+                projectile.hp -= 1;
+                if (projectile.hp <= 0) {
+                  player.projectiles.splice(
+                    player.projectiles.indexOf(projectile),
+                    1
+                  );
+                }
+                enemy.hp -= 1;
+                if (enemy.hp <= 0) {
+                  let explosion = null;
+                  switch (enemy.name) {
+                    case "TieFighter":
+                      explosion = new Explosion(enemy.loot, {
+                        posX: enemy.posX,
+                        posY: enemy.posY,
+                        velocityY: 1
+                      });
+                      if (!window.muted) {
+                        let tieExplodeSound = new Audio(
+                          "./src/sounds/tie_explode_short.mp3"
+                        );
+                        tieExplodeSound.play();
+                      }
+                      explosions.push(explosion);
+                      this.score += 1;
+                      break;
+                    default:
+                      break;
+                  }
+                  enemies.splice(enemies.indexOf(enemy), 1);
+                }
+              } else {
+                if (!alreadyDrawn) {
+                  projectile.posY += projectile.velocityY;
+                  projectile.draw();
+                  alreadyDrawn = true;
+                }
+              }
+            });
+          } else {
+            player.projectiles.splice(
+              player.projectiles.indexOf(projectile),
+              1
+            );
+          }
+        });
+
+        enemies.forEach(enemy => {
+          if (enemy.posY >= 850) {
+            this.player.hp -= 1;
+            enemies.splice(enemies.indexOf(enemy), 1);
+          } else {
+            enemy.drawTieFighter();
+            let randomNumber = Math.ceil(Math.random() * 1000);
+            if (randomNumber === 1) {
+              enemy.fireWeapon();
+              enemyLasers.push(enemy.projectiles[enemy.projectiles.length - 1]);
+            }
+          }
+        });
+
+        enemyLasers.forEach(projectile => {
+          if (checkCollision(projectile, player)) {
+            enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
+            player.hp -= 10;
+            let explosion = new Explosion(null, {
+              posX: this.player.x,
+              posY: this.player.y,
+              velocityY: 1
+            });
+            if (!window.muted) {
+              this.tieExplode.play();
+            }
+            this.explosions.push(explosion);
+          } else if (projectile.posY < 850) {
+            projectile.draw();
+            projectile.posY += projectile.velocityY;
+          } else {
+            enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
+          }
+        });
+
         explosions.forEach(explosion => {
           if (explosion.hp > 0) {
             explosion.drawExplosion();
@@ -110,6 +202,7 @@ class Game {
             explosions.splice(explosions.indexOf(explosion), 1);
           }
         });
+
         upgrades.forEach(upgrade => {
           if (checkCollision(player, upgrade)) {
             switch (player.weapon) {
@@ -211,92 +304,7 @@ class Game {
             upgrades.splice(upgrades.indexOf(upgrade), 1);
           }
         });
-        player.projectiles.forEach(projectile => {
-          if (projectile && projectile.posY >= -5) {
-            let alreadyDrawn = false;
-            enemies.forEach(enemy => {
-              if (checkCollision(projectile, enemy)) {
-                if (!window.muted) this.impact.play();
-                projectile.hp -= 1;
-                if (projectile.hp <= 0) {
-                  player.projectiles.splice(
-                    player.projectiles.indexOf(projectile),
-                    1
-                  );
-                }
-                enemy.hp -= 1;
-                if (enemy.hp <= 0) {
-                  let explosion = null;
-                  switch (enemy.name) {
-                    case "TieFighter":
-                      explosion = new Explosion(enemy.loot, {
-                        posX: enemy.posX,
-                        posY: enemy.posY,
-                        velocityY: 1
-                      });
-                      if (!window.muted) {
-                        let tieExplodeSound = new Audio(
-                          "./src/sounds/tie_explode_short.mp3"
-                        );
-                        tieExplodeSound.play();
-                      }
-                      explosions.push(explosion);
-                      this.score += 1;
-                      break;
-                    default:
-                      break;
-                  }
-                  enemies.splice(enemies.indexOf(enemy), 1);
-                }
-              } else {
-                if (!alreadyDrawn) {
-                  projectile.posY += projectile.velocityY;
-                  projectile.draw();
-                  alreadyDrawn = true;
-                }
-              }
-            });
-          } else {
-            player.projectiles.splice(
-              player.projectiles.indexOf(projectile),
-              1
-            );
-          }
-        });
 
-        enemyLasers.forEach(projectile => {
-          if (checkCollision(projectile, player)) {
-            enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
-            player.hp -= 10;
-            let explosion = new Explosion(null, {
-              posX: this.player.x,
-              posY: this.player.y,
-              velocityY: 1
-            });
-            if (!window.muted) {
-              this.tieExplode.play();
-            }
-            this.explosions.push(explosion);
-          } else if (projectile.posY < 850) {
-            projectile.draw();
-            projectile.posY += projectile.velocityY;
-          } else {
-            enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
-          }
-        });
-        enemies.forEach(enemy => {
-          if (enemy.posY >= 850) {
-            this.player.hp -= 1;
-            enemies.splice(enemies.indexOf(enemy), 1);
-          } else {
-            enemy.drawTieFighter();
-            let randomNumber = Math.ceil(Math.random() * 1000);
-            if (randomNumber === 1) {
-              enemy.fireWeapon();
-              enemyLasers.push(enemy.projectiles[enemy.projectiles.length - 1]);
-            }
-          }
-        });
         if (enemies.length === 0) {
           let speed = 3;
           switch (this.wave) {
@@ -406,13 +414,18 @@ class Game {
     e.preventDefault();
     if (e.key == "r" || e.key == "R") {
       this.player = new XFighter();
-      this.wave = 1;
+
+      this.wave = 0;
+      this.waveCount = 0;
       this.score = 0;
+
       this.enemies = [];
       this.explosions = [];
       this.enemyLasers = [];
       this.upgrades = [];
+
       this.lost = false;
+      this.paused = false;
       this.won = false;
     } else if (e.key == "p" || e.key == "P") {
       this.paused = !this.paused;

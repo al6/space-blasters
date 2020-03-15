@@ -1,13 +1,9 @@
-import "./styles/index.scss";
-import drawBackground from "./js/background.js";
 import Game from "./js/game.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  drawBackground();
   window.muted = true;
   window.bgMusic = new Audio("./src/sounds/sw.mp3");
   window.bgMusic.volume = 0.1;
-
   window.playerImg = new Image();
   window.playerImg.src = "./src/images/xwing.png";
   window.playerImg.onload = function() {
@@ -15,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.width = this.naturalWidth;
     canvas.height = this.naturalHeight;
     setTimeout(() => {
-      new Game();
+      new Game().draw();
     }, 100);
   };
 
