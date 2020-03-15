@@ -6,6 +6,7 @@ class XFighter {
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.img = window.playerImg;
+    this.laserSound = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
     this.hp = 100;
     this.height = 100;
     this.width = 100;
@@ -93,7 +94,7 @@ class XFighter {
     this.downPressed = false;
     this.spacePressed = false;
   }
-  
+
   drawXFighter() {
     const { canvas, ctx, x, y, height, width } = this;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -132,11 +133,12 @@ class XFighter {
     if (this.projectileCoolDown <= 0) {
       this.projectileCoolDown += this.projectileCoolDownConstant;
       switch (this.weapon) {
+        // level 1 laser light blue
         case "laser1":
           laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
           if (!window.muted) laser.play();
           x = new PlayerWeapon("laser1", {
-            velocityY: -5,
+            velocityY: -10,
             posX: this.x + 43,
             posY: this.y - 10
           });
@@ -146,12 +148,12 @@ class XFighter {
           laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
           if (!window.muted) laser.play();
           x = new PlayerWeapon("laser1", {
-            velocityY: -5,
+            velocityY: -10,
             posX: this.x,
             posY: this.y - 10
           });
           y = new PlayerWeapon("laser1", {
-            velocityY: -5,
+            velocityY: -10,
             posX: this.x + 90,
             posY: this.y - 10
           });
@@ -162,17 +164,213 @@ class XFighter {
           laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
           if (!window.muted) laser.play();
           x = new PlayerWeapon("laser1", {
-            velocityY: -5,
+            velocityY: -10,
             posX: this.x,
             posY: this.y - 10
           });
           y = new PlayerWeapon("laser1", {
-            velocityY: -5,
+            velocityY: -10,
             posX: this.x + 43,
             posY: this.y - 10
           });
           z = new PlayerWeapon("laser1", {
-            velocityY: -5,
+            velocityY: -10,
+            posX: this.x + 90,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          this.projectiles.push(y);
+          this.projectiles.push(z);
+          break;
+        // level 2 laser yellow
+        case "laser4":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser2", {
+            velocityY: -8,
+            posX: this.x + 43,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          break;
+        case "laser5":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser2", {
+            velocityY: -8,
+            posX: this.x,
+            posY: this.y - 10
+          });
+          y = new PlayerWeapon("laser2", {
+            velocityY: -8,
+            posX: this.x + 90,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          this.projectiles.push(y);
+          break;
+        case "laser6":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser2", {
+            velocityY: -8,
+            posX: this.x,
+            posY: this.y - 10
+          });
+          y = new PlayerWeapon("laser2", {
+            velocityY: -8,
+            posX: this.x + 43,
+            posY: this.y - 10
+          });
+          z = new PlayerWeapon("laser2", {
+            velocityY: -8,
+            posX: this.x + 90,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          this.projectiles.push(y);
+          this.projectiles.push(z);
+          break;
+        // level 3 laser purple
+        case "laser7":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser3", {
+            velocityY: -6,
+            posX: this.x + 43,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          break;
+        case "laser8":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser3", {
+            velocityY: -6,
+            posX: this.x,
+            posY: this.y - 10
+          });
+          y = new PlayerWeapon("laser3", {
+            velocityY: -6,
+            posX: this.x + 90,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          this.projectiles.push(y);
+          break;
+        case "laser9":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser3", {
+            velocityY: -6,
+            posX: this.x,
+            posY: this.y - 10
+          });
+          y = new PlayerWeapon("laser3", {
+            velocityY: -6,
+            posX: this.x + 43,
+            posY: this.y - 10
+          });
+          z = new PlayerWeapon("laser3", {
+            velocityY: -6,
+            posX: this.x + 90,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          this.projectiles.push(y);
+          this.projectiles.push(z);
+          break;
+        // level 4 laser blue
+        case "laser10":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser4", {
+            velocityY: -4,
+            posX: this.x + 43,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          break;
+        case "laser11":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser4", {
+            velocityY: -4,
+            posX: this.x,
+            posY: this.y - 10
+          });
+          y = new PlayerWeapon("laser4", {
+            velocityY: -4,
+            posX: this.x + 90,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          this.projectiles.push(y);
+          break;
+        case "laser12":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser4", {
+            velocityY: -4,
+            posX: this.x,
+            posY: this.y - 10
+          });
+          y = new PlayerWeapon("laser4", {
+            velocityY: -4,
+            posX: this.x + 43,
+            posY: this.y - 10
+          });
+          z = new PlayerWeapon("laser4", {
+            velocityY: -4,
+            posX: this.x + 90,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          this.projectiles.push(y);
+          this.projectiles.push(z);
+          break;
+        // level 5 laser green
+        case "laser13":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser5", {
+            velocityY: -2,
+            posX: this.x + 43,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          break;
+        case "laser14":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser5", {
+            velocityY: -2,
+            posX: this.x,
+            posY: this.y - 10
+          });
+          y = new PlayerWeapon("laser5", {
+            velocityY: -2,
+            posX: this.x + 90,
+            posY: this.y - 10
+          });
+          this.projectiles.push(x);
+          this.projectiles.push(y);
+          break;
+        case "laser15":
+          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
+          if (!window.muted) laser.play();
+          x = new PlayerWeapon("laser5", {
+            velocityY: -2,
+            posX: this.x,
+            posY: this.y - 10
+          });
+          y = new PlayerWeapon("laser5", {
+            velocityY: -2,
+            posX: this.x + 43,
+            posY: this.y - 10
+          });
+          z = new PlayerWeapon("laser5", {
+            velocityY: -2,
             posX: this.x + 90,
             posY: this.y - 10
           });

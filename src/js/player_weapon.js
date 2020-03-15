@@ -10,11 +10,29 @@ class PlayerWeapon extends MovingObject {
     this.img = new Image();
     let { img } = this;
     switch (name) {
+      case "red-laser":
+        img.src = "./src/images/weapons/red_laser.png";
+        this.hp = 1;
+        break;
       case "laser1":
         img.src = "./src/images/weapons/laser1.png";
+        this.hp = 2;
         break;
       case "laser2":
         img.src = "./src/images/weapons/laser2.png";
+        this.hp = 4;
+        break;
+      case "laser3":
+        img.src = "./src/images/weapons/laser3.png";
+        this.hp = 8;
+        break;
+      case "laser4":
+        img.src = "./src/images/weapons/laser4.png";
+        this.hp = 16;
+        break;
+      case "laser5":
+        img.src = "./src/images/weapons/laser5.png";
+        this.hp = 32;
         break;
       default:
         break;

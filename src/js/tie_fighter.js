@@ -4,16 +4,9 @@ class TieFighter extends MovingObject {
   constructor(img, props) {
     super(props);
     this.name = "TieFighter";
-    this.weapon = "laser2";
-    this.hp = 2;
-    this.loot = [
-      { name: "upgrade", droprate: 0.15 }
-      // { name: "laser2", droprate: 0.3 },
-      // { name: "laser3", droprate: 0.2 },
-      // { name: "raygun", droprate: 0.1 },
-      // { name: "bigboy", droprate: 0.07 },
-      // { name: "antimatter", droprate: 0.05 }
-    ];
+    this.weapon = "red-laser";
+    this.hp = 5;
+    this.loot = [{ name: "upgrade", droprate: 0.04 }];
     this.loot = this.loot[Math.floor(Math.random() * this.loot.length)];
     let rand = Math.ceil(Math.random() * 100);
     if (this.loot["droprate"] * 100 > rand) {
@@ -47,12 +40,12 @@ class TieFighter extends MovingObject {
       this.projectileCoolDown += this.projectileCoolDownConstant;
       let laser, x;
       switch (this.weapon) {
-        case "laser2":
+        case "red-laser":
           if (!window.muted) {
             laser = new Audio("./src/sounds/tie_fire_laser.mp3");
             laser.play();
           }
-          x = new PlayerWeapon("laser2", {
+          x = new PlayerWeapon("red-laser", {
             velocityY: 5,
             posX: this.posX + 53,
             posY: this.posY - 10

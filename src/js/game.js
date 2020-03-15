@@ -13,10 +13,13 @@ class Game {
     this.context = this.canvas.getContext("2d");
     this.player = new XFighter(this.playerImg);
     this.wave = 0;
+    this.waveCount = 0;
+    this.lastWave = 30;
     this.score = 0;
     this.enemies = [];
     this.paused = false;
     this.lost = false;
+    this.won = false;
     this.fpsInterval = 1000 / 120;
     this.stop = false;
     this.frameCount = 0;
@@ -30,11 +33,11 @@ class Game {
     this.checkCollision = this.checkCollision.bind(this);
     this.draw = this.draw.bind(this);
     this.drawReset = this.drawReset.bind(this);
+    this.drawWin = this.drawWin.bind(this);
+    this.drawWavesLeft = this.drawWavesLeft.bind(this);
     this.impact = new Audio("./src/sounds/impact.mp3");
     this.tieExplode = new Audio("./src/sounds/tie_explode_short.mp3");
-    this.tieExplode.volume = 0.5;
-    this.upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-    this.upgradeSound.volume = 1;
+    this.tieExplode.volume = 0.3;
     this.keyDownHandler = this.keyDownHandler.bind(this);
     document.addEventListener("keydown", this.keyDownHandler, false);
     this.explosions = [];
@@ -44,13 +47,17 @@ class Game {
   }
 
   draw() {
+    if (this.waveCount >= 30) {
+      this.drawWin();
+      this.won = true;
+    }
     requestAnimationFrame(this.draw);
     this.now = Date.now();
     this.elapsed = this.now - this.then;
     if (this.elapsed > this.fpsInterval) {
       this.then = this.now - (this.elapsed % this.fpsInterval);
 
-      if (!this.paused && !this.lost) {
+      if (!this.paused && !this.lost && !this.won) {
         let {
           background,
           context,
@@ -76,6 +83,7 @@ class Game {
         this.drawCoolDownConstant();
         this.drawScore();
         this.drawHP();
+        this.drawWavesLeft();
         explosions.forEach(explosion => {
           if (explosion.hp > 0) {
             explosion.drawExplosion();
@@ -107,19 +115,88 @@ class Game {
             switch (player.weapon) {
               case "laser1":
                 player.weapon = "laser2";
-                if (!window.muted) this.upgradeSound.play();
+                let upgradeSound = new Audio(
+                  "./src/sounds/upgrade_complete.mp3"
+                );
+                if (!window.muted) upgradeSound.play();
                 break;
               case "laser2":
                 player.weapon = "laser3";
-                if (!window.muted) this.upgradeSound.play();
+                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+                if (!window.muted) upgradeSound.play();
+                break;
               case "laser3":
+                player.weapon = "laser4";
+                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+                if (!window.muted) upgradeSound.play();
+                break;
+              case "laser4":
+                player.weapon = "laser5";
+                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+                if (!window.muted) upgradeSound.play();
+                break;
+              case "laser5":
+                player.weapon = "laser6";
+                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+                if (!window.muted) upgradeSound.play();
+                break;
+              case "laser6":
+                player.weapon = "laser7";
+                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+                if (!window.muted) upgradeSound.play();
+                break;
+              case "laser7":
+                player.weapon = "laser8";
+                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+                if (!window.muted) upgradeSound.play();
+                break;
+              case "laser8":
+                player.weapon = "laser9";
+                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+                if (!window.muted) upgradeSound.play();
+                break;
+              case "laser9":
+                player.weapon = "laser10";
+                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+                if (!window.muted) upgradeSound.play();
+                break;
+              case "laser10":
+                player.weapon = "laser11";
+                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+                if (!window.muted) upgradeSound.play();
+                break;
+              case "laser11":
+                player.weapon = "laser12";
+                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+                if (!window.muted) upgradeSound.play();
+                break;
+              case "laser12":
+                player.weapon = "laser13";
+                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+                if (!window.muted) upgradeSound.play();
+                break;
+              case "laser13":
+                player.weapon = "laser14";
+                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+                if (!window.muted) upgradeSound.play();
+                break;
+              case "laser14":
+                player.weapon = "laser15";
+                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+                if (!window.muted) upgradeSound.play();
+                break;
+              case "laser15":
+                player.weapon = "laser15";
                 if (player.hp === 100) {
                   if (player.projectileCoolDownConstant >= 5) {
                     player.projectileCoolDownConstant -= 1;
-                    if (!window.muted) this.upgradeSound.play();
+                    upgradeSound = new Audio(
+                      "./src/sounds/upgrade_complete.mp3"
+                    );
+                    if (!window.muted) upgradeSound.play();
                   }
                 } else if (player.hp <= 99) {
-                  player.hp += 1;
+                  player.hp += 2;
                 } else {
                   this.score += 5;
                 }
@@ -140,10 +217,13 @@ class Game {
             enemies.forEach(enemy => {
               if (checkCollision(projectile, enemy)) {
                 if (!window.muted) this.impact.play();
-                player.projectiles.splice(
-                  player.projectiles.indexOf(projectile),
-                  1
-                );
+                projectile.hp -= 1;
+                if (projectile.hp <= 0) {
+                  player.projectiles.splice(
+                    player.projectiles.indexOf(projectile),
+                    1
+                  );
+                }
                 enemy.hp -= 1;
                 if (enemy.hp <= 0) {
                   let explosion = null;
@@ -154,7 +234,6 @@ class Game {
                         posY: enemy.posY,
                         velocityY: 1
                       });
-
                       if (!window.muted) {
                         let tieExplodeSound = new Audio(
                           "./src/sounds/tie_explode_short.mp3"
@@ -188,13 +267,12 @@ class Game {
         enemyLasers.forEach(projectile => {
           if (checkCollision(projectile, player)) {
             enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
-            player.hp -= 1;
+            player.hp -= 10;
             let explosion = new Explosion(null, {
               posX: this.player.x,
               posY: this.player.y,
               velocityY: 1
             });
-
             if (!window.muted) {
               this.tieExplode.play();
             }
@@ -237,7 +315,8 @@ class Game {
             default:
               break;
           }
-          this.wave += 20;
+          this.wave += 2;
+          this.waveCount += 1;
           this.enemies = [...Array(this.wave).keys()].map(
             () =>
               new TieFighter(this.tieFighterImg, {
@@ -245,8 +324,15 @@ class Game {
               })
           );
         }
-      } else if (!this.lost) {
+      } else if (!this.lost && !this.won) {
         this.drawPause();
+        if (window.muted) {
+          this.drawMuted();
+        } else {
+          this.context.clearRect(300, -100, 550, 150);
+        }
+      } else if (!this.lost && this.won) {
+        this.drawWin();
         if (window.muted) {
           this.drawMuted();
         } else {
@@ -269,6 +355,10 @@ class Game {
   checkCollision(object1, object2) {
     switch (object1.name) {
       case "laser1":
+      case "laser2":
+      case "laser3":
+      case "laser4":
+      case "laser5":
         if (!object1 || !object2) {
           return false;
         } else if (
@@ -282,7 +372,7 @@ class Game {
           return true;
         }
 
-      case "laser2":
+      case "red-laser":
         if (!object1 || !object2) {
           return false;
         } else if (
@@ -323,6 +413,7 @@ class Game {
       this.enemyLasers = [];
       this.upgrades = [];
       this.lost = false;
+      this.won = false;
     } else if (e.key == "p" || e.key == "P") {
       this.paused = !this.paused;
     } else if (e.key == "m" || e.key == "M") {
@@ -357,11 +448,22 @@ class Game {
   drawCoolDownConstant() {
     let { context } = this;
     context.font = "bold 20px Arial";
-    context.fillStyle = "green";
+    context.fillStyle = "white";
     context.fillText(
       "Laser Cooldown: " + this.player.projectileCoolDownConstant,
       10,
       60
+    );
+  }
+
+  drawWavesLeft() {
+    let { context } = this;
+    context.font = "bold 20px Arial";
+    context.fillStyle = "white";
+    context.fillText(
+      "Waves Remaining: " + (this.lastWave - this.waveCount),
+      10,
+      80
     );
   }
 
@@ -370,6 +472,19 @@ class Game {
     context.font = "bold 30px Arial";
     context.fillStyle = "white";
     context.fillText("Score: " + this.score, 130, 30);
+  }
+
+  drawWin() {
+    let { context } = this;
+    context.font = "bold 80px Arial";
+    context.fillStyle = "green";
+    context.fillText("YOU WIN!", 230, 280);
+    context.font = "bold 30px Arial";
+    context.fillText("THE FORCE IS STRONG WITHIN YOU", 150, 330);
+    context.font = "bold 50px Arial";
+    context.fillText("Your final score is: " + this.score, 155, 410);
+    context.font = "bold 50px Arial";
+    context.fillText("PRESS R TO RESTART", 150, 470);
   }
 
   drawLose() {
