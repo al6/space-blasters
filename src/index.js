@@ -1,3 +1,4 @@
+import "./styles/index.scss";
 import Game from "./js/game.js";
 
 document.addEventListener("DOMContentLoaded", () => {
