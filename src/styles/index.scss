@@ -134,6 +134,10 @@ table {
 }
 
 /* end of reset */
+html {
+  height: 100vh;
+  width: 100vw;
+}
 
 body {
   align-items: center;
@@ -151,13 +155,12 @@ body {
   flex-direction: column;
   justify-content: space-between;
   height: 700px;
-  
+
   .header {
     align-items: center;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    
   }
 
   .headline {
@@ -286,21 +289,24 @@ body {
   #game-canvas {
     z-index: 9;
   }
+  #ui-canvas {
+    z-index: 10;
+  }
 }
 
-@media (max-width: 325px){
+@media (max-width: 325px) {
   body {
     zoom: 60%;
   }
 }
 
-@media (min-width: 350px), (max-width: 500px){
+@media (min-width: 350px), (max-width: 500px) {
   body {
     zoom: 80%;
   }
 }
 
-@media (max-width: 500px){
+@media (max-width: 500px) {
   .right-container {
     display: none;
   }
