@@ -8,14 +8,14 @@ document.addEventListener("DOMContentLoaded", () => {
   window.playerImg = new Image();
   window.playerImg.src = "./src/images/xwing.png";
   window.playerImg.onload = function() {
-    let game = new Game();
     let canvas = document.getElementById("game-canvas");
     canvas.width = this.naturalWidth;
     canvas.height = this.naturalHeight;
-    setTimeout(() => {
+    let game = new Game();
+    game.background[7].img.onload = function() {
       game.draw();
       game.paused = true;
-    }, 200);
+    };
   };
 
   bgMusic.loop = true;
