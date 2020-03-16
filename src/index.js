@@ -1,20 +1,20 @@
 import Game from "./js/game.js";
-import drawBackground from "./js/background.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  drawBackground();
   window.muted = true;
   window.bgMusic = new Audio("./src/sounds/sw.mp3");
   window.bgMusic.volume = 0.1;
   window.playerImg = new Image();
   window.playerImg.src = "./src/images/xwing.png";
   window.playerImg.onload = function() {
+    let game = new Game();
     let canvas = document.getElementById("game-canvas");
     canvas.width = this.naturalWidth;
     canvas.height = this.naturalHeight;
     setTimeout(() => {
-      new Game().draw();
-    }, 100);
+      game.draw();
+      game.paused = true;
+    }, 200);
   };
 
   bgMusic.loop = true;

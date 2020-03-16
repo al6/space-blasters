@@ -3,6 +3,10 @@ import MovingObject from "./moving_object";
 class TieFighter extends MovingObject {
   constructor(img, props) {
     super(props);
+
+    this.canvas = document.getElementById("game-canvas");
+    this.ctx = this.canvas.getContext("2d");
+
     this.name = "TieFighter";
     this.weapon = "red-laser";
     this.hp = 5;
@@ -16,8 +20,6 @@ class TieFighter extends MovingObject {
     }
     this.projectileCoolDown = 0;
     this.projectileCoolDownConstant = 10;
-    this.canvas = document.getElementById("game-canvas");
-    this.ctx = this.canvas.getContext("2d");
     this.img = img;
     this.posX = Math.floor(Math.random() * 731);
     this.posY = Math.floor(Math.random() * -800);
@@ -43,11 +45,12 @@ class TieFighter extends MovingObject {
         case "red-laser":
           if (!window.muted) {
             laser = new Audio("./src/sounds/tie_fire_laser.mp3");
+            laser.volume = 0.1;
             laser.play();
           }
           x = new PlayerWeapon("red-laser", {
             velocityY: 5,
-            posX: this.posX + 53,
+            posX: this.posX + 48,
             posY: this.posY - 10
           });
           this.projectiles.push(x);

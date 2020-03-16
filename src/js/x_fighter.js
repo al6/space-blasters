@@ -385,5 +385,96 @@ class XFighter {
       this.projectileCoolDown -= 1;
     }
   }
+
+  upgrade() {
+    let { weapon, hp, projectileCoolDownConstant } = this;
+    switch (weapon) {
+      case "laser1":
+        this.weapon = "laser2";
+        let upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+        if (!window.muted) upgradeSound.play();
+        break;
+      case "laser2":
+        this.weapon = "laser3";
+        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+        if (!window.muted) upgradeSound.play();
+        break;
+      case "laser3":
+        this.weapon = "laser4";
+        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+        if (!window.muted) upgradeSound.play();
+        break;
+      case "laser4":
+        this.weapon = "laser5";
+        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+        if (!window.muted) upgradeSound.play();
+        break;
+      case "laser5":
+        this.weapon = "laser6";
+        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+        if (!window.muted) upgradeSound.play();
+        break;
+      case "laser6":
+        this.weapon = "laser7";
+        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+        if (!window.muted) upgradeSound.play();
+        break;
+      case "laser7":
+        this.weapon = "laser8";
+        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+        if (!window.muted) upgradeSound.play();
+        break;
+      case "laser8":
+        this.weapon = "laser9";
+        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+        if (!window.muted) upgradeSound.play();
+        break;
+      case "laser9":
+        this.weapon = "laser10";
+        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+        if (!window.muted) upgradeSound.play();
+        break;
+      case "laser10":
+        this.weapon = "laser11";
+        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+        if (!window.muted) upgradeSound.play();
+        break;
+      case "laser11":
+        this.weapon = "laser12";
+        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+        if (!window.muted) upgradeSound.play();
+        break;
+      case "laser12":
+        this.weapon = "laser13";
+        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+        if (!window.muted) upgradeSound.play();
+        break;
+      case "laser13":
+        this.weapon = "laser14";
+        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+        if (!window.muted) upgradeSound.play();
+        break;
+      case "laser14":
+        this.weapon = "laser15";
+        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+        if (!window.muted) upgradeSound.play();
+        break;
+      case "laser15":
+        if (hp === 100) {
+          if (projectileCoolDownConstant >= 5) {
+            this.projectileCoolDownConstant -= 1;
+            upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
+            if (!window.muted) upgradeSound.play();
+          }
+        } else if (hp <= 90) {
+          this.hp += 10;
+        } else if (hp <= 100) {
+          this.hp += 1;
+        }
+        break;
+      default:
+        break;
+    }
+  }
 }
 export default XFighter;

@@ -15,10 +15,13 @@ class Game {
     this.tieFighterImg = new Image();
     this.tieFighterImg.src = "./src/images/tie-advanced.png";
     this.player = new XFighter(this.playerImg);
+    this.explosionImg = new Image();
+    this.explosionImg.src =
+      "./src/images/explosions/explosion_sprite_sheet.png";
 
     this.impact = new Audio("./src/sounds/impact.mp3");
     this.tieExplode = new Audio("./src/sounds/tie_explode_short.mp3");
-    this.tieExplode.volume = 0.3;
+    this.tieExplode.volume = 0.1;
 
     this.score = 0;
     this.wave = 0;
@@ -67,7 +70,8 @@ class Game {
           enemyLasers,
           checkCollision,
           explosions,
-          upgrades
+          upgrades,
+          explosionImg
         } = this;
         context.clearRect(0, 0, 450, 700);
 
@@ -77,7 +81,7 @@ class Game {
         if (player.hp > 0 && window.playerImg) {
           player.drawXFighter();
         } else if (player.hp > 0) {
-          //failsafe if player image isn't loaded
+          //failsafe if player image isn't loaded somehow
         } else {
           this.drawLose();
           this.lost = true;
@@ -88,45 +92,47 @@ class Game {
         this.drawScore();
         this.drawWavesLeft();
 
-        player.projectiles.forEach(projectile => {
+        player.projectiles.forEach((projectile, i) => {
           if (projectile && projectile.posY >= -5) {
             let alreadyDrawn = false;
-            enemies.forEach(enemy => {
-              if (checkCollision(projectile, enemy)) {
-                if (!window.muted) this.impact.play();
-                projectile.hp -= 1;
-                if (projectile.hp <= 0) {
-                  player.projectiles.splice(
-                    player.projectiles.indexOf(projectile),
-                    1
-                  );
-                }
-                enemy.hp -= 1;
-                if (enemy.hp <= 0) {
-                  let explosion = null;
-                  switch (enemy.name) {
-                    case "TieFighter":
-                      explosion = new Explosion(enemy.loot, {
-                        posX: enemy.posX,
-                        posY: enemy.posY,
-                        velocityY: 1
-                      });
-                      if (!window.muted) {
-                        let tieExplodeSound = new Audio(
-                          "./src/sounds/tie_explode_short.mp3"
-                        );
-                        tieExplodeSound.play();
-                      }
-                      explosions.push(explosion);
-                      this.score += 1;
-                      break;
-                    default:
-                      break;
+            enemies.forEach((enemy, j) => {
+              if (enemy) {
+                if (checkCollision(projectile, enemy)) {
+                  if (!window.muted) this.impact.play();
+                  enemy.hp -= 1;
+                  projectile.hp -= 1;
+                  if (projectile.hp <= 0) {
+                    player.projectiles[i] = null;
                   }
-                  enemies.splice(enemies.indexOf(enemy), 1);
-                }
-              } else {
-                if (!alreadyDrawn) {
+                  if (enemy.hp <= 0) {
+                    let explosion = null;
+                    switch (enemy.name) {
+                      case "TieFighter":
+                        explosion = new Explosion(
+                          enemy.loot,
+                          {
+                            posX: enemy.posX,
+                            posY: enemy.posY,
+                            velocityY: 1
+                          },
+                          explosionImg
+                        );
+                        if (!window.muted) {
+                          let tieExplodeSound = new Audio(
+                            "./src/sounds/tie_explode_short.mp3"
+                          );
+                          tieExplodeSound.volume = 0.1;
+                          tieExplodeSound.play();
+                        }
+                        explosions.push(explosion);
+                        this.score += 1;
+                        break;
+                      default:
+                        break;
+                    }
+                    enemies[j] = null;
+                  }
+                } else if (!alreadyDrawn) {
                   projectile.posY += projectile.velocityY;
                   projectile.draw();
                   alreadyDrawn = true;
@@ -134,23 +140,24 @@ class Game {
               }
             });
           } else {
-            player.projectiles.splice(
-              player.projectiles.indexOf(projectile),
-              1
-            );
+            player.projectiles[i] = null;
           }
         });
 
-        enemies.forEach(enemy => {
-          if (enemy.posY >= 850) {
-            this.player.hp -= 1;
-            enemies.splice(enemies.indexOf(enemy), 1);
-          } else {
-            enemy.drawTieFighter();
-            let randomNumber = Math.ceil(Math.random() * 1000);
-            if (randomNumber === 1) {
-              enemy.fireWeapon();
-              enemyLasers.push(enemy.projectiles[enemy.projectiles.length - 1]);
+        enemies.forEach((enemy, idx) => {
+          if (enemy) {
+            if (enemy.posY >= 850) {
+              this.player.hp -= 1;
+              enemies[idx] = null;
+            } else {
+              enemy.drawTieFighter();
+              let randomNumber = Math.ceil(Math.random() * 1000);
+              if (randomNumber === 1) {
+                enemy.fireWeapon();
+                enemyLasers.push(
+                  enemy.projectiles[enemy.projectiles.length - 1]
+                );
+              }
             }
           }
         });
@@ -159,11 +166,15 @@ class Game {
           if (checkCollision(projectile, player)) {
             enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
             player.hp -= 10;
-            let explosion = new Explosion(null, {
-              posX: this.player.x,
-              posY: this.player.y,
-              velocityY: 1
-            });
+            let explosion = new Explosion(
+              null,
+              {
+                posX: projectile.posX - 20,
+                posY: projectile.posY - 10,
+                velocityY: 1
+              },
+              explosionImg
+            );
             if (!window.muted) {
               this.tieExplode.play();
             }
@@ -205,98 +216,7 @@ class Game {
 
         upgrades.forEach(upgrade => {
           if (checkCollision(player, upgrade)) {
-            switch (player.weapon) {
-              case "laser1":
-                player.weapon = "laser2";
-                let upgradeSound = new Audio(
-                  "./src/sounds/upgrade_complete.mp3"
-                );
-                if (!window.muted) upgradeSound.play();
-                break;
-              case "laser2":
-                player.weapon = "laser3";
-                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-                if (!window.muted) upgradeSound.play();
-                break;
-              case "laser3":
-                player.weapon = "laser4";
-                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-                if (!window.muted) upgradeSound.play();
-                break;
-              case "laser4":
-                player.weapon = "laser5";
-                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-                if (!window.muted) upgradeSound.play();
-                break;
-              case "laser5":
-                player.weapon = "laser6";
-                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-                if (!window.muted) upgradeSound.play();
-                break;
-              case "laser6":
-                player.weapon = "laser7";
-                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-                if (!window.muted) upgradeSound.play();
-                break;
-              case "laser7":
-                player.weapon = "laser8";
-                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-                if (!window.muted) upgradeSound.play();
-                break;
-              case "laser8":
-                player.weapon = "laser9";
-                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-                if (!window.muted) upgradeSound.play();
-                break;
-              case "laser9":
-                player.weapon = "laser10";
-                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-                if (!window.muted) upgradeSound.play();
-                break;
-              case "laser10":
-                player.weapon = "laser11";
-                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-                if (!window.muted) upgradeSound.play();
-                break;
-              case "laser11":
-                player.weapon = "laser12";
-                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-                if (!window.muted) upgradeSound.play();
-                break;
-              case "laser12":
-                player.weapon = "laser13";
-                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-                if (!window.muted) upgradeSound.play();
-                break;
-              case "laser13":
-                player.weapon = "laser14";
-                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-                if (!window.muted) upgradeSound.play();
-                break;
-              case "laser14":
-                player.weapon = "laser15";
-                upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-                if (!window.muted) upgradeSound.play();
-                break;
-              case "laser15":
-                player.weapon = "laser15";
-                if (player.hp === 100) {
-                  if (player.projectileCoolDownConstant >= 5) {
-                    player.projectileCoolDownConstant -= 1;
-                    upgradeSound = new Audio(
-                      "./src/sounds/upgrade_complete.mp3"
-                    );
-                    if (!window.muted) upgradeSound.play();
-                  }
-                } else if (player.hp <= 99) {
-                  player.hp += 2;
-                } else {
-                  this.score += 5;
-                }
-                break;
-              default:
-                break;
-            }
+            player.upgrade();
             upgrades.splice(upgrades.indexOf(upgrade), 1);
           } else if (upgrade && upgrade.posY < 850) {
             upgrade.drawUpgrade();
@@ -305,17 +225,18 @@ class Game {
           }
         });
 
-        if (enemies.length === 0) {
+        if (enemies.length === 0 || enemies.every(el => el === null)) {
           let speed = 3;
           switch (this.wave) {
-            case this.wave > 20:
+            case this.waveCount >= 10 && this.waveCount < 20:
               speed = 5;
               break;
-            case this.wave > 30:
+            case this.waveCount >= 20 && this.waveCount < 29:
               speed = 6;
               break;
-            case this.wave > 40:
-              speed = 8;
+            case this.waveCount >= 29:
+              speed = 20;
+              this.wave += 20;
               break;
             case this.wave > 50:
               speed = 10;
@@ -323,7 +244,7 @@ class Game {
             default:
               break;
           }
-          this.wave += 2;
+          this.wave += 5;
           this.waveCount += 1;
           this.enemies = [...Array(this.wave).keys()].map(
             () =>

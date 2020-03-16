@@ -1,13 +1,14 @@
 import MovingObject from "./moving_object";
 class Explosion extends MovingObject {
-  constructor(loot, props) {
+  constructor(loot, props, img) {
     super(props);
-    this.name = "explosion";
-    this.hp = 64;
+
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
-    this.img = new Image();
-    this.img.src = "./src/images/explosions/explosion_sprite_sheet.png";
+
+    this.name = "explosion";
+    this.hp = 64;
+    this.img = img;
     this.sX = 0;
     this.sY = 0;
     this.sWidth = 512;
@@ -32,6 +33,7 @@ class Explosion extends MovingObject {
       width,
       scale
     } = this;
+    
     if (this.hp > 0) {
       ctx.drawImage(
         img,
@@ -45,9 +47,6 @@ class Explosion extends MovingObject {
         height * scale
       );
     }
-    img.onload = function() {
-      ctx.drawImage(img, posX, posY, width, height);
-    };
   }
 }
 export default Explosion;
