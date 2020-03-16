@@ -1,6 +1,8 @@
 import Game from "./js/game.js";
+import drawBackground from "./js/background.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+  drawBackground();
   window.muted = true;
   window.bgMusic = new Audio("./src/sounds/sw.mp3");
   window.bgMusic.volume = 0.1;
