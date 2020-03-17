@@ -18,8 +18,6 @@ class TieFighter extends MovingObject {
     } else {
       this.loot = null;
     }
-    this.projectileCoolDown = 0;
-    this.projectileCoolDownConstant = 10;
     this.img = img;
     this.posX = Math.floor(Math.random() * 731);
     this.posY = Math.floor(Math.random() * -800);
@@ -32,34 +30,26 @@ class TieFighter extends MovingObject {
     let { ctx, img, posX, posY, velocityY, height, width } = this;
     ctx.drawImage(img, posX, posY, width, height);
     this.posY += velocityY;
-    img.onload = function() {
-      ctx.drawImage(img, posX, posY, width, height);
-    };
   }
 
   fireWeapon() {
-    if (this.projectileCoolDown <= 0) {
-      this.projectileCoolDown += this.projectileCoolDownConstant;
-      let laser, x;
-      switch (this.weapon) {
-        case "red-laser":
-          if (!window.muted) {
-            laser = new Audio("./src/sounds/tie_fire_laser.mp3");
-            laser.volume = 0.1;
-            laser.play();
-          }
-          x = new PlayerWeapon("red-laser", {
-            velocityY: 5,
-            posX: this.posX + 48,
-            posY: this.posY - 10
-          });
-          this.projectiles.push(x);
-          break;
-        default:
-          break;
-      }
-    } else {
-      this.projectileCoolDown -= 1;
+    let laser, x;
+    switch (this.weapon) {
+      case "red-laser":
+        if (!window.muted) {
+          laser = new Audio("./src/sounds/tie_fire_laser.mp3");
+          laser.volume = 0.1;
+          laser.play();
+        }
+        x = new PlayerWeapon("red-laser", {
+          velocityY: 5,
+          posX: Math.floor(this.posX + 48),
+          posY: Math.floor(this.posY - 10)
+        });
+        this.projectiles.push(x);
+        break;
+      default:
+        break;
     }
   }
 }

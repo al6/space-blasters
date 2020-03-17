@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
   window.muted = true;
   window.bgMusic = new Audio("./src/sounds/sw.mp3");
   window.bgMusic.volume = 0.1;
+  bgMusic.loop = true;
+
   window.playerImg = new Image();
   window.playerImg.src = "./src/images/xwing.png";
   window.playerImg.onload = function() {
@@ -14,14 +16,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let game = new Game();
     game.background[7].img.onload = function() {
       game.draw();
-      game.paused = true;
     };
   };
 
-  bgMusic.loop = true;
-
   let playingStatus = document.getElementById("sound");
   let notPlayingStatus = document.getElementById("no-sound");
+
   playingStatus.addEventListener("click", () => {
     playingStatus.classList.toggle("hidden");
     notPlayingStatus.classList.toggle("hidden");

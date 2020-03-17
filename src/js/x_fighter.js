@@ -96,8 +96,7 @@ class XFighter {
   }
 
   drawXFighter() {
-    const { canvas, ctx, x, y, height, width } = this;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const { ctx, x, y, height, width } = this;
     if (this.spacePressed) {
       this.fireWeapon();
     }
@@ -140,7 +139,7 @@ class XFighter {
           x = new PlayerWeapon("laser1", {
             velocityY: -10,
             posX: this.x + 43,
-            posY: this.y - 10
+            posY: this.y - 1
           });
           this.projectiles.push(x);
           break;
