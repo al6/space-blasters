@@ -50,6 +50,10 @@ class Game {
     this.elapsed = 0;
     this.then = Date.now();
     this.fpsInterval = 500;
+    let draw = this.draw;
+    this.background[7].img.onload = function() {
+      draw();
+    };
   }
 
   draw() {
@@ -148,7 +152,6 @@ class Game {
       enemies.forEach((enemy, idx) => {
         if (enemy) {
           if (enemy.posY >= 850) {
-            this.player.hp -= 1;
             enemies[idx] = null;
           } else {
             enemy.drawTieFighter();

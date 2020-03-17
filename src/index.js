@@ -13,10 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let canvas = document.getElementById("game-canvas");
     canvas.width = this.naturalWidth;
     canvas.height = this.naturalHeight;
-    let game = new Game();
-    game.background[7].img.onload = function() {
-      game.draw();
-    };
+    new Game();
   };
 
   let playingStatus = document.getElementById("sound");
