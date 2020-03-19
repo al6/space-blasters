@@ -176,25 +176,27 @@ body {
 
   .educational-disclaimer {
     margin: 0.5rem;
+    text-align: center;
     &:hover {
       cursor: default;
     }
   }
 
   .professional-links {
+    align-items: center;
     display: flex;
     justify-content: space-between;
-    width: 10rem;
+    min-width: 60%;
   }
 
   .professional-link {
-    height: 2rem;
+    fill: white;
+    font-size: 2rem;
+    height: 4rem;
     filter: brightness(60%);
-    transition: 1s;
     &:hover {
       cursor: pointer;
       filter: none;
-      transition: 0.2s;
     }
   }
 
