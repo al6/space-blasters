@@ -285,9 +285,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  &:hover {
-    cursor: default;
-  }
   h1 {
     text-align: center;
   }
@@ -305,6 +302,7 @@ body {
     &:hover {
       background-color: black;
       border-color: white;
+      cursor: pointer;
       outline: none;
     }
   }
