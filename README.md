@@ -10,7 +10,7 @@ Space Blasters is a Star Wars inspired space shooter game. Navigate a spaceship 
 
 ## Features and Implementations
 
-# Player shooting lasers
+### Player shooting lasers
 
 Instantiate and push laser object into self contained array
 
@@ -33,7 +33,7 @@ fireWeapon() {
       }}}
 ```
 
-# Explosion animation
+### Explosion animation
 
 Iterate over one sprite-sheet PNG file and draw exact frames of the explosion
 
@@ -68,7 +68,7 @@ class Explosion extends MovingObject{
 }
 ```
 
-# Infinite particle background
+### Infinite particle background
 
 The infinite background with individual particles for stars/rocks/etc. was achieved with 8 layered canvas elements moving at different velocities and optimized to maximize game-play FPS.
 
