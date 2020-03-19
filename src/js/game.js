@@ -50,7 +50,7 @@ class Game {
     this.elapsed = 0;
     this.then = Date.now();
     this.fpsInterval = 500;
-    let draw = this.draw;
+    let { draw } = this;
     this.background[7].img.onload = function() {
       draw();
     };

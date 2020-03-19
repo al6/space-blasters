@@ -29,34 +29,32 @@
     </div>
 
     <section class="right-container">
-        <img  class="headline" src="./src/images/sw-banner.png" />
+      <img class="headline" src="./src/images/sw-banner.png" />
+      <div>
+        <div class="educational-disclaimer">Code written by Albert Lee</div>
         <div class="educational-disclaimer">For educational purposes only</div>
-        <nav class="professional-links">
-          <a href="https://angel.co/albertlee"
-            ><img
-              class="professional-link"
-              src="./src/images/professional_logos/angellist.png"
-          /></a>
-          <a href="https://github.com/al6/space-blasters"
-            ><img
-              class="professional-link"
-              src="./src/images/professional_logos/github-logo.png"
-          /></a>
-          <a href="https://www.linkedin.com/in/albertlee3/"
-            ><img
-              class="professional-link"
-              src="./src/images/professional_logos/linkedin.svg"
-          /></a>
-        </nav>
-      <div class="hi-scores">
-        <ul>
-          <li>HOLD SPACE TO FIRE</li>
-          <li>SHOOT DOWN ENEMIES</li>
-          <li>COLLECT GREEN UPGRADES</li>
-          <li>PRESS P TO PLAY/PAUSE</li>
-          <li>PRESS R TO RESET</li>
-          <li>PRESS M TO MUTE/UNMUTE</li>
-        </ul>
+      </div>
+      <nav class="professional-links">
+        <a href="https://www.linkedin.com/in/albertlee3/"
+          ><img
+            class="professional-link"
+            src="./src/images/professional_logos/linkedin.svg"
+        /></a>
+        <a href="https://github.com/al6/space-blasters"
+          ><img
+            class="professional-link"
+            src="./src/images/professional_logos/github-logo.png"
+        /></a>
+        <a href="https://angel.co/albertlee"
+          ><img
+            class="professional-link"
+            src="./src/images/professional_logos/angellist.png"
+        /></a>
+      </nav>
+      <div id="modal-button">
+        <button id="instructions-modal-open-button">
+          Click for Tips / Instructions
+        </button>
       </div>
       <div class="controls">
         <img class="arrow-keys" src="./src/images/arrow-keys.png" />
@@ -70,3 +68,35 @@
     </section>
   </body>
 </html>
+<div id="modal-container">
+  <div id="instructions-modal-background" class="hidden"></div>
+  <div id="instructions-modal-content" class="hidden">
+    <ul>
+      <li>
+        Use arrow keys and press/hold space to shoot lasers at the enemies!
+      </li>
+      <li>
+        Enemies can drop
+        <img
+          src="./src/images/upgrades/upgrades1.png"
+          alt="upgrade sphere image"
+        />
+        green upgrade spheres at a 4% droprate.
+      </li>
+      <li>
+        <img src="./src/images/weapons/demo.png" alt="different laser colors" />
+      </li>
+      <li>Collect the green upgrade spheres to empower your laser.</li>
+      <li>
+        You will lose 10 HP if you get hit by an
+        <img src="./src/images/weapons/red_laser.png" alt="enemy laser" /> enemy
+        laser.
+      </li>
+      <li>The final upgrade is reducing your laser cooldown. Fastest is 4.</li>
+      <li>I highly recommend playing with sound.</li>
+      <li>Press M or click on the sound icon to MUTE/UNMUTE</li>
+      <li>Press P to PLAY/PAUSE</li>
+      <li>Press R to RESET</li>
+    </ul>
+  </div>
+</div>
