@@ -189,6 +189,10 @@ body {
     min-width: 60%;
   }
 
+  .professional-links > a {
+    width: 4rem;
+  }
+
   .professional-link {
     fill: white;
     font-size: 2rem;
@@ -326,6 +330,11 @@ body {
     margin: 10% auto;
     li {
       margin: 1rem;
+      div {
+        display: inline;
+        font-size: 1rem;
+        font-weight: 600;
+      }
     }
   }
 
