@@ -1,12 +1,13 @@
 import PlayerWeapon from "./player_weapon";
 import MovingObject from "./moving_object";
+
 class TieFighter extends MovingObject {
-  constructor(img, props) {
+  constructor(img, sounds, props) {
     super(props);
 
     this.canvas = document.getElementById("game-canvas");
     this.ctx = this.canvas.getContext("2d");
-
+    this.sounds = sounds;
     this.name = "TieFighter";
     this.weapon = "red-laser";
     this.hp = 5;
@@ -33,14 +34,13 @@ class TieFighter extends MovingObject {
   }
 
   fireWeapon() {
-    let laser, x;
+    if (!this.sounds.muted) {
+      this.sounds.enemyLaserSound.currentTime = 0;
+      this.sounds.enemyLaserSound.play();
+    }
+    let x;
     switch (this.weapon) {
       case "red-laser":
-        if (!window.muted) {
-          laser = new Audio("./src/sounds/tie_fire_laser.mp3");
-          laser.volume = 0.1;
-          laser.play();
-        }
         x = new PlayerWeapon("red-laser", {
           velocityY: 5,
           posX: Math.floor(this.posX + 48),

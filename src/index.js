@@ -1,19 +1,17 @@
 import "./styles/index.scss";
-import Game from "./js/game.js";
-
+import Game from "./js/game";
+import Images from "./js/images";
+import SoundSingleton from "./js/sounds";
 document.addEventListener("DOMContentLoaded", () => {
-  window.muted = true;
-  window.bgMusic = new Audio("./src/sounds/sw.mp3");
-  window.bgMusic.volume = 0.1;
-  bgMusic.loop = true;
-  let game;
-  window.playerImg = new Image();
-  window.playerImg.src = "./src/images/xwing.png";
-  window.playerImg.onload = function() {
+  let game, images, sounds;
+  images = new Images();
+  sounds = SoundSingleton.initialize();
+  sounds = SoundSingleton;
+  images.playerImg.onload = function() {
     let canvas = document.getElementById("game-canvas");
     canvas.width = this.naturalWidth;
     canvas.height = this.naturalHeight;
-    game = new Game();
+    game = new Game(images, sounds);
   };
 
   let instructionsOpenButton = document.getElementById(
@@ -43,14 +41,14 @@ document.addEventListener("DOMContentLoaded", () => {
   playingStatus.addEventListener("click", () => {
     playingStatus.classList.toggle("hidden");
     notPlayingStatus.classList.toggle("hidden");
-    muted = true;
+    this.sounds.muted = true;
     bgMusic.pause();
   });
 
   notPlayingStatus.addEventListener("click", () => {
     playingStatus.classList.toggle("hidden");
     notPlayingStatus.classList.toggle("hidden");
-    muted = false;
-    bgMusic.play();
+    this.sounds.muted = false;
+    sounds.backgroundMusic.play();
   });
 });

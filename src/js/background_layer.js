@@ -5,17 +5,17 @@ class BackgroundLayer extends MovingObject {
     this.canvas = canvas;
     this.canvas.width = 450;
     this.canvas.height = 700;
-    this.ctx = this.canvas.getContext("2d");
+    this.context = this.canvas.getContext("2d");
     this.img = new Image();
     this.img.src = `${imgSrc}`;
   }
 
   draw() {
-    let { canvas, ctx, img, posY, velocityY } = this;
+    let { canvas, context, img, posY, velocityY } = this;
     this.posY += velocityY;
-    ctx.clearRect(0, 0, 450, 700);
-    ctx.drawImage(img, 0, -700 + posY);
-    ctx.drawImage(img, 0, posY);
+    context.clearRect(0, 0, 450, 700);
+    context.drawImage(img, 0, -700 + posY);
+    context.drawImage(img, 0, posY);
     if (posY >= canvas.height) {
       this.posY = 0;
     } else if (posY < -700) {

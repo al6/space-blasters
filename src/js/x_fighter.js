@@ -1,26 +1,20 @@
 import PlayerWeapon from "./player_weapon";
-class XFighter {
+import MovingObject from "./moving_object";
+import Sounds from "./sounds";
+
+class XFighter extends MovingObject {
   constructor(img) {
+    super();
     this.name = "player";
     this.weapon = "laser1";
-    this.canvas = document.getElementById("game-canvas");
-    this.ctx = this.canvas.getContext("2d");
-    this.img = window.playerImg;
-    this.laserSound = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-    this.hp = 100;
-    this.height = 100;
-    this.width = 100;
-    this.x = 400;
-    this.y = 765;
-    this.projectiles = [];
-    this.projectileCoolDown = 0;
-    this.projectileCoolDownConstant = 10;
+    this.img = img;
+    this.restart();
+    this.sounds = Sounds;
     this.spacePressed = false;
     this.upPressed = false;
     this.downPressed = false;
     this.rightPressed = false;
     this.leftPressed = false;
-    this.draw = this.draw.bind(this);
     this.keyUpHandler = this.keyUpHandler.bind(this);
     this.keyDownHandler = this.keyDownHandler.bind(this);
     this.touchHandler = this.touchHandler.bind(this);
@@ -30,6 +24,17 @@ class XFighter {
     document.addEventListener("touchstart", this.touchHandler);
     document.addEventListener("touchend", this.touchEndHandler);
     document.addEventListener("touchmove", this.touchHandler);
+  }
+
+  restart() {
+    this.hp = 100;
+    this.height = 100;
+    this.width = 100;
+    this.x = 400;
+    this.y = 765;
+    this.projectiles = [];
+    this.projectileCoolDown = 0;
+    this.projectileCoolDownConstant = 10;
   }
 
   keyUpHandler(e) {
@@ -96,7 +101,7 @@ class XFighter {
   }
 
   draw() {
-    const { ctx, x, y, height, width } = this;
+    const { context, x, y, height, width } = this;
     if (this.spacePressed) {
       this.fireWeapon();
     }
@@ -124,18 +129,20 @@ class XFighter {
         this.y += 10;
       }
     }
-    ctx.drawImage(this.img, x, y, height, width);
+    context.drawImage(this.img, x, y, height, width);
   }
 
   fireWeapon() {
-    let laser, x, y, z;
+    let x, y, z;
     if (this.projectileCoolDown <= 0) {
       this.projectileCoolDown += this.projectileCoolDownConstant;
+      if (!this.sounds.muted) {
+        this.sounds.laserSound.currentTime = 0;
+        this.sounds.laserSound.play();
+      }
       switch (this.weapon) {
         // level 1 laser light blue
         case "laser1":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser1", {
             velocityY: -10,
             posX: this.x + 43,
@@ -144,8 +151,6 @@ class XFighter {
           this.projectiles.push(x);
           break;
         case "laser2":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser1", {
             velocityY: -10,
             posX: this.x,
@@ -160,8 +165,6 @@ class XFighter {
           this.projectiles.push(y);
           break;
         case "laser3":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser1", {
             velocityY: -10,
             posX: this.x,
@@ -183,8 +186,6 @@ class XFighter {
           break;
         // level 2 laser yellow
         case "laser4":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser2", {
             velocityY: -8,
             posX: this.x + 43,
@@ -193,8 +194,6 @@ class XFighter {
           this.projectiles.push(x);
           break;
         case "laser5":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser2", {
             velocityY: -8,
             posX: this.x,
@@ -209,8 +208,6 @@ class XFighter {
           this.projectiles.push(y);
           break;
         case "laser6":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser2", {
             velocityY: -8,
             posX: this.x,
@@ -232,8 +229,6 @@ class XFighter {
           break;
         // level 3 laser purple
         case "laser7":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser3", {
             velocityY: -6,
             posX: this.x + 43,
@@ -242,8 +237,6 @@ class XFighter {
           this.projectiles.push(x);
           break;
         case "laser8":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser3", {
             velocityY: -6,
             posX: this.x,
@@ -258,8 +251,6 @@ class XFighter {
           this.projectiles.push(y);
           break;
         case "laser9":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser3", {
             velocityY: -6,
             posX: this.x,
@@ -281,8 +272,6 @@ class XFighter {
           break;
         // level 4 laser blue
         case "laser10":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser4", {
             velocityY: -4,
             posX: this.x + 43,
@@ -291,8 +280,6 @@ class XFighter {
           this.projectiles.push(x);
           break;
         case "laser11":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser4", {
             velocityY: -4,
             posX: this.x,
@@ -307,8 +294,6 @@ class XFighter {
           this.projectiles.push(y);
           break;
         case "laser12":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser4", {
             velocityY: -4,
             posX: this.x,
@@ -330,8 +315,6 @@ class XFighter {
           break;
         // level 5 laser green
         case "laser13":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser5", {
             velocityY: -2,
             posX: this.x + 43,
@@ -340,8 +323,6 @@ class XFighter {
           this.projectiles.push(x);
           break;
         case "laser14":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser5", {
             velocityY: -2,
             posX: this.x,
@@ -356,8 +337,6 @@ class XFighter {
           this.projectiles.push(y);
           break;
         case "laser15":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser5", {
             velocityY: -2,
             posX: this.x,
@@ -387,83 +366,57 @@ class XFighter {
 
   upgrade() {
     let { weapon, hp, projectileCoolDownConstant } = this;
+    if (!this.sounds.muted) {
+      this.sounds.upgradeSound.currentTime = 0;
+      this.sounds.upgradeSound.play();
+    }
     switch (weapon) {
       case "laser1":
         this.weapon = "laser2";
-        let upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-        if (!window.muted) upgradeSound.play();
         break;
       case "laser2":
         this.weapon = "laser3";
-        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-        if (!window.muted) upgradeSound.play();
         break;
       case "laser3":
         this.weapon = "laser4";
-        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-        if (!window.muted) upgradeSound.play();
         break;
       case "laser4":
         this.weapon = "laser5";
-        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-        if (!window.muted) upgradeSound.play();
         break;
       case "laser5":
         this.weapon = "laser6";
-        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-        if (!window.muted) upgradeSound.play();
         break;
       case "laser6":
         this.weapon = "laser7";
-        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-        if (!window.muted) upgradeSound.play();
         break;
       case "laser7":
         this.weapon = "laser8";
-        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-        if (!window.muted) upgradeSound.play();
         break;
       case "laser8":
         this.weapon = "laser9";
-        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-        if (!window.muted) upgradeSound.play();
         break;
       case "laser9":
         this.weapon = "laser10";
-        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-        if (!window.muted) upgradeSound.play();
         break;
       case "laser10":
         this.weapon = "laser11";
-        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-        if (!window.muted) upgradeSound.play();
         break;
       case "laser11":
         this.weapon = "laser12";
-        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-        if (!window.muted) upgradeSound.play();
         break;
       case "laser12":
         this.weapon = "laser13";
-        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-        if (!window.muted) upgradeSound.play();
         break;
       case "laser13":
         this.weapon = "laser14";
-        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-        if (!window.muted) upgradeSound.play();
         break;
       case "laser14":
         this.weapon = "laser15";
-        upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-        if (!window.muted) upgradeSound.play();
         break;
       case "laser15":
         if (hp === 100) {
           if (projectileCoolDownConstant >= 5) {
             this.projectileCoolDownConstant -= 1;
-            upgradeSound = new Audio("./src/sounds/upgrade_complete.mp3");
-            if (!window.muted) upgradeSound.play();
           }
         } else if (hp <= 90) {
           this.hp += 10;

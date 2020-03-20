@@ -1,24 +1,21 @@
 import MovingObject from "./moving_object";
+
 class Upgrade extends MovingObject {
-  constructor(loot, props) {
+  constructor(img, loot, props) {
     super(props);
     this.name = "upgrade";
-    this.canvas = document.getElementById("game-canvas");
-    this.ctx = this.canvas.getContext("2d");
-    this.img = new Image();
-    this.img.src = "./src/images/upgrades/upgrades1.png";
-    
+    this.img = img;
     this.height = 20;
     this.width = 30;
     this.loot = loot;
   }
 
   drawUpgrade() {
-    let { ctx, img, posX, posY, velocityY, height, width } = this;
-    ctx.drawImage(img, posX, posY, width, height);
+    let { context, img, posX, posY, velocityY, height, width } = this;
+    context.drawImage(img, posX, posY, width, height);
     this.posY += velocityY;
     img.onload = function() {
-      ctx.drawImage(img, posX, posY, width, height);
+      context.drawImage(img, posX, posY, width, height);
     };
   }
 }

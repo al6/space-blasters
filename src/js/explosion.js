@@ -2,10 +2,6 @@ import MovingObject from "./moving_object";
 class Explosion extends MovingObject {
   constructor(loot, props, img) {
     super(props);
-
-    this.canvas = document.getElementById("game-canvas");
-    this.ctx = this.canvas.getContext("2d");
-
     this.name = "explosion";
     this.hp = 64;
     this.img = img;
@@ -19,9 +15,9 @@ class Explosion extends MovingObject {
     this.loot = loot;
   }
 
-  drawExplosion() {
+  draw() {
     let {
-      ctx,
+      context,
       img,
       sX,
       sY,
@@ -33,9 +29,9 @@ class Explosion extends MovingObject {
       width,
       scale
     } = this;
-    
+
     if (this.hp > 0) {
-      ctx.drawImage(
+      context.drawImage(
         img,
         sX,
         sY,

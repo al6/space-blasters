@@ -3,6 +3,7 @@ const src = "./src/images/background_layers/";
 
 function drawLayer(i) {
   let v = { velocityY: 0 };
+
   switch (i) {
     case 0: // main background
       v["velocityY"] = 0.1;

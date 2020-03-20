@@ -14,23 +14,23 @@ class PlayerWeapon extends MovingObject {
         img.src = "./src/images/weapons/red_laser.png";
         this.hp = 1;
         break;
-      case "laser1":
+      case "laser1": // light blue
         img.src = "./src/images/weapons/laser1.png";
         this.hp = 2;
         break;
-      case "laser2":
+      case "laser2": // yellow
         img.src = "./src/images/weapons/laser2.png";
         this.hp = 4;
         break;
-      case "laser3":
+      case "laser3": // purple
         img.src = "./src/images/weapons/laser3.png";
         this.hp = 8;
         break;
-      case "laser4":
+      case "laser4": // blue
         img.src = "./src/images/weapons/laser4.png";
         this.hp = 16;
         break;
-      case "laser5":
+      case "laser5": // green
         img.src = "./src/images/weapons/laser5.png";
         this.hp = 32;
         break;

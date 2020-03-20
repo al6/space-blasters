@@ -1,21 +1,20 @@
-let defaults = {
-  velocityX: 0,
-  velocityY: 0,
-  posX: 0,
-  posY: 0
-};
+import GameCanvas from "./game_canvas";
 
-export default class MovingObject {
+class MovingObject extends GameCanvas {
   constructor(props = {}) {
+    super();
+    let defaults = {
+      velocityX: 0,
+      velocityY: 0,
+      posX: 0,
+      posY: 0
+    };
     const settings = Object.assign({}, defaults, props);
     this.velocityX = settings.velocityX;
     this.velocityY = settings.velocityY;
     this.posX = settings.posX;
     this.posY = settings.posY;
   }
-
-  move() {
-    this.posX += this.velocityX;
-    this.posY += this.velocityY;
-  }
 }
+
+export default MovingObject;
