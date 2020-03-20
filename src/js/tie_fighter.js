@@ -26,7 +26,7 @@ class TieFighter extends MovingObject {
     this.projectiles = [];
   }
 
-  drawTieFighter() {
+  draw() {
     let { ctx, img, posX, posY, velocityY, height, width } = this;
     ctx.drawImage(img, posX, posY, width, height);
     this.posY += velocityY;

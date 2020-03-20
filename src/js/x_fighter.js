@@ -20,7 +20,7 @@ class XFighter {
     this.downPressed = false;
     this.rightPressed = false;
     this.leftPressed = false;
-    this.drawXFighter = this.drawXFighter.bind(this);
+    this.draw = this.draw.bind(this);
     this.keyUpHandler = this.keyUpHandler.bind(this);
     this.keyDownHandler = this.keyDownHandler.bind(this);
     this.touchHandler = this.touchHandler.bind(this);
@@ -95,7 +95,7 @@ class XFighter {
     this.spacePressed = false;
   }
 
-  drawXFighter() {
+  draw() {
     const { ctx, x, y, height, width } = this;
     if (this.spacePressed) {
       this.fireWeapon();

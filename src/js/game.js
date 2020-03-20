@@ -154,7 +154,7 @@ class Game {
           if (enemy.posY >= 850) {
             enemies[idx] = null;
           } else {
-            enemy.drawTieFighter();
+            enemy.draw();
             let randomNumber = Math.ceil(Math.random() * 1000);
             if (randomNumber === 1) {
               enemy.fireWeapon();
