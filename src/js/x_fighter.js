@@ -8,22 +8,9 @@ class XFighter extends MovingObject {
     this.name = "player";
     this.weapon = "laser1";
     this.img = img;
-    this.restart();
     this.sounds = Sounds;
-    this.spacePressed = false;
-    this.upPressed = false;
-    this.downPressed = false;
-    this.rightPressed = false;
-    this.leftPressed = false;
-    this.keyUpHandler = this.keyUpHandler.bind(this);
-    this.keyDownHandler = this.keyDownHandler.bind(this);
-    this.touchHandler = this.touchHandler.bind(this);
-    this.touchEndHandler = this.touchEndHandler.bind(this);
-    document.addEventListener("keyup", this.keyUpHandler, false);
-    document.addEventListener("keydown", this.keyDownHandler, false);
-    document.addEventListener("touchstart", this.touchHandler);
-    document.addEventListener("touchend", this.touchEndHandler);
-    document.addEventListener("touchmove", this.touchHandler);
+    this.restart();
+    this.setKeyAndTouchHandlers();
   }
 
   restart() {
@@ -35,6 +22,23 @@ class XFighter extends MovingObject {
     this.projectiles = [];
     this.projectileCoolDown = 0;
     this.projectileCoolDownConstant = 10;
+    this.spacePressed = false;
+    this.upPressed = false;
+    this.downPressed = false;
+    this.rightPressed = false;
+    this.leftPressed = false;
+  }
+
+  setKeyAndTouchHandlers() {
+    this.keyUpHandler = this.keyUpHandler.bind(this);
+    this.keyDownHandler = this.keyDownHandler.bind(this);
+    this.touchHandler = this.touchHandler.bind(this);
+    this.touchEndHandler = this.touchEndHandler.bind(this);
+    document.addEventListener("keyup", this.keyUpHandler, false);
+    document.addEventListener("keydown", this.keyDownHandler, false);
+    document.addEventListener("touchstart", this.touchHandler);
+    document.addEventListener("touchend", this.touchEndHandler);
+    document.addEventListener("touchmove", this.touchHandler);
   }
 
   keyUpHandler(e) {
