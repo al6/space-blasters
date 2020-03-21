@@ -13,7 +13,6 @@ class Game extends GameCanvas {
     this.setAssets();
     this.reset();
     this.bindStuff();
-    this.draw();
   }
 
   draw() {
@@ -241,6 +240,7 @@ class Game extends GameCanvas {
       canvas = document.getElementById("ui-canvas");
       canvas.width = naturalWidth;
       canvas.height = naturalHeight;
+      that.draw();
     };
   }
 
