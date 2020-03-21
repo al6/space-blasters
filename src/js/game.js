@@ -1,94 +1,47 @@
 import Explosion from "./explosion";
 import GameCanvas from "./game_canvas";
+import Images from "./images";
+import SoundSingleton from "./sounds";
 import TieFighter from "./tie_fighter";
+import UI from "./ui";
 import Upgrade from "./upgrade";
 import XFighter from "./x_fighter";
-import Sounds from "./sounds";
 
 class Game extends GameCanvas {
-  constructor(images, sounds) {
+  constructor() {
     super();
-    this.images = images;
-    this.sounds = sounds;
-    this.player = new XFighter(images.playerImg);
-
+    this.setAssets();
     this.reset();
     this.bindStuff();
-    document.addEventListener("keydown", this.keyDownHandler, false);
     this.draw();
   }
 
-  bindStuff() {
-    this.draw = this.draw.bind(this);
-    this.checkFPS = this.checkFPS.bind(this);
-    this.checkCollision = this.checkCollision.bind(this);
-    this.keyDownHandler = this.keyDownHandler.bind(this);
-  }
-
-  reset() {
-    this.score = 0;
-    this.wave = 0;
-    this.waveCount = 0;
-    this.lastWave = 30;
-
-    this.lost = false;
-    this.paused = false;
-    this.won = false;
-
-    this.enemies = [];
-    this.enemyLasers = [];
-    this.explosions = [];
-    this.upgrades = [];
-
-    this.setFPS();
-  }
-
-  setFPS() {
-    this.now = 0;
-    this.elapsed = 0;
-    this.then = Date.now();
-    this.fpsInterval = 1;
-  }
-
-  checkFPS() {
-    this.now = Date.now();
-    this.elapsed = this.now - this.then;
-    if (this.elapsed > this.fpsInterval) {
-      this.then = this.now - (this.elapsed % this.fpsInterval);
-      this.images.background.forEach(layer => layer.draw());
-    }
-  }
-
   draw() {
-    let { sounds } = this;
-    if (this.waveCount >= 30) {
-      this.drawWin();
-    }
+    let {
+      checkCollision,
+      clear,
+      enemies,
+      enemyLasers,
+      explosions,
+      images,
+      lost,
+      paused,
+      player,
+      score,
+      sounds,
+      upgrades,
+      waveCount,
+      won,
+      ui
+    } = this;
+    clear();
     if (!this.paused && !this.lost && !this.won) {
-      let {
-        canvas,
-        context,
-        player,
-        enemies,
-        enemyLasers,
-        checkCollision,
-        explosions,
-        upgrades,
-        images,
-        sounds,
-        checkFPS
-      } = this;
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      checkFPS();
-
+      this.images.background.forEach(layer => layer.draw());
       if (player.hp > 0) {
         player.draw();
       } else {
-        this.drawLose();
         this.lost = true;
       }
-
-      this.drawUI();
 
       player.projectiles.forEach((projectile, i) => {
         if (projectile && projectile.posY >= -5) {
@@ -246,39 +199,75 @@ class Game extends GameCanvas {
             })
         );
       }
-    } else if (!this.lost && !this.won) {
-      this.drawPause();
-      if (sounds.muted) {
-        this.drawMuted();
-      } else {
-        this.context.clearRect(300, -100, 550, 150);
-      }
-    } else if (!this.lost && this.won) {
-      this.drawWin();
-      if (sounds.muted) {
-        this.drawMuted();
-      } else {
-        this.context.clearRect(300, -100, 550, 150);
-      }
-    } else {
-      this.drawLose();
-      if (sounds.muted) {
-        this.drawMuted();
-      } else {
-        this.context.clearRect(300, -100, 550, 150);
-      }
     }
-    if (this.sounds.muted && !this.paused) {
-      this.drawMuted();
-    }
+    ui.draw(this);
+    if (waveCount >= 30) this.won = true;
+    if (won) ui.drawWin(score);
+    if (lost) ui.drawLose(score);
+    if (paused && !lost && !won) ui.drawPause();
+    if (sounds.muted) ui.drawMuted();
     requestAnimationFrame(this.draw);
   }
 
-  drawUI() {
-    this.drawCoolDownConstant();
-    this.drawHP();
-    this.drawScore();
-    this.drawWavesLeft();
+  clear() {
+    let { canvas, context, ui } = this;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    ui.context.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  pause() {
+    this.paused = true;
+  }
+
+  play() {
+    this.paused = false;
+  }
+
+  setAssets() {
+    SoundSingleton.initialize();
+    this.images = new Images();
+    this.sounds = SoundSingleton;
+    this.ui = new UI(this);
+    this.setCanvasResolution();
+  }
+
+  setCanvasResolution() {
+    let that = this;
+    this.images.playerImg.onload = function() {
+      let { canvas } = that;
+      let { naturalWidth, naturalHeight } = this;
+      canvas.width = naturalWidth;
+      canvas.height = naturalHeight;
+      canvas = document.getElementById("ui-canvas");
+      canvas.width = naturalWidth;
+      canvas.height = naturalHeight;
+    };
+  }
+
+  bindStuff() {
+    this.clear = this.clear.bind(this);
+    this.draw = this.draw.bind(this);
+    this.checkCollision = this.checkCollision.bind(this);
+    this.keyDownHandler = this.keyDownHandler.bind(this);
+    document.addEventListener("keydown", this.keyDownHandler, false);
+  }
+
+  reset() {
+    this.player = new XFighter(this.images.playerImg);
+
+    this.score = 0;
+    this.wave = 0;
+    this.waveCount = 0;
+    this.lastWave = 30;
+
+    this.lost = false;
+    this.paused = false;
+    this.won = false;
+
+    this.enemies = [];
+    this.enemyLasers = [];
+    this.explosions = [];
+    this.upgrades = [];
   }
 
   checkCollision(object1, object2) {
@@ -332,13 +321,14 @@ class Game extends GameCanvas {
   }
 
   keyDownHandler(e) {
-    let { sounds, playingStatus, notPlayingStatus } = this;
+    let { sounds, won, paused, lost } = this;
+    let { playingStatus, notPlayingStatus } = this.ui;
     e.preventDefault();
     if (e.key == "r" || e.key == "R") {
       this.player = new XFighter(this.images.playerImg);
       this.reset();
     } else if (e.key == "p" || e.key == "P") {
-      this.paused = !this.paused;
+      if (!won && !lost) this.paused = !this.paused;
     } else if (e.key == "m" || e.key == "M") {
       if (sounds.muted) {
         playingStatus.classList.toggle("hidden");
@@ -352,90 +342,6 @@ class Game extends GameCanvas {
         this.sounds.muted = true;
       }
     }
-  }
-
-  drawMuted() {
-    let { context } = this;
-    context.font = "bold 30px Arial";
-    context.fillStyle = "red";
-    context.fillText("MUTED! PRESS M TO UNMUTE", 388, 30);
-  }
-
-  drawHP() {
-    let { context } = this;
-    context.font = "bold 30px Arial";
-    context.fillStyle = "red";
-    context.fillText("HP: " + this.player.hp, 10, 30);
-  }
-
-  drawCoolDownConstant() {
-    let { context } = this;
-    context.font = "bold 20px Arial";
-    context.fillStyle = "white";
-    context.fillText(
-      "Laser Cooldown: " + this.player.projectileCoolDownConstant,
-      10,
-      60
-    );
-  }
-
-  drawWavesLeft() {
-    let { context } = this;
-    context.font = "bold 20px Arial";
-    context.fillStyle = "white";
-    context.fillText(
-      "Waves Remaining: " + (this.lastWave - this.waveCount),
-      10,
-      80
-    );
-  }
-
-  drawScore() {
-    let { context } = this;
-    context.font = "bold 30px Arial";
-    context.fillStyle = "white";
-    context.fillText("Score: " + this.score, 130, 30);
-  }
-
-  drawWin() {
-    let { context } = this;
-    this.won = true;
-    context.font = "bold 80px Arial";
-    context.fillStyle = "green";
-    context.fillText("YOU WIN!", 230, 280);
-    context.font = "bold 30px Arial";
-    context.fillText("THE FORCE IS STRONG WITHIN YOU", 150, 330);
-    context.font = "bold 50px Arial";
-    context.fillText("Your final score is: " + this.score, 155, 410);
-    context.font = "bold 50px Arial";
-    context.fillText("PRESS R TO RESTART", 150, 470);
-  }
-
-  drawLose() {
-    let { context } = this;
-    context.font = "bold 130px Arial";
-    context.fillStyle = "red";
-    context.fillText("GAME OVER", 10, 250);
-    context.font = "bold 50px Arial";
-    context.fillText("Your final score is: " + this.score, 150, 330);
-    context.font = "bold 50px Arial";
-    context.fillText("PRESS R TO RESTART", 150, 400);
-  }
-
-  drawPause() {
-    let { context } = this;
-    context.font = "100px Arial";
-    context.fillStyle = "green";
-    context.fillText("PAUSED", 250, 370);
-    context.font = "bold 50px Arial";
-    context.fillText("PRESS P TO PLAY/PAUSE", 110, 420);
-  }
-
-  drawReset() {
-    let { context } = this;
-    context.font = "100px Arial";
-    context.fillStyle = "red";
-    context.fillText("RESET", 250, 320);
   }
 }
 
