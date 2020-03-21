@@ -1,11 +1,11 @@
 import Explosion from "./explosion";
 import GameCanvas from "./game_canvas";
 import Images from "./images";
-import SoundSingleton from "./sounds";
 import TieFighter from "./tie_fighter";
 import UI from "./ui";
 import Upgrade from "./upgrade";
 import XFighter from "./x_fighter";
+import SoundSingleton from "./sounds";
 
 class Game extends GameCanvas {
   constructor() {
@@ -18,7 +18,6 @@ class Game extends GameCanvas {
   draw() {
     let {
       background,
-      checkCollision,
       clear,
       enemies,
       enemyLasers,
@@ -49,7 +48,7 @@ class Game extends GameCanvas {
           let alreadyDrawn = false;
           enemies.forEach((enemy, j) => {
             if (enemy) {
-              if (checkCollision(projectile, enemy)) {
+              if (projectile.checkCollision(enemy)) {
                 if (!sounds.muted) sounds.impact.play();
                 enemy.hp -= 1;
                 projectile.hp -= 1;
@@ -82,7 +81,6 @@ class Game extends GameCanvas {
                   enemies[j] = null;
                 }
               } else if (!alreadyDrawn) {
-                projectile.posY += projectile.velocityY;
                 projectile.draw();
                 alreadyDrawn = true;
               }
@@ -108,33 +106,34 @@ class Game extends GameCanvas {
         }
       });
 
-      enemyLasers.forEach(projectile => {
-        if (checkCollision(projectile, player)) {
-          enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
-          player.hp -= 10;
-          let explosion = new Explosion(
-            null,
-            {
-              posX: projectile.posX - 20,
-              posY: projectile.posY - 10,
-              velocityY: 1
-            },
-            images.explosionImg
-          );
-          if (!sounds.muted) {
-            sounds.tieExplodeSound.currentTime = 0;
-            sounds.tieExplodeSound.play();
+      enemyLasers.forEach((projectile, idx) => {
+        if (projectile) {
+          if (projectile.checkCollision(player)) {
+            player.hp -= 10;
+            let explosion = new Explosion(
+              null,
+              {
+                posX: projectile.posX - 20,
+                posY: projectile.posY - 10,
+                velocityY: 1
+              },
+              images.explosionImg
+            );
+            enemyLasers[idx] = null;
+            if (!sounds.muted) {
+              sounds.tieExplodeSound.currentTime = 0;
+              sounds.tieExplodeSound.play();
+            }
+            this.explosions.push(explosion);
+          } else if (projectile.posY < 850) {
+            projectile.draw();
+          } else {
+            enemyLasers[idx] = null;
           }
-          this.explosions.push(explosion);
-        } else if (projectile.posY < 850) {
-          projectile.draw();
-          projectile.posY += projectile.velocityY;
-        } else {
-          enemyLasers.splice(enemyLasers.indexOf(projectile), 1);
         }
       });
 
-      explosions.forEach(explosion => {
+      explosions.forEach((explosion, idx) => {
         if (explosion.hp > 0) {
           explosion.draw();
           if (explosion.sX <= 3584) {
@@ -157,18 +156,18 @@ class Game extends GameCanvas {
             });
             upgrades.push(upgrade);
           }
-          explosions.splice(explosions.indexOf(explosion), 1);
+          explosions[idx] = null;
         }
       });
 
-      upgrades.forEach(upgrade => {
-        if (checkCollision(player, upgrade)) {
+      upgrades.forEach((upgrade, idx) => {
+        if (player.checkCollision(upgrade)) {
           player.upgrade();
-          upgrades.splice(upgrades.indexOf(upgrade), 1);
+          upgrades[idx] = null;
         } else if (upgrade && upgrade.posY < 850) {
           upgrade.drawUpgrade();
         } else {
-          upgrades.splice(upgrades.indexOf(upgrade), 1);
+          upgrades[idx] = null;
         }
       });
 
@@ -195,20 +194,38 @@ class Game extends GameCanvas {
         this.waveCount += 1;
         this.enemies = [...Array(this.wave).keys()].map(
           () =>
-            new TieFighter(images.tieFighterImg, sounds, {
+            new TieFighter(images.tieFighterImg, {
               velocityY: Math.ceil(Math.random() * speed)
             })
         );
       }
     }
+    this.filterNulls();
+    if (this.paused || this.won || this.lost) {
+      this.fps = 60;
+    } else {
+      if (performance.now() - this.then > 500) {
+        this.fps = 60 - (Math.floor(performance.now() - this.then) - 500);
+        if (this.fps < 0) this.fps = 0;
+        this.then = performance.now();
+      }
+    }
     ui.draw(this);
+    if (!paused) ui.draw(this);
     if (waveCount >= 30) this.won = true;
     if (won) ui.drawWin(score);
     if (lost) ui.drawLose(score);
     if (paused && !lost && !won) ui.drawPause();
     if (sounds.muted) ui.drawMuted();
-
     requestAnimationFrame(this.draw);
+  }
+
+  filterNulls() {
+    this.player.projectiles = this.player.projectiles.filter(el => el);
+    this.enemyLasers = this.enemyLasers.filter(el => el);
+    this.enemies = this.enemies.filter(el => el);
+    this.explosions = this.explosions.filter(el => el);
+    this.upgrades = this.upgrades.filter(el => el);
   }
 
   clear() {
@@ -231,6 +248,8 @@ class Game extends GameCanvas {
     this.images = new Images();
     this.background = this.images.background;
     this.ui = new UI(this);
+    this.fps = 0;
+    this.then = performance.now();
     this.setCanvasResolution();
   }
 
@@ -251,7 +270,6 @@ class Game extends GameCanvas {
   bindStuff() {
     this.clear = this.clear.bind(this);
     this.draw = this.draw.bind(this);
-    this.checkCollision = this.checkCollision.bind(this);
     this.keyDownHandler = this.keyDownHandler.bind(this);
     document.addEventListener("keydown", this.keyDownHandler, false);
   }
@@ -272,56 +290,6 @@ class Game extends GameCanvas {
     this.enemyLasers = [];
     this.explosions = [];
     this.upgrades = [];
-  }
-
-  checkCollision(object1, object2) {
-    switch (object1.name) {
-      case "laser1":
-      case "laser2":
-      case "laser3":
-      case "laser4":
-      case "laser5":
-        if (!object1 || !object2) {
-          return false;
-        } else if (
-          object1.posY > object2.posY + object2.height ||
-          object1.posY < object2.posY ||
-          object1.posX + 10 < object2.posX ||
-          object1.posX > object2.posX + object2.width
-        ) {
-          return false;
-        } else {
-          return true;
-        }
-
-      case "red-laser":
-        if (!object1 || !object2) {
-          return false;
-        } else if (
-          object1.posY > object2.y + object2.height ||
-          object1.posY < object2.y ||
-          object1.posX + 10 < object2.x ||
-          object1.posX > object2.x + object2.width
-        ) {
-          return false;
-        } else {
-          return true;
-        }
-
-      case "player":
-        if (!object1 || !object2) {
-          return false;
-        } else if (
-          object1.y > object2.posY + object2.height ||
-          object1.y + object1.height < object2.posY ||
-          object1.x + object1.width < object2.posX ||
-          object1.x > object2.posX + object2.width
-        ) {
-          return false;
-        } else {
-          return true;
-        }
-    }
   }
 
   keyDownHandler(e) {
@@ -345,6 +313,8 @@ class Game extends GameCanvas {
         sounds.backgroundMusic.pause();
         this.sounds.muted = true;
       }
+    } else if (e.key == "t" || e.key == "T") {
+      this.toggleBackground();
     }
   }
 

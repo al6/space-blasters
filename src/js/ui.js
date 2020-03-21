@@ -20,54 +20,12 @@ class UI {
     this.setToggleSoundOnClick();
   }
 
-  setToggleBackgroundOnClick() {
-    let { game, backgroundButton } = this;
-    backgroundButton.addEventListener("click", () => {
-      game.toggleBackground();
-    });
-  }
-
-  setToggleSoundOnClick() {
-    let { playingStatus, notPlayingStatus } = this;
-    playingStatus.addEventListener("click", () => {
-      playingStatus.classList.toggle("hidden");
-      notPlayingStatus.classList.toggle("hidden");
-      this.game.sounds.muted = true;
-      this.game.sounds.backgroundMusic.pause();
-    });
-
-    notPlayingStatus.addEventListener("click", () => {
-      playingStatus.classList.toggle("hidden");
-      notPlayingStatus.classList.toggle("hidden");
-      this.game.sounds.muted = false;
-      this.game.sounds.backgroundMusic.play();
-    });
-  }
-
-  setInstructionsModal() {
-    let {
-      game,
-      instructionsModalBackground,
-      instructionsOpenButton,
-      instructionsModalContent
-    } = this;
-    instructionsModalBackground.addEventListener("click", () => {
-      game.play();
-      instructionsModalBackground.classList.toggle("hidden");
-      instructionsModalContent.classList.toggle("hidden");
-    });
-    instructionsOpenButton.addEventListener("click", () => {
-      game.pause();
-      instructionsModalBackground.classList.toggle("hidden");
-      instructionsModalContent.classList.toggle("hidden");
-    });
-  }
-
   draw(game) {
     this.drawCoolDownConstant(game.player.projectileCoolDownConstant);
     this.drawHP(game.player.hp);
     this.drawScore(game.score);
     this.drawWavesLeft(game.lastWave, game.waveCount);
+    this.drawFPS(game.fps);
   }
 
   drawMuted() {
@@ -96,6 +54,13 @@ class UI {
     context.font = "bold 20px Arial";
     context.fillStyle = "white";
     context.fillText("Waves Remaining: " + (lastWave - waveCount), 10, 80);
+  }
+
+  drawFPS(fps) {
+    let { context } = this;
+    context.font = "bold 20px Arial";
+    context.fillStyle = "white";
+    context.fillText("FPS: " + fps, 10, 100);
   }
 
   drawScore(score) {
@@ -143,6 +108,49 @@ class UI {
     context.font = "100px Arial";
     context.fillStyle = "red";
     context.fillText("RESET", 250, 320);
+  }
+
+  setToggleBackgroundOnClick() {
+    let { game, backgroundButton } = this;
+    backgroundButton.addEventListener("click", () => {
+      game.toggleBackground();
+    });
+  }
+
+  setToggleSoundOnClick() {
+    let { playingStatus, notPlayingStatus } = this;
+    playingStatus.addEventListener("click", () => {
+      playingStatus.classList.toggle("hidden");
+      notPlayingStatus.classList.toggle("hidden");
+      this.game.sounds.muted = true;
+      this.game.sounds.backgroundMusic.pause();
+    });
+
+    notPlayingStatus.addEventListener("click", () => {
+      playingStatus.classList.toggle("hidden");
+      notPlayingStatus.classList.toggle("hidden");
+      this.game.sounds.muted = false;
+      this.game.sounds.backgroundMusic.play();
+    });
+  }
+
+  setInstructionsModal() {
+    let {
+      game,
+      instructionsModalBackground,
+      instructionsOpenButton,
+      instructionsModalContent
+    } = this;
+    instructionsModalBackground.addEventListener("click", () => {
+      game.play();
+      instructionsModalBackground.classList.toggle("hidden");
+      instructionsModalContent.classList.toggle("hidden");
+    });
+    instructionsOpenButton.addEventListener("click", () => {
+      game.pause();
+      instructionsModalBackground.classList.toggle("hidden");
+      instructionsModalContent.classList.toggle("hidden");
+    });
   }
 }
 

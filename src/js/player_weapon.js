@@ -41,7 +41,7 @@ class PlayerWeapon extends MovingObject {
 
   draw() {
     let { ctx, img, posX, posY, velocityY } = this;
-    posY += velocityY;
+    this.posY += velocityY;
     ctx.drawImage(img, posX, posY);
   }
 }
