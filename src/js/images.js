@@ -3,7 +3,6 @@ import drawBackground from "./background";
 class Images {
   constructor() {
     this.background = drawBackground();
-
     this.tieFighterImg = new Image();
     this.tieFighterImg.src = "./src/images/tie-advanced.png";
 

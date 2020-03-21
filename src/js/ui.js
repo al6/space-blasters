@@ -5,6 +5,7 @@ class UI {
     this.context = this.canvas.getContext("2d");
     this.playingStatus = document.getElementById("sound");
     this.notPlayingStatus = document.getElementById("no-sound");
+    this.backgroundButton = document.getElementById("toggle-background-button");
     this.instructionsOpenButton = document.getElementById(
       "instructions-modal-open-button"
     );
@@ -15,7 +16,15 @@ class UI {
       "instructions-modal-content"
     );
     this.setInstructionsModal();
+    this.setToggleBackgroundOnClick();
     this.setToggleSoundOnClick();
+  }
+
+  setToggleBackgroundOnClick() {
+    let { game, backgroundButton } = this;
+    backgroundButton.addEventListener("click", () => {
+      game.toggleBackground();
+    });
   }
 
   setToggleSoundOnClick() {

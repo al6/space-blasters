@@ -361,6 +361,32 @@ body {
   }
 }
 
+#toggle-background-button-container {
+  align-items: center;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  #toggle-background-button {
+    background-color: black;
+    border-radius: 0.5rem;
+    font-size: 100%;
+    font-family: inherit;
+    border: 1px solid white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    &:focus,
+    &:hover {
+      background-color: black;
+      border-color: white;
+      cursor: pointer;
+      outline: none;
+    }
+  }
+}
+
 @media screen and (max-width: 325px) {
   body {
     zoom: 60%;

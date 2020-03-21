@@ -17,6 +17,7 @@ class Game extends GameCanvas {
 
   draw() {
     let {
+      background,
       checkCollision,
       clear,
       enemies,
@@ -33,9 +34,10 @@ class Game extends GameCanvas {
       won,
       ui
     } = this;
+
     clear();
     if (!this.paused && !this.lost && !this.won) {
-      this.images.background.forEach(layer => layer.draw());
+      background.forEach(layer => layer.draw());
       if (player.hp > 0) {
         player.draw();
       } else {
@@ -205,6 +207,7 @@ class Game extends GameCanvas {
     if (lost) ui.drawLose(score);
     if (paused && !lost && !won) ui.drawPause();
     if (sounds.muted) ui.drawMuted();
+
     requestAnimationFrame(this.draw);
   }
 
@@ -224,8 +227,9 @@ class Game extends GameCanvas {
 
   setAssets() {
     SoundSingleton.initialize();
-    this.images = new Images();
     this.sounds = SoundSingleton;
+    this.images = new Images();
+    this.background = this.images.background;
     this.ui = new UI(this);
     this.setCanvasResolution();
   }
@@ -321,7 +325,7 @@ class Game extends GameCanvas {
   }
 
   keyDownHandler(e) {
-    let { sounds, won, paused, lost } = this;
+    let { sounds, won, lost } = this;
     let { playingStatus, notPlayingStatus } = this.ui;
     e.preventDefault();
     if (e.key == "r" || e.key == "R") {
@@ -341,6 +345,14 @@ class Game extends GameCanvas {
         sounds.backgroundMusic.pause();
         this.sounds.muted = true;
       }
+    }
+  }
+
+  toggleBackground() {
+    if (this.background.length === 0) {
+      this.background = this.images.background;
+    } else {
+      this.background = [];
     }
   }
 }
