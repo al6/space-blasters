@@ -16,20 +16,16 @@ Instantiate and push laser object into self contained array
 
 ```javascript
 fireWeapon() {
-    let laser, x;
-    if (this.projectileCoolDown <= 0) {
-      this.projectileCoolDown += this.projectileCoolDownConstant;
+    let x;
+      ...
       switch (this.weapon) {
-        // level 1 laser light blue
         case "laser1":
-          laser = new Audio("./src/sounds/Digital_SFX_Set/laser1.mp3");
-          if (!window.muted) laser.play();
           x = new PlayerWeapon("laser1", {
-            velocityY: -10,
-            posX: this.x + 43,
-            posY: this.y - 1
+            ...
           });
-          this.projectiles.push(x)
+          this.projectiles.push(x);
+          break;
+          ...
       }}}
 ```
 
@@ -38,21 +34,20 @@ fireWeapon() {
 Iterate over one sprite-sheet PNG file and draw exact frames of the explosion
 
 ```javascript
-class Explosion extends MovingObject{
+class Explosion extends MovingObject {
   constructor(...){
     ...
-    this.hp = 64;
     this.sX = 0;
     this.sY = 0;
     this.sWidth = 512;
     this.sHeight = 512;
     this.height = 50;
     this.width = 80;
-    this.scale = 5;
-  }
+    ...
+}
   draw(){
-    if (this.hp > 0) {
-      ctx.drawImage(
+    ...
+    ctx.drawImage(
         img,
         sX,
         sY,
@@ -60,17 +55,16 @@ class Explosion extends MovingObject{
         sHeight,
         posX - 170,
         posY - 100,
-        width * scale,
-        height * scale
+        width,
+        height
       );
     }
   }
-}
 ```
 
 ### Infinite particle background
 
-The infinite background with individual particles for stars/rocks/etc. was achieved with 8 layered canvas elements moving at different velocities and optimized to maximize game-play FPS.
+The infinite background with individual particles for stars/rocks/etc. was achieved with 8 layered canvas elements moving at different velocities and optimized to maximize game-play FPS
 
 Drawing the layers
 
@@ -113,28 +107,17 @@ function drawBackground() {
 }
 ```
 
-Optimize background canvas layers by reducing unnecessary computational load to maximize game-play FPS
+Singleton implementation for audio files to improve background/gameplay FPS by 3000% (from 2 FPS to 60+ FPS) and to improve space complexity from O(n) to O(1)
 
 ```javascript
-class Game {
-  constructor() {
+class Sounds {
+  initialize() {
     ...
-    this.now = 0;
-    this.elapsed = 0;
-    this.then = Date.now();
-    this.fpsInterval = 500;
-  }
-  draw() {
+    this.audio = new Audio('src');
     ...
-    this.now = Date.now();
-      this.elapsed = this.now - this.then;
-      if (this.elapsed > this.fpsInterval) {
-        this.then = this.now - (this.elapsed % this.fpsInterval);
-        background.forEach(layer => layer.draw());
-      }
-    requestAnimationFrame(this.draw);
   }
 }
+export default new Sounds();
 ```
 
 ## Functionality and MVPs
