@@ -6,7 +6,7 @@ class XFighter extends MovingObject {
   constructor(img) {
     super();
     this.name = "player";
-    this.weapon = "laser1";
+    this.weapon = "laser15";
     this.img = img;
     this.sounds = Sounds;
     this.restart();
@@ -370,7 +370,7 @@ class XFighter extends MovingObject {
 
   upgrade() {
     let { weapon, hp, projectileCoolDownConstant } = this;
-    if (!this.sounds.muted) {
+    if (!this.sounds.muted && weapon !== "laser15") {
       this.sounds.upgradeSound.currentTime = 0;
       this.sounds.upgradeSound.play();
     }
