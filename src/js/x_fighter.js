@@ -421,6 +421,10 @@ class XFighter extends MovingObject {
         if (hp === 100) {
           if (projectileCoolDownConstant >= 5) {
             this.projectileCoolDownConstant -= 1;
+            if (!this.sounds.muted && weapon !== "laser15") {
+              this.sounds.upgradeSound.currentTime = 0;
+              this.sounds.upgradeSound.play();
+            }
           }
         } else if (hp <= 90) {
           this.hp += 10;
