@@ -33,16 +33,20 @@ class Game extends GameCanvas {
       won,
       ui
     } = this;
-
     clear();
-    if (!this.paused && !this.lost && !this.won) {
+    if (!this.playing) {
+      player.draw();
+      background.forEach(layer => layer.draw());
+      this.background = [];
+      ui.drawBeginInstructions();
+    }
+    if (!this.paused && !this.lost && !this.won && this.playing) {
       background.forEach(layer => layer.draw());
       if (player.hp > 0) {
         player.draw();
       } else {
         this.lost = true;
       }
-
       player.projectiles.forEach((projectile, i) => {
         if (projectile && projectile.posY >= -5) {
           let alreadyDrawn = false;
@@ -201,7 +205,7 @@ class Game extends GameCanvas {
       }
     }
     this.filterNulls();
-    if (this.paused || this.won || this.lost) {
+    if (this.paused || this.won || this.lost || !this.playing) {
       this.fps = 60;
     } else {
       if (performance.now() - this.then > 500) {
@@ -282,6 +286,7 @@ class Game extends GameCanvas {
     this.waveCount = 0;
     this.lastWave = 30;
 
+    this.playing = false;
     this.lost = false;
     this.paused = false;
     this.won = false;
@@ -296,6 +301,10 @@ class Game extends GameCanvas {
     let { sounds, won, lost } = this;
     let { playingStatus, notPlayingStatus } = this.ui;
     e.preventDefault();
+    if (!this.playing) {
+      this.playing = true;
+      this.background = this.images.background;
+    }
     if (e.key == "r" || e.key == "R") {
       this.player = new XFighter(this.images.playerImg);
       this.reset();

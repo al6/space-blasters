@@ -35,6 +35,14 @@ class UI {
     context.fillText("MUTED! PRESS M TO UNMUTE", 388, 30);
   }
 
+  drawBeginInstructions() {
+    let { context } = this;
+    context.font = "80px Arial";
+    context.fillStyle = "green";
+    context.fillText("PRESS ANY KEY", 100, 370);
+    context.fillText("TO START PLAYING", 35, 520);
+  }
+
   drawHP(hp) {
     let { context } = this;
     context.font = "bold 30px Arial";
@@ -74,33 +82,33 @@ class UI {
     let { context } = this;
     context.font = "bold 80px Arial";
     context.fillStyle = "green";
-    context.fillText("YOU WIN!", 230, 280);
+    context.fillText("YOU WIN!", 230, 310);
     context.font = "bold 30px Arial";
-    context.fillText("THE FORCE IS STRONG WITHIN YOU", 150, 330);
+    context.fillText("THE FORCE IS STRONG WITHIN YOU", 150, 370);
     context.font = "bold 50px Arial";
-    context.fillText("Your final score is: " + score, 155, 410);
+    context.fillText("Your final score is: " + score, 155, 430);
     context.font = "bold 50px Arial";
-    context.fillText("PRESS R TO RESTART", 150, 470);
+    context.fillText("PRESS R TO RESTART", 150, 500);
   }
 
   drawLose(score) {
     let { context } = this;
     context.font = "bold 130px Arial";
     context.fillStyle = "red";
-    context.fillText("GAME OVER", 10, 250);
+    context.fillText("GAME OVER", 10, 350);
     context.font = "bold 50px Arial";
-    context.fillText("Your final score is: " + score, 150, 330);
+    context.fillText("Your final score is: " + score, 150, 430);
     context.font = "bold 50px Arial";
-    context.fillText("PRESS R TO RESTART", 150, 400);
+    context.fillText("PRESS R TO RESTART", 150, 500);
   }
 
   drawPause() {
     let { context } = this;
     context.font = "100px Arial";
     context.fillStyle = "green";
-    context.fillText("PAUSED", 250, 370);
+    context.fillText("PAUSED", 230, 370);
     context.font = "bold 50px Arial";
-    context.fillText("PRESS P TO PLAY/PAUSE", 110, 420);
+    context.fillText("PRESS P TO PLAY/PAUSE", 110, 520);
   }
 
   drawReset() {
@@ -146,7 +154,9 @@ class UI {
       instructionsModalContent.classList.toggle("hidden");
     });
     instructionsOpenButton.addEventListener("click", () => {
-      game.pause();
+      if (game.playing) {
+        game.pause();
+      }
       instructionsModalBackground.classList.toggle("hidden");
       instructionsModalContent.classList.toggle("hidden");
     });
