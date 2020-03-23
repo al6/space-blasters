@@ -6,7 +6,7 @@ class XFighter extends MovingObject {
   constructor(img) {
     super();
     this.name = "player";
-    this.weapon = "laser15";
+    this.weapon = "laser1";
     this.img = img;
     this.sounds = Sounds;
     this.restart();
