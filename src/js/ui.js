@@ -142,7 +142,6 @@ class UI {
       instructionsModalContent
     } = this;
     instructionsModalBackground.addEventListener("click", () => {
-      game.play();
       instructionsModalBackground.classList.toggle("hidden");
       instructionsModalContent.classList.toggle("hidden");
     });
