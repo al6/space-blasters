@@ -1,16 +1,16 @@
-[Live Site](https://al6.github.io/space-blasters "Space Blasters")
+# [Live Site](https://al6.github.io/space-blasters "Space Blasters")
 
-# Space Blasters
+## Space Blasters
 
 ![Later version of game](https://media.giphy.com/media/SVTSbxSx6Ce09CT9Jl/giphy.gif)
 
-## Background and Overview
+### Background and Overview
 
 Space Blasters is a Star Wars inspired space shooter game. Navigate a spaceship and defeat the enemies!
 
-## Features and Implementations
+### Features and Implementations
 
-### Player shooting lasers
+#### Player shooting lasers
 
 Instantiate and push laser object into self contained array
 
@@ -29,7 +29,7 @@ fireWeapon() {
       }}}
 ```
 
-### Explosion animation
+#### Explosion animation
 
 Iterate over one sprite-sheet PNG file and draw exact frames of the explosion
 
@@ -62,7 +62,7 @@ class Explosion extends MovingObject {
   }
 ```
 
-### Infinite particle background
+#### Infinite particle background
 
 The infinite background with individual particles for stars/rocks/etc. was achieved with 8 layered canvas elements moving at different velocities and optimized to maximize game-play FPS
 
@@ -120,34 +120,34 @@ class Sounds {
 export default new Sounds();
 ```
 
-## Functionality and MVPs
+### Functionality and MVPs
 
 In Space Blasters, players will be able to:
 
-- Shoot lasers
-- Navigate a spaceship
-- Enjoy the space inspired scenery with several layered canvas elements
-- Destroy enemy spaceships
-- See their own HP
-- Upgrade laser upon picking up upgrade item
+- [x] Shoot lasers
+- [x] Navigate a spaceship
+- [x] Enjoy the space inspired scenery with several layered canvas elements
+- [x] Destroy enemy spaceships
+- [x] See their own HP
+- [x] Upgrade laser upon picking up upgrade item
 
-## Wireframes
+### Wireframes
 
-![Early version of game](https://media.giphy.com/media/gLcA8yS00O1c3JViU3/giphy.gif)
+![Early wireframe of game](https://media.giphy.com/media/gLcA8yS00O1c3JViU3/giphy.gif)
 
-## Architecture and Technologies
+### Architecture and Technologies
 
 This project was written in HTML and JavaScript with no outside libraries.
 
-## Implementation Timeline
+### Implementation Timeline
 
-- 3/2 Shoot lasers
-- 3/3 Destroy enemy spaceships
-- 3/4 See own HP
-- 3/5 Upgrade laser upon picking up item
+- [x] 3/2 Shoot lasers
+- [x] 3/3 Destroy enemy spaceships
+- [x] 3/4 See own HP
+- [x] 3/5 Upgrade laser upon picking up item
 
-## Bonus Features
+## Future Directions
 
-- 3D rotation of sprite when moving
-- More differentiated enemies
-- User driven settings for background/spaceship velocities
+- [ ] 3D rotation of sprite when moving
+- [ ] More differentiated enemies
+- [ ] User driven settings for background/spaceship velocities
