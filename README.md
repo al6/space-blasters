@@ -147,7 +147,7 @@ This project was written in HTML and JavaScript with no outside libraries.
 - [x] 3/5 Upgrade laser upon picking up item
 
 ## Future Directions
-
+- [ ] Refactor arrays to doubly linked lists to house instantiated moving objects to improve time complexity.
 - [ ] 3D rotation of sprite when moving
 - [ ] More differentiated enemies
 - [ ] User driven settings for background/spaceship velocities
