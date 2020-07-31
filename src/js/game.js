@@ -31,22 +31,26 @@ class Game extends GameCanvas {
       upgrades,
       waveCount,
       won,
-      ui
+      ui,
     } = this;
+
     clear();
+
     if (!this.playing) {
       player.draw();
-      background.forEach(layer => layer.draw());
+      background.forEach((layer) => layer.draw());
       this.background = [];
       ui.drawBeginInstructions();
     }
+
     if (!this.paused && !this.lost && !this.won && this.playing) {
-      background.forEach(layer => layer.draw());
+      background.forEach((layer) => layer.draw());
       if (player.hp > 0) {
         player.draw();
       } else {
         this.lost = true;
       }
+
       player.projectiles.forEach((projectile, i) => {
         if (projectile && projectile.posY >= -5) {
           let alreadyDrawn = false;
@@ -68,7 +72,7 @@ class Game extends GameCanvas {
                         {
                           posX: enemy.posX,
                           posY: enemy.posY,
-                          velocityY: 1
+                          velocityY: 1,
                         },
                         images.explosionImg
                       );
@@ -119,7 +123,7 @@ class Game extends GameCanvas {
               {
                 posX: projectile.posX - 20,
                 posY: projectile.posY - 10,
-                velocityY: 1
+                velocityY: 1,
               },
               images.explosionImg
             );
@@ -156,7 +160,7 @@ class Game extends GameCanvas {
             let upgrade = new Upgrade(images.upgradeImg, this.loot, {
               posX: explosion.posX,
               posY: explosion.posY,
-              velocityY: 1
+              velocityY: 1,
             });
             upgrades.push(upgrade);
           }
@@ -175,7 +179,7 @@ class Game extends GameCanvas {
         }
       });
 
-      if (enemies.length === 0 || enemies.every(el => el === null)) {
+      if (enemies.length === 0 || enemies.every((el) => el === null)) {
         let speed = 3;
         switch (this.wave) {
           case this.waveCount >= 10 && this.waveCount < 20:
@@ -199,12 +203,14 @@ class Game extends GameCanvas {
         this.enemies = [...Array(this.wave).keys()].map(
           () =>
             new TieFighter(images.tieFighterImg, {
-              velocityY: Math.ceil(Math.random() * speed)
+              velocityY: Math.ceil(Math.random() * speed),
             })
         );
       }
     }
+
     this.filterNulls();
+
     if (this.paused || this.won || this.lost || !this.playing) {
       this.fps = 60;
     } else {
@@ -225,15 +231,15 @@ class Game extends GameCanvas {
   }
 
   filterNulls() {
-    this.player.projectiles = this.player.projectiles.filter(el => el);
-    this.enemyLasers = this.enemyLasers.filter(el => el);
-    this.enemies = this.enemies.filter(el => el);
-    this.explosions = this.explosions.filter(el => el);
-    this.upgrades = this.upgrades.filter(el => el);
+    this.player.projectiles = this.player.projectiles.filter((el) => el);
+    this.enemyLasers = this.enemyLasers.filter((el) => el);
+    this.enemies = this.enemies.filter((el) => el);
+    this.explosions = this.explosions.filter((el) => el);
+    this.upgrades = this.upgrades.filter((el) => el);
   }
 
   clear() {
-    let { canvas, context, ui } = this;
+    let { canvas, context } = this;
     context.clearRect(0, 0, canvas.width, canvas.height);
     ui.context.clearRect(0, 0, canvas.width, canvas.height);
   }
@@ -259,7 +265,7 @@ class Game extends GameCanvas {
 
   setCanvasResolution() {
     let that = this;
-    this.images.playerImg.onload = function() {
+    this.images.playerImg.onload = function () {
       let { canvas } = that;
       let { naturalWidth, naturalHeight } = this;
       canvas.width = naturalWidth;
