@@ -150,7 +150,7 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser1", {
             velocityY: -10,
             posX: this.x + 43,
-            posY: this.y - 1
+            posY: this.y - 1,
           });
           this.projectiles.push(x);
           break;
@@ -158,12 +158,12 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser1", {
             velocityY: -10,
             posX: this.x,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           y = new PlayerWeapon("laser1", {
             velocityY: -10,
             posX: this.x + 90,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           this.projectiles.push(x);
           this.projectiles.push(y);
@@ -172,17 +172,17 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser1", {
             velocityY: -10,
             posX: this.x,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           y = new PlayerWeapon("laser1", {
             velocityY: -10,
             posX: this.x + 43,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           z = new PlayerWeapon("laser1", {
             velocityY: -10,
             posX: this.x + 90,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           this.projectiles.push(x);
           this.projectiles.push(y);
@@ -193,7 +193,7 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser2", {
             velocityY: -8,
             posX: this.x + 43,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           this.projectiles.push(x);
           break;
@@ -201,12 +201,12 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser2", {
             velocityY: -8,
             posX: this.x,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           y = new PlayerWeapon("laser2", {
             velocityY: -8,
             posX: this.x + 90,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           this.projectiles.push(x);
           this.projectiles.push(y);
@@ -215,17 +215,17 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser2", {
             velocityY: -8,
             posX: this.x,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           y = new PlayerWeapon("laser2", {
             velocityY: -8,
             posX: this.x + 43,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           z = new PlayerWeapon("laser2", {
             velocityY: -8,
             posX: this.x + 90,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           this.projectiles.push(x);
           this.projectiles.push(y);
@@ -236,7 +236,7 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser3", {
             velocityY: -6,
             posX: this.x + 43,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           this.projectiles.push(x);
           break;
@@ -244,12 +244,12 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser3", {
             velocityY: -6,
             posX: this.x,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           y = new PlayerWeapon("laser3", {
             velocityY: -6,
             posX: this.x + 90,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           this.projectiles.push(x);
           this.projectiles.push(y);
@@ -258,17 +258,17 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser3", {
             velocityY: -6,
             posX: this.x,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           y = new PlayerWeapon("laser3", {
             velocityY: -6,
             posX: this.x + 43,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           z = new PlayerWeapon("laser3", {
             velocityY: -6,
             posX: this.x + 90,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           this.projectiles.push(x);
           this.projectiles.push(y);
@@ -279,7 +279,7 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser4", {
             velocityY: -4,
             posX: this.x + 43,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           this.projectiles.push(x);
           break;
@@ -287,12 +287,12 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser4", {
             velocityY: -4,
             posX: this.x,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           y = new PlayerWeapon("laser4", {
             velocityY: -4,
             posX: this.x + 90,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           this.projectiles.push(x);
           this.projectiles.push(y);
@@ -301,17 +301,17 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser4", {
             velocityY: -4,
             posX: this.x,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           y = new PlayerWeapon("laser4", {
             velocityY: -4,
             posX: this.x + 43,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           z = new PlayerWeapon("laser4", {
             velocityY: -4,
             posX: this.x + 90,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           this.projectiles.push(x);
           this.projectiles.push(y);
@@ -322,7 +322,7 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser5", {
             velocityY: -2,
             posX: this.x + 43,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           this.projectiles.push(x);
           break;
@@ -330,12 +330,12 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser5", {
             velocityY: -2,
             posX: this.x,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           y = new PlayerWeapon("laser5", {
             velocityY: -2,
             posX: this.x + 90,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           this.projectiles.push(x);
           this.projectiles.push(y);
@@ -344,17 +344,17 @@ class XFighter extends MovingObject {
           x = new PlayerWeapon("laser5", {
             velocityY: -2,
             posX: this.x,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           y = new PlayerWeapon("laser5", {
             velocityY: -2,
             posX: this.x + 43,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           z = new PlayerWeapon("laser5", {
             velocityY: -2,
             posX: this.x + 90,
-            posY: this.y - 10
+            posY: this.y - 10,
           });
           this.projectiles.push(x);
           this.projectiles.push(y);
