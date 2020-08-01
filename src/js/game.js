@@ -35,9 +35,8 @@ class Game extends GameCanvas {
     } = this;
 
     clear();
-
     if (!this.playing) {
-      player.draw();
+      // player.draw();
       background.forEach((layer) => layer.draw());
       this.background = [];
       ui.drawBeginInstructions();
@@ -47,7 +46,7 @@ class Game extends GameCanvas {
       background.forEach((layer) => layer.draw());
       if (player.hp > 0) {
         player.draw();
-      } else {
+      } else if (player.hp <= 0) {
         this.lost = true;
       }
 
@@ -211,15 +210,6 @@ class Game extends GameCanvas {
 
     this.filterNulls();
 
-    if (this.paused || this.won || this.lost || !this.playing) {
-      this.fps = 60;
-    } else {
-      if (performance.now() - this.then > 500) {
-        this.fps = 60 - (Math.floor(performance.now() - this.then) - 500);
-        if (this.fps < 0) this.fps = 0;
-        this.then = performance.now();
-      }
-    }
     ui.draw(this);
     if (!paused) ui.draw(this);
     if (waveCount >= 30) this.won = true;
@@ -227,7 +217,9 @@ class Game extends GameCanvas {
     if (lost) ui.drawLose(score);
     if (paused && !lost && !won) ui.drawPause();
     if (sounds.muted) ui.drawMuted();
-    requestAnimationFrame(this.draw);
+    setTimeout(() => {
+      requestAnimationFrame(this.draw);
+    }, 1000 / this.fps);
   }
 
   filterNulls() {
@@ -239,7 +231,7 @@ class Game extends GameCanvas {
   }
 
   clear() {
-    let { canvas, context } = this;
+    let { canvas, context, ui } = this;
     context.clearRect(0, 0, canvas.width, canvas.height);
     ui.context.clearRect(0, 0, canvas.width, canvas.height);
   }
@@ -258,8 +250,7 @@ class Game extends GameCanvas {
     this.images = new Images();
     this.background = this.images.background;
     this.ui = new UI(this);
-    this.fps = 0;
-    this.then = performance.now();
+    this.fps = 60;
     this.setCanvasResolution();
   }
 
