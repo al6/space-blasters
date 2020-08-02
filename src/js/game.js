@@ -11,7 +11,7 @@ class Game extends GameCanvas {
   constructor() {
     super();
     this.setAssets();
-    this.reset();
+    this.restart();
     this.bindStuff();
   }
 
@@ -127,10 +127,7 @@ class Game extends GameCanvas {
               images.explosionImg
             );
             enemyLasers[idx] = null;
-            if (!sounds.muted) {
-              sounds.tieExplodeSound.currentTime = 0;
-              sounds.tieExplodeSound.play();
-            }
+            sounds.tieExplodeSound.playIfNotMuted();
             this.explosions.push(explosion);
           } else if (projectile.posY < 850) {
             projectile.draw();
@@ -211,7 +208,6 @@ class Game extends GameCanvas {
     this.filterNulls();
 
     ui.draw(this);
-    if (!paused) ui.draw(this);
     if (waveCount >= 30) this.won = true;
     if (won) ui.drawWin(score);
     if (lost) ui.drawLose(score);
@@ -275,7 +271,7 @@ class Game extends GameCanvas {
     document.addEventListener("keydown", this.keyDownHandler, false);
   }
 
-  reset() {
+  restart() {
     this.player = new XFighter(this.images.playerImg);
 
     this.score = 0;
@@ -304,7 +300,7 @@ class Game extends GameCanvas {
     }
     if (e.key == "r" || e.key == "R") {
       this.player = new XFighter(this.images.playerImg);
-      this.reset();
+      this.restart();
     } else if (e.key == "p" || e.key == "P") {
       if (!won && !lost) this.paused = !this.paused;
     } else if (e.key == "m" || e.key == "M") {
