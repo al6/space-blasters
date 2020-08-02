@@ -32,8 +32,8 @@ class XFighter extends MovingObject {
   setKeyAndTouchHandlers() {
     this.keyUpHandler = this.keyUpHandler.bind(this);
     this.keyDownHandler = this.keyDownHandler.bind(this);
-    this.touchHandler = this.touchHandler.bind(this);
-    this.touchEndHandler = this.touchEndHandler.bind(this);
+    // this.touchHandler = this.touchHandler.bind(this);
+    // this.touchEndHandler = this.touchEndHandler.bind(this);
     document.addEventListener("keyup", this.keyUpHandler, false);
     document.addEventListener("keydown", this.keyDownHandler, false);
     document.addEventListener("touchstart", this.touchHandler);
@@ -78,31 +78,32 @@ class XFighter extends MovingObject {
     }
   }
 
-  touchHandler(e) {
-    if (e.touches) {
-      this.spacePressed = true;
-      if (e.touches[0].pageX * 2.32 < this.x) {
-        this.leftPressed = true;
-      } else {
-        this.rightPressed = true;
-      }
-      if (e.touches[0].pageY * 1.45 < this.y) {
-        this.upPressed = true;
-      } else {
-        this.downPressed = true;
-      }
-    }
-    e.preventDefault();
-  }
+  // remove mobile touch handlers for now
+  // touchHandler(e) {
+  // if (e.touches) {
+  //   this.spacePressed = true;
+  //   if (e.touches[0].pageX * 2.32 < this.x) {
+  //     this.leftPressed = true;
+  //   } else {
+  //     this.rightPressed = true;
+  //   }
+  //   if (e.touches[0].pageY * 1.45 < this.y) {
+  //     this.upPressed = true;
+  //   } else {
+  // this.downPressed = true;
+  //   }
+  // }
+  // e.preventDefault();
+  // }
 
-  touchEndHandler(e) {
-    e.preventDefault();
-    this.leftPressed = false;
-    this.rightPressed = false;
-    this.upPressed = false;
-    this.downPressed = false;
-    this.spacePressed = false;
-  }
+  // touchEndHandler(e) {
+  //   e.preventDefault();
+  //   this.leftPressed = false;
+  //   this.rightPressed = false;
+  //   this.upPressed = false;
+  //   this.downPressed = false;
+  //   this.spacePressed = false;
+  // }
 
   draw() {
     const { context, x, y, height, width } = this;
