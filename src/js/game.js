@@ -190,7 +190,7 @@ class Game extends GameCanvas {
   }
 
   drawPlayer() {
-    if (this.player.hp > 0) this.player.draw();
+    if (this.player.hp > 0 && !this.paused) this.player.draw();
   }
 
   filterNulls() {
