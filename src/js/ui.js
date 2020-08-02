@@ -20,12 +20,29 @@ class UI {
     this.setToggleSoundOnClick();
   }
 
-  draw(game) {
-    this.drawCoolDownConstant(game.player.projectileCoolDownConstant);
-    this.drawHP(game.player.hp);
-    this.drawScore(game.score);
-    this.drawWavesLeft(game.lastWave, game.waveCount);
-    this.drawFPS(game.fps);
+  draw() {
+    let {
+      won,
+      lost,
+      paused,
+      score,
+      sounds,
+      player,
+      lastWave,
+      waveCount,
+      fps,
+      playing,
+    } = this.game;
+    this.drawCoolDownConstant(player.projectileCoolDownConstant);
+    this.drawHP(player.hp);
+    this.drawScore(score);
+    this.drawWavesLeft(lastWave, waveCount);
+    this.drawFPS(fps);
+    if (won) this.drawWin(score);
+    if (lost) this.drawLose(score);
+    if (paused && !lost && !won) this.drawPause();
+    if (sounds.muted) this.drawMuted();
+    if (!playing) this.drawBeginInstructions();
   }
 
   drawMuted() {
@@ -147,7 +164,7 @@ class UI {
       game,
       instructionsModalBackground,
       instructionsOpenButton,
-      instructionsModalContent
+      instructionsModalContent,
     } = this;
     instructionsModalBackground.addEventListener("click", () => {
       instructionsModalBackground.classList.toggle("hidden");
