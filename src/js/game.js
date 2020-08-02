@@ -17,39 +17,22 @@ class Game extends GameCanvas {
 
   draw() {
     let {
-      background,
-      clear,
       enemies,
       enemyLasers,
       explosions,
       images,
-      lost,
-      paused,
       player,
-      score,
       sounds,
       upgrades,
-      waveCount,
-      won,
-      ui,
     } = this;
 
-    clear();
-    if (!this.playing) {
-      // player.draw();
-      background.forEach((layer) => layer.draw());
-      this.background = [];
-      ui.drawBeginInstructions();
-    }
+    this.checkIfWonOrLostGame();
+    this.clearGameAndUiCanvas();
+    this.drawBackground();
+    this.drawPlayer();
+    this.ui.draw(this);
 
     if (!this.paused && !this.lost && !this.won && this.playing) {
-      background.forEach((layer) => layer.draw());
-      if (player.hp > 0) {
-        player.draw();
-      } else if (player.hp <= 0) {
-        this.lost = true;
-      }
-
       player.projectiles.forEach((projectile, i) => {
         if (projectile && projectile.posY >= -5) {
           let alreadyDrawn = false;
@@ -166,56 +149,48 @@ class Game extends GameCanvas {
 
       upgrades.forEach((upgrade, idx) => {
         if (player.checkCollision(upgrade)) {
+          // upgrade player's weapon and delete the upgrade
           player.upgrade();
           upgrades[idx] = null;
         } else if (upgrade && upgrade.posY < 850) {
+          // upgrade is still falling so draw it for the player to see
           upgrade.drawUpgrade();
         } else {
+          // player missed upgrade and upgrade fell off the map so delete it
           upgrades[idx] = null;
         }
       });
 
-      if (enemies.length === 0 || enemies.every((el) => el === null)) {
-        let speed = 3;
-        switch (this.wave) {
-          case this.waveCount >= 10 && this.waveCount < 20:
-            speed = 5;
-            break;
-          case this.waveCount >= 20 && this.waveCount < 29:
-            speed = 6;
-            break;
-          case this.waveCount >= 29:
-            speed = 20;
-            this.wave += 20;
-            break;
-          case this.wave > 50:
-            speed = 10;
-            break;
-          default:
-            break;
-        }
-        this.wave += 5;
-        this.waveCount += 1;
-        this.enemies = [...Array(this.wave).keys()].map(
-          () =>
-            new TieFighter(images.tieFighterImg, {
-              velocityY: Math.ceil(Math.random() * speed),
-            })
-        );
-      }
+      this.filterNulls();
+      this.startNextWave();
     }
 
-    this.filterNulls();
+    this.requestAnimationFrameAtCertainFPS(60);
+  }
 
-    ui.draw(this);
-    if (waveCount >= 30) this.won = true;
-    if (won) ui.drawWin(score);
-    if (lost) ui.drawLose(score);
-    if (paused && !lost && !won) ui.drawPause();
-    if (sounds.muted) ui.drawMuted();
-    setTimeout(() => {
-      requestAnimationFrame(this.draw);
-    }, 1000 / this.fps);
+  bindStuff() {
+    this.draw = this.draw.bind(this);
+    this.keyDownHandler = this.keyDownHandler.bind(this);
+    document.addEventListener("keydown", this.keyDownHandler, false);
+  }
+
+  checkIfWonOrLostGame() {
+    if (this.player.hp <= 0) this.lost = true;
+    if (!this.lost && this.waveCount >= 30) this.won = true;
+  }
+
+  clearGameAndUiCanvas() {
+    let { canvas, context, ui } = this;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    ui.context.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  drawBackground() {
+    this.background.forEach((layer) => layer.draw());
+  }
+
+  drawPlayer() {
+    if (this.player.hp > 0) this.player.draw();
   }
 
   filterNulls() {
@@ -226,68 +201,26 @@ class Game extends GameCanvas {
     this.upgrades = this.upgrades.filter((el) => el);
   }
 
-  clear() {
-    let { canvas, context, ui } = this;
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    ui.context.clearRect(0, 0, canvas.width, canvas.height);
-  }
-
-  pause() {
-    this.paused = true;
-  }
-
-  play() {
-    this.paused = false;
-  }
-
-  setAssets() {
-    SoundSingleton.initialize();
-    this.sounds = SoundSingleton;
-    this.images = new Images();
-    this.background = this.images.background;
-    this.ui = new UI(this);
-    this.fps = 60;
-    this.setCanvasResolution();
-  }
-
-  setCanvasResolution() {
-    let that = this;
-    this.images.playerImg.onload = function () {
-      let { canvas } = that;
-      let { naturalWidth, naturalHeight } = this;
-      canvas.width = naturalWidth;
-      canvas.height = naturalHeight;
-      canvas = document.getElementById("ui-canvas");
-      canvas.width = naturalWidth;
-      canvas.height = naturalHeight;
-      that.draw();
-    };
-  }
-
-  bindStuff() {
-    this.clear = this.clear.bind(this);
-    this.draw = this.draw.bind(this);
-    this.keyDownHandler = this.keyDownHandler.bind(this);
-    document.addEventListener("keydown", this.keyDownHandler, false);
-  }
-
-  restart() {
-    this.player = new XFighter(this.images.playerImg);
-
-    this.score = 0;
-    this.wave = 0;
-    this.waveCount = 0;
-    this.lastWave = 30;
-
-    this.playing = false;
-    this.lost = false;
-    this.paused = false;
-    this.won = false;
-
-    this.enemies = [];
-    this.enemyLasers = [];
-    this.explosions = [];
-    this.upgrades = [];
+  graduallyIncreaseEnemySpeed() {
+    let { wave, waveCount } = this;
+    let speed = 3;
+    switch (wave) {
+      case waveCount >= 10 && waveCount < 20:
+        speed = 5;
+        break;
+      case waveCount >= 20 && waveCount < 29:
+        speed = 6;
+        break;
+      case waveCount >= 29:
+        speed = 20;
+        break;
+      case wave > 50:
+        speed = 10;
+        break;
+      default:
+        break;
+    }
+    return speed;
   }
 
   keyDownHandler(e) {
@@ -317,6 +250,78 @@ class Game extends GameCanvas {
       }
     } else if (e.key == "t" || e.key == "T") {
       this.toggleBackground();
+    }
+  }
+
+  pause() {
+    this.paused = true;
+  }
+
+  play() {
+    this.paused = false;
+  }
+
+  requestAnimationFrameAtCertainFPS(fpsDesired) {
+    setTimeout(() => {
+      requestAnimationFrame(this.draw);
+    }, 1000 / fpsDesired);
+  }
+
+  restart() {
+    this.player = new XFighter(this.images.playerImg);
+
+    this.score = 0;
+    this.wave = 0;
+    this.waveCount = 0;
+    this.lastWave = 30;
+
+    this.playing = false;
+    this.lost = false;
+    this.paused = false;
+    this.won = false;
+
+    this.enemies = [];
+    this.enemyLasers = [];
+    this.explosions = [];
+    this.upgrades = [];
+  }
+
+  setAssets() {
+    SoundSingleton.initialize();
+    this.sounds = SoundSingleton;
+    this.images = new Images();
+    this.background = this.images.background;
+    this.ui = new UI(this);
+    this.fps = 60;
+    this.setCanvasResolution();
+  }
+
+  setCanvasResolution() {
+    let that = this;
+    this.images.playerImg.onload = function () {
+      let { canvas } = that;
+      let { naturalWidth, naturalHeight } = this;
+      canvas.width = naturalWidth;
+      canvas.height = naturalHeight;
+      canvas = document.getElementById("ui-canvas");
+      canvas.width = naturalWidth;
+      canvas.height = naturalHeight;
+      that.draw();
+    };
+  }
+
+  startNextWave() {
+    let { enemies } = this;
+    if (enemies.length === 0 || enemies.every((el) => el === null)) {
+      let speed = this.graduallyIncreaseEnemySpeed();
+      this.wave += 5;
+      this.waveCount += 1;
+      this.enemies = [...Array(this.wave).keys()].map(
+        () =>
+          new TieFighter(this.images.tieFighterImg, {
+            velocityY: Math.ceil(Math.random() * speed),
+          })
+      );
     }
   }
 
