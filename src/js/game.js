@@ -16,163 +16,36 @@ class Game extends GameCanvas {
 
   draw = () => {
     let {
-      enemies,
-      enemyLasers,
-      explosions,
-      images,
-      player,
-      sounds,
-      upgrades,
-      ui,
-      filterNulls,
-      ifWonOrLostStopGameAndPrintScore,
-      startNextWave,
       clearGameAndUiCanvasForNextFramePainting,
-      keepDrawingBackgroundLayers,
+      filterNulls,
+      handleExplosions,
+      handleEnemies,
+      handleEnemyLasers,
+      handlePlayerLasers,
+      handleUpgrades,
       ifNotPausedAndAliveDrawPlayer,
+      ifWonOrLostStopGameAndPrintScore,
+      keepDrawingBackgroundLayers,
       loopAnimationFramesAtDesiredFps,
+      startNextWave,
+      ui,
     } = this;
 
     keepDrawingBackgroundLayers();
-
     ifWonOrLostStopGameAndPrintScore();
     clearGameAndUiCanvasForNextFramePainting();
     ifNotPausedAndAliveDrawPlayer();
     ui.draw(this);
 
-    if (!this.paused && !this.lost && !this.won && this.playing) {
-      player.projectiles.forEach((projectile, i) => {
-        if (projectile && projectile.posY >= -5) {
-          let alreadyDrawn = false;
-          enemies.forEach((enemy, j) => {
-            if (enemy) {
-              if (projectile.checkCollision(enemy)) {
-                if (!sounds.muted) sounds.impact.play();
-                enemy.hp -= 1;
-                projectile.hp -= 1;
-                if (projectile.hp <= 0) {
-                  player.projectiles[i] = null;
-                }
-                if (enemy.hp <= 0) {
-                  let explosion = null;
-                  switch (enemy.name) {
-                    case "TieFighter":
-                      explosion = new Explosion(
-                        enemy.loot,
-                        {
-                          posX: enemy.posX,
-                          posY: enemy.posY,
-                          velocityY: 1,
-                        },
-                        images.explosionImg
-                      );
-                      if (!sounds.muted) {
-                        sounds.tieExplodeSound.currentTime = 0;
-                        sounds.tieExplodeSound.play();
-                      }
-                      explosions.push(explosion);
-                      this.score += 1;
-                      break;
-                    default:
-                      break;
-                  }
-                  enemies[j] = null;
-                }
-              } else if (!alreadyDrawn) {
-                projectile.draw();
-                alreadyDrawn = true;
-              }
-            }
-          });
-        } else {
-          player.projectiles[i] = null;
-        }
-      });
-
-      enemies.forEach((enemy, idx) => {
-        if (enemy) {
-          if (enemy.posY >= 850) {
-            enemies[idx] = null;
-          } else {
-            enemy.draw();
-            let randomNumber = Math.ceil(Math.random() * 1000);
-            if (randomNumber === 1) {
-              enemy.fireWeapon();
-              enemyLasers.push(enemy.projectiles[enemy.projectiles.length - 1]);
-            }
-          }
-        }
-      });
-
-      enemyLasers.forEach((projectile, idx) => {
-        if (projectile) {
-          if (projectile.checkCollision(player)) {
-            player.hp -= 10;
-            let explosion = new Explosion(
-              null,
-              {
-                posX: projectile.posX - 20,
-                posY: projectile.posY - 10,
-                velocityY: 1,
-              },
-              images.explosionImg
-            );
-            enemyLasers[idx] = null;
-            sounds.tieExplodeSound.playIfNotMuted();
-            this.explosions.push(explosion);
-          } else if (projectile.posY < 850) {
-            projectile.draw();
-          } else {
-            enemyLasers[idx] = null;
-          }
-        }
-      });
-
-      explosions.forEach((explosion, idx) => {
-        if (explosion.hp > 0) {
-          explosion.draw();
-          if (explosion.sX <= 3584) {
-            explosion.sX += 512;
-          } else {
-            explosion.sX = 0;
-          }
-          if (explosion.sY <= 3584) {
-            explosion.sY += 512;
-          } else {
-            explosion.sY = 0;
-          }
-          explosion.hp -= 1;
-        } else if (explosion.hp <= 0) {
-          if (explosion.loot) {
-            let upgrade = new Upgrade(images.upgradeImg, this.loot, {
-              posX: explosion.posX,
-              posY: explosion.posY,
-              velocityY: 1,
-            });
-            upgrades.push(upgrade);
-          }
-          explosions[idx] = null;
-        }
-      });
-
-      upgrades.forEach((upgrade, idx) => {
-        if (player.checkCollision(upgrade)) {
-          // upgrade player's weapon and delete the upgrade
-          player.upgrade();
-          upgrades[idx] = null;
-        } else if (upgrade && upgrade.posY < 850) {
-          // upgrade is still falling so draw it for the player to see
-          upgrade.drawUpgrade();
-        } else {
-          // player missed upgrade and upgrade fell off the map so delete it
-          upgrades[idx] = null;
-        }
-      });
-
+    if (this.playing && !this.paused && !this.lost && !this.won) {
+      handleEnemies();
+      handlePlayerLasers();
+      handleEnemyLasers();
+      handleExplosions();
+      handleUpgrades();
       filterNulls();
       startNextWave();
     }
-
     loopAnimationFramesAtDesiredFps(60);
   };
 
@@ -223,6 +96,150 @@ class Game extends GameCanvas {
         break;
     }
     return speed;
+  };
+
+  handleExplosions = () => {
+    let { explosions, upgrades, images, loot } = this;
+    explosions.forEach((explosion, idx) => {
+      let { sX, sY } = explosion;
+      if (explosion.hp > 0) {
+        explosion.draw();
+        if (sX <= 3584) {
+          explosion.sX += 512;
+        } else {
+          explosion.sX = 0;
+        }
+        if (sY <= 3584) {
+          explosion.sY += 512;
+        } else {
+          explosion.sY = 0;
+        }
+        explosion.hp -= 1;
+      } else if (explosion.hp <= 0) {
+        if (explosion.loot) {
+          let upgrade = new Upgrade(images.upgradeImg, loot, {
+            posX: explosion.posX,
+            posY: explosion.posY,
+            velocityY: 1,
+          });
+          upgrades.push(upgrade);
+        }
+        explosions[idx] = null;
+      }
+    });
+  };
+
+  handleEnemies = () => {
+    let { enemies, enemyLasers } = this;
+    enemies.forEach((enemy, idx) => {
+      if (enemy) {
+        if (enemy.posY >= 850) {
+          enemies[idx] = null;
+        } else {
+          enemy.draw();
+          let randomNumber = Math.ceil(Math.random() * 1000);
+          if (randomNumber === 1) {
+            enemy.fireWeapon();
+            enemyLasers.push(enemy.projectiles[enemy.projectiles.length - 1]);
+          }
+        }
+      }
+    });
+  };
+
+  handleEnemyLasers = () => {
+    let { enemyLasers, player, images, sounds, explosions } = this;
+    enemyLasers.forEach((projectile, idx) => {
+      if (projectile) {
+        if (projectile.checkCollision(player)) {
+          player.hp -= 10;
+          let explosion = new Explosion(
+            null,
+            {
+              posX: projectile.posX - 20,
+              posY: projectile.posY - 10,
+              velocityY: 1,
+            },
+            images.explosionImg
+          );
+          enemyLasers[idx] = null;
+          sounds.tieExplodeSound.playIfNotMuted();
+          explosions.push(explosion);
+        } else if (projectile.posY < 850) {
+          projectile.draw();
+        } else {
+          enemyLasers[idx] = null;
+        }
+      }
+    });
+  };
+
+  handlePlayerLasers = () => {
+    let { player, enemies, sounds, images, explosions } = this;
+    player.projectiles.forEach((projectile, i) => {
+      if (projectile && projectile.posY >= -5) {
+        let alreadyDrawn = false;
+        enemies.forEach((enemy, j) => {
+          if (enemy) {
+            if (projectile.checkCollision(enemy)) {
+              if (!sounds.muted) sounds.impact.play();
+              enemy.hp -= 1;
+              projectile.hp -= 1;
+              if (projectile.hp <= 0) {
+                player.projectiles[i] = null;
+              }
+              if (enemy.hp <= 0) {
+                let explosion = null;
+                switch (enemy.name) {
+                  case "TieFighter":
+                    explosion = new Explosion(
+                      enemy.loot,
+                      {
+                        posX: enemy.posX,
+                        posY: enemy.posY,
+                        velocityY: 1,
+                      },
+                      images.explosionImg
+                    );
+                    if (!sounds.muted) {
+                      sounds.tieExplodeSound.currentTime = 0;
+                      sounds.tieExplodeSound.play();
+                    }
+                    explosions.push(explosion);
+                    this.score += 1;
+                    break;
+                  default:
+                    break;
+                }
+                enemies[j] = null;
+              }
+            } else if (!alreadyDrawn) {
+              projectile.draw();
+              alreadyDrawn = true;
+            }
+          }
+        });
+      } else {
+        player.projectiles[i] = null;
+      }
+    });
+  };
+
+  handleUpgrades = () => {
+    let { player, upgrades } = this;
+    upgrades.forEach((upgrade, idx) => {
+      if (player.checkCollision(upgrade)) {
+        // upgrade player's weapon and delete the upgrade
+        player.upgrade();
+        upgrades[idx] = null;
+      } else if (upgrade && upgrade.posY < 850) {
+        // upgrade is still falling so draw it for the player to see
+        upgrade.drawUpgrade();
+      } else {
+        // player missed upgrade and upgrade fell off the map so delete it
+        upgrades[idx] = null;
+      }
+    });
   };
 
   keyDownHandler = (e) => {
@@ -332,13 +349,13 @@ class Game extends GameCanvas {
     }
   };
 
-  toggleBackground() {
+  toggleBackground = () => {
     if (this.background.length === 0) {
       this.background = this.images.background;
     } else {
       this.background = [];
     }
-  }
+  };
 }
 
 export default Game;
