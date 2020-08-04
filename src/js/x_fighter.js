@@ -30,10 +30,6 @@ class XFighter extends MovingObject {
   }
 
   setKeyAndTouchHandlers() {
-    this.keyUpHandler = this.keyUpHandler.bind(this);
-    this.keyDownHandler = this.keyDownHandler.bind(this);
-    // this.touchHandler = this.touchHandler.bind(this);
-    // this.touchEndHandler = this.touchEndHandler.bind(this);
     document.addEventListener("keyup", this.keyUpHandler, false);
     document.addEventListener("keydown", this.keyDownHandler, false);
     document.addEventListener("touchstart", this.touchHandler);
@@ -41,7 +37,7 @@ class XFighter extends MovingObject {
     document.addEventListener("touchmove", this.touchHandler);
   }
 
-  keyUpHandler(e) {
+  keyUpHandler = (e) => {
     if (e.code == "Space" || e.key == "Space") {
       this.spacePressed = false;
     }
@@ -57,9 +53,9 @@ class XFighter extends MovingObject {
     if (e.key == "Down" || e.key == "ArrowDown") {
       this.downPressed = false;
     }
-  }
+  };
 
-  keyDownHandler(e) {
+  keyDownHandler = (e) => {
     e.preventDefault();
     if (e.code == "Space") {
       this.spacePressed = true;
@@ -76,10 +72,10 @@ class XFighter extends MovingObject {
     if (e.key == "Down" || e.key == "ArrowDown") {
       this.downPressed = true;
     }
-  }
+  };
 
   // remove mobile touch handlers for now
-  // touchHandler(e) {
+  // touchHandler = (e) => {
   // if (e.touches) {
   //   this.spacePressed = true;
   //   if (e.touches[0].pageX * 2.32 < this.x) {
@@ -96,7 +92,7 @@ class XFighter extends MovingObject {
   // e.preventDefault();
   // }
 
-  // touchEndHandler(e) {
+  // touchEndHandler = (e) => {
   //   e.preventDefault();
   //   this.leftPressed = false;
   //   this.rightPressed = false;

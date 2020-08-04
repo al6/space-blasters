@@ -12,10 +12,9 @@ class Game extends GameCanvas {
     super();
     this.setAssets();
     this.restart();
-    this.bindStuff();
   }
 
-  draw() {
+  draw = () => {
     let {
       enemies,
       enemyLasers,
@@ -24,13 +23,22 @@ class Game extends GameCanvas {
       player,
       sounds,
       upgrades,
+      ui,
+      filterNulls,
+      ifWonOrLostStopGameAndPrintScore,
+      startNextWave,
+      clearGameAndUiCanvasForNextFramePainting,
+      keepDrawingBackgroundLayers,
+      ifNotPausedAndAliveDrawPlayer,
+      loopAnimationFramesAtDesiredFps,
     } = this;
 
-    this.checkIfWonOrLostGame();
-    this.clearGameAndUiCanvas();
-    this.drawBackground();
-    this.drawPlayer();
-    this.ui.draw(this);
+    keepDrawingBackgroundLayers();
+
+    ifWonOrLostStopGameAndPrintScore();
+    clearGameAndUiCanvasForNextFramePainting();
+    ifNotPausedAndAliveDrawPlayer();
+    ui.draw(this);
 
     if (!this.paused && !this.lost && !this.won && this.playing) {
       player.projectiles.forEach((projectile, i) => {
@@ -161,47 +169,41 @@ class Game extends GameCanvas {
         }
       });
 
-      this.filterNulls();
-      this.startNextWave();
+      filterNulls();
+      startNextWave();
     }
 
-    this.requestAnimationFrameAtCertainFPS(60);
-  }
+    loopAnimationFramesAtDesiredFps(60);
+  };
 
-  bindStuff() {
-    this.draw = this.draw.bind(this);
-    this.keyDownHandler = this.keyDownHandler.bind(this);
-    document.addEventListener("keydown", this.keyDownHandler, false);
-  }
-
-  checkIfWonOrLostGame() {
+  ifWonOrLostStopGameAndPrintScore = () => {
     if (this.player.hp <= 0) this.lost = true;
     if (!this.lost && this.waveCount >= 30) this.won = true;
-  }
+  };
 
-  clearGameAndUiCanvas() {
+  clearGameAndUiCanvasForNextFramePainting = () => {
     let { canvas, context, ui } = this;
     context.clearRect(0, 0, canvas.width, canvas.height);
     ui.context.clearRect(0, 0, canvas.width, canvas.height);
-  }
+  };
 
-  drawBackground() {
+  keepDrawingBackgroundLayers = () => {
     this.background.forEach((layer) => layer.draw());
-  }
+  };
 
-  drawPlayer() {
+  ifNotPausedAndAliveDrawPlayer = () => {
     if (this.player.hp > 0 && !this.paused) this.player.draw();
-  }
+  };
 
-  filterNulls() {
+  filterNulls = () => {
     this.player.projectiles = this.player.projectiles.filter((el) => el);
     this.enemyLasers = this.enemyLasers.filter((el) => el);
     this.enemies = this.enemies.filter((el) => el);
     this.explosions = this.explosions.filter((el) => el);
     this.upgrades = this.upgrades.filter((el) => el);
-  }
+  };
 
-  graduallyIncreaseEnemySpeed() {
+  graduallyIncreaseEnemySpeed = () => {
     let { wave, waveCount } = this;
     let speed = 3;
     switch (wave) {
@@ -221,9 +223,9 @@ class Game extends GameCanvas {
         break;
     }
     return speed;
-  }
+  };
 
-  keyDownHandler(e) {
+  keyDownHandler = (e) => {
     let { sounds, won, lost } = this;
     let { playingStatus, notPlayingStatus } = this.ui;
     e.preventDefault();
@@ -251,23 +253,23 @@ class Game extends GameCanvas {
     } else if (e.key == "t" || e.key == "T") {
       this.toggleBackground();
     }
-  }
+  };
 
-  pause() {
+  pause = () => {
     this.paused = true;
-  }
+  };
 
-  play() {
+  play = () => {
     this.paused = false;
-  }
+  };
 
-  requestAnimationFrameAtCertainFPS(fpsDesired) {
+  loopAnimationFramesAtDesiredFps = (fpsDesired) => {
     setTimeout(() => {
       requestAnimationFrame(this.draw);
     }, 1000 / fpsDesired);
-  }
+  };
 
-  restart() {
+  restart = () => {
     this.player = new XFighter(this.images.playerImg);
 
     this.score = 0;
@@ -284,9 +286,9 @@ class Game extends GameCanvas {
     this.enemyLasers = [];
     this.explosions = [];
     this.upgrades = [];
-  }
+  };
 
-  setAssets() {
+  setAssets = () => {
     SoundSingleton.initialize();
     this.sounds = SoundSingleton;
     this.images = new Images();
@@ -294,9 +296,10 @@ class Game extends GameCanvas {
     this.ui = new UI(this);
     this.fps = 60;
     this.setCanvasResolution();
-  }
+    this.setKeyDownHandler();
+  };
 
-  setCanvasResolution() {
+  setCanvasResolution = () => {
     let that = this;
     this.images.playerImg.onload = function () {
       let { canvas } = that;
@@ -308,12 +311,16 @@ class Game extends GameCanvas {
       canvas.height = naturalHeight;
       that.draw();
     };
-  }
+  };
 
-  startNextWave() {
-    let { enemies } = this;
+  setKeyDownHandler = () => {
+    document.addEventListener("keydown", this.keyDownHandler, false);
+  };
+
+  startNextWave = () => {
+    let { enemies, graduallyIncreaseEnemySpeed } = this;
     if (enemies.length === 0 || enemies.every((el) => el === null)) {
-      let speed = this.graduallyIncreaseEnemySpeed();
+      let speed = graduallyIncreaseEnemySpeed();
       this.wave += 5;
       this.waveCount += 1;
       this.enemies = [...Array(this.wave).keys()].map(
@@ -323,7 +330,7 @@ class Game extends GameCanvas {
           })
       );
     }
-  }
+  };
 
   toggleBackground() {
     if (this.background.length === 0) {
