@@ -65,7 +65,7 @@ class Game extends GameCanvas {
   };
 
   ifNotPausedAndAliveDrawPlayer = () => {
-    if (this.player.hp > 0 && !this.paused) this.player.draw();
+    if (this.player.hp > 0 && !this.paused && !this.won) this.player.draw();
   };
 
   filterNulls = () => {
